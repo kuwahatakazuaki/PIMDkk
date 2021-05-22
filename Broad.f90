@@ -1,0 +1,232 @@
+Subroutine Broad1
+
+  Use Parameters
+  Use Parameter_tk
+  Use MPI
+  Implicit None
+
+  Call MPI_BCAST(natom,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(temperature,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(nbead,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(nstep,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(dt,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(Simulation,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(nref,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(nys,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(nnhc,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(order,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(gamma,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(nensemble,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(theory,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(NQMMM,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(NGenGau,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(NSaveVel,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(NSavelog,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(NSaveChk,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(NColor,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(NRestart,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(NForce,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(ISEED1,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(ISEED2,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(ISEED3,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(ISEED4,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(NCent,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(angstrom,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(nshoot,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(ntshoot,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(hdel,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(zshoot,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(xshootmin,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(xshootmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(yshootmin,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(yshootmax,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(eshoot,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(nrandomc,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(nocharge,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(nodipole,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(nohomo,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(freq1,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(npop,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(address,80,MPI_CHARACTER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(address2,80,MPI_CHARACTER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(kproc,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(nohfcc,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+! Kuwahata 2019/08/04
+  Call MPI_BCAST(version_gaussian,80,MPI_CHARACTER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(Save_force,1,MPI_LOGICAL,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(umbrella_sampling,1,MPI_LOGICAL,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(umbrella_width,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(umbrella_height,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(umbrella_atom1,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(umbrella_atom2,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+! End Kuwahata 2020/0929
+  Return
+End Subroutine
+
+
+Subroutine Broad2
+  Use Parameters
+  Use MPI
+  Implicit None
+  Double Precision,dimension(natom) :: x1,y1,z1
+
+  If(Simulation==99) Then 
+     Call MPI_BCAST(physmass,natom+nshoot-1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+     If(NForce==3) Then
+        Call MPI_BCAST(no_atom,natom+nshoot-1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+     EndIf
+     Call MPI_BCAST(alabel,2*(natom+nshoot-1),MPI_CHARACTER,0,MPI_COMM_WORLD,IERR)
+  Else
+     Call MPI_BCAST(physmass,natom,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+     If(NForce==3) Then
+        Call MPI_BCAST(no_atom,natom,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+     EndIf
+     Call MPI_BCAST(alabel,2*natom,MPI_CHARACTER,0,MPI_COMM_WORLD,IERR)
+  EndIf
+
+
+  If(MyRank==0) Then
+    Do iatom=1,natom
+       x1(iatom)=ux(iatom,1)
+       y1(iatom)=uy(iatom,1)
+       z1(iatom)=uz(iatom,1)
+    EndDo
+  EndIf
+
+  Call MPI_BCAST(x1,natom,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(y1,natom,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(z1,natom,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+
+  Do iatom=1,natom
+     ux(iatom,1)=x1(iatom)
+     uy(iatom,1)=y1(iatom)
+     uz(iatom,1)=z1(iatom)
+  EndDo
+
+  Return
+End Subroutine
+
+
+  Subroutine Broad3
+    Use Parameters
+    Use MPI
+    Implicit None
+!   Double Precision,dimension(natom,nnhc) :: x1,y1,z1,vx1,vy1,vz1
+!   Double Precision,dimension(nnhc) :: r1,v1
+    
+
+    Call MPI_BCAST(ux(1,1),natom*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(uy(1,1),natom*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(uz(1,1),natom*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(vux(1,1),natom*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(vuy(1,1),natom*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(vuz(1,1),natom*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(fux(1,1),natom*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(fuy(1,1),natom*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(fuz(1,1),natom*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+
+    Call MPI_BCAST(vxbath(1,1,1),natom*nnhc*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(vybath(1,1,1),natom*nnhc*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(vzbath(1,1,1),natom*nnhc*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(xbath(1,1,1),natom*nnhc*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(ybath(1,1,1),natom*nnhc*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(zbath(1,1,1),natom*nnhc*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(fxbath(1,1,1),natom*nnhc*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(fybath(1,1,1),natom*nnhc*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+    Call MPI_BCAST(fzbath(1,1,1),natom*nnhc*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+
+    If(NCent==3) Then
+     
+       If(NColor==1) Then
+
+          Call MPI_BCAST(fxbc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(fybc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(fzbc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(vxbc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(vybc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(vzbc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(xbc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(ybc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(zbc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          
+       Else
+
+          Call MPI_BCAST(fxbc3(1,1,1),natom*nnhc*ncolor,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(fybc3(1,1,1),natom*nnhc*ncolor,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(fzbc3(1,1,1),natom*nnhc*ncolor,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(vxbc3(1,1,1),natom*nnhc*ncolor,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(vybc3(1,1,1),natom*nnhc*ncolor,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(vzbc3(1,1,1),natom*nnhc*ncolor,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(xbc3(1,1,1),natom*nnhc*ncolor,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(ybc3(1,1,1),natom*nnhc*ncolor,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(zbc3(1,1,1),natom*nnhc*ncolor,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+
+       EndIf
+
+    EndIf
+
+    If(NCent==1) Then
+
+       If(NColor==1) Then
+
+          Call MPI_BCAST(rbc11,nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(vbc11,nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(fbc11,nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+
+       Else
+
+          Call MPI_BCAST(rbc1(1,1),nnhc*ncolor,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(vbc1(1,1),nnhc*ncolor,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+          Call MPI_BCAST(fbc1(1,1),nnhc*ncolor,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+
+       EndIf
+    
+    EndIf
+
+    Return
+  End Subroutine
+
+
+
+!  Subroutine Broad3_Shoot
+!
+!    Use Parameters
+!    Use MPI
+!    Implicit None
+!!   Double Precision,dimension(natom,nnhc) :: x1,y1,z1,vx1,vy1,vz1
+!!   Double Precision,dimension(nnhc) :: r1,v1
+!    
+!
+!    Call MPI_BCAST(natom,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(gnkt,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(nhydtot,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(nmshot,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(nhydrfl,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(nhyddel,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(nhydthr,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+!
+!    Call MPI_BCAST(hvelin,nshoot,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(hvelout,nshoot,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(hinitx,nshoot,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(hinity,nshoot,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(index_hyd,nshoot,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(nhspin,nshoot,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(ncontact,nshoot,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+!
+!    Call MPI_BCAST(ux(1,1),(natom0+nshoot)*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(uy(1,1),(natom0+nshoot)*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(uz(1,1),(natom0+nshoot)*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(vux(1,1),(natom0+nshoot)*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(vuy(1,1),(natom0+nshoot)*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(vuz(1,1),(natom0+nshoot)*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!
+!    Call MPI_BCAST(vxbath(1,1,1),(natom0+nshoot)*nnhc*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(vybath(1,1,1),(natom0+nshoot)*nnhc*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(vzbath(1,1,1),(natom0+nshoot)*nnhc*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(xbath(1,1,1),(natom0+nshoot)*nnhc*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(ybath(1,1,1),(natom0+nshoot)*nnhc*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!    Call MPI_BCAST(zbath(1,1,1),(natom0+nshoot)*nnhc*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+!
+!
+!    Return
+!  End Subroutine
