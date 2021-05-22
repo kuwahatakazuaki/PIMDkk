@@ -1,2 +1,2 @@
-# PIMDkk
-new PIMD program
+# PIMD
+Repository for PIMD
