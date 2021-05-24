@@ -4,6 +4,8 @@ subroutine get_force
   use utility
 
   select case(Nforce)
+    case(1)
+      call force_mopac
 !    case(2)
 !      call force_siesta
     case(6)
@@ -12,6 +14,10 @@ subroutine get_force
       call program_abort('ERROR!!! Wrong "NForce" option')
   end select
 contains
+
+subroutine force_mopac
+end subroutine force_mopac
+
 
 subroutine force_gaussian
   use mpi
@@ -148,7 +154,7 @@ subroutine force_gaussian
 !end if
 !call mpi_barrier(MPI_COMM_WORLD, Ierr)
 
- if  ( Myrank == 0 ) call print_gaussian
+ if  ( Myrank == 0 ) call print_result
 
 return
 401 call program_abort('ERROR!!: We can not find "SCF Done" or "EUMP2" in Gaussian output')
