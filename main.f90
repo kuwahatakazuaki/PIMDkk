@@ -11,12 +11,14 @@ program pimd
   call mpi_comm_rank(MPI_COMM_WORLD, myrank, ierr)
 
   if (myrank == 0) then
-     write(*,'(a)') ' ***********************'
-     write(*,'(a)') '    Simulation Start!   '
-     write(*,'(a)') ' ***********************'
-     write(*,'(a)') '  Simulation Started at '
+    open(newunit=Uout,file='out.dat',status='replace')
+    write(Uout,'(a)') ' ***********************'
+    write(Uout,'(a)') '    Simulation Start!   '
+    write(Uout,'(a)') ' ***********************'
+    write(Uout,'(a)') '  Simulation Started at '
     call print_time()
     call read_input1
+    close(Uout)
   end if
   call broad_parameters1
   call set_allocate
@@ -64,10 +66,10 @@ program pimd
   end do
 
   if (myrank == 0) then
-     write(*,'(a)') ' ***********************'
-     write(*,'(a)') '     Simulation End!    '
-     write(*,'(a)') ' ***********************'
-     write(*,'(a)') '   Simulation Ended at  '
+     write(Uout,'(a)') ' ***********************'
+     write(Uout,'(a)') '     Simulation End!    '
+     write(Uout,'(a)') ' ***********************'
+     write(Uout,'(a)') '   Simulation Ended at  '
     call print_time()
   end if
 
@@ -92,10 +94,10 @@ contains
     character(len=10) :: zone
 
     call date_and_time(date, time, zone, newtime)
-    write(*,'("  ",i4,a1,i2.2,a1,i2.2,a1,i2.2,a1,i2.2,a1,i2.2,a1,i3.3)') &
+    write(Uout,'("  ",i4,a1,i2.2,a1,i2.2,a1,i2.2,a1,i2.2,a1,i2.2,a1,i3.3)') &
              newtime(1),'/',newtime(2),'/',newtime(3),' ', &
              newtime(5),':',newtime(6),':',newtime(7),':',newtime(8)
-    write(*,'()')
+    write(Uout,'()')
   end subroutine print_time
 
 
