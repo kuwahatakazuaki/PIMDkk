@@ -33,6 +33,7 @@
 
 # pimd execution file
 pimd_mpi
+pimd
 tags
 *swp
 
