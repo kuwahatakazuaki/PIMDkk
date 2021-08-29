@@ -4,8 +4,8 @@ subroutine get_force
   use utility
 
   select case(Nforce)
-    case(1)
-      call force_mopac
+!    case(1)
+!      call force_mopac
 !    case(2)
 !      call force_siesta
     case(6)
@@ -24,9 +24,29 @@ contains
 
   ! Parameters in Atomic unit
   ! Hydrogen molecule
-    real(8), parameter :: r0    = 1.41014d0
-    real(8), parameter :: De    = 0.1745d0
+    real(8), parameter :: r0     = 1.41014d0
+    real(8), parameter :: De     = 0.1745d0
     real(8), parameter :: curvat = 1.0213d0
+
+    integer :: Imode, i, j
+    real(8) :: rij(3), fij(3), power, dis
+
+    call comm_coord
+
+    f(:,:,:) = 0.0d0
+    do Imode = Ista, Iend
+      do i = 1, Natom
+        do j = i+1, Natom
+          rij(:) = r(:,i,Imode) - r(:,j,Imode)
+          dis = dsqrt( dot_product(rij(:), rij(:)) )
+          power = (-1) * curvat * (dis - r0)
+          fij(3) = 2 * curvat * De * exp(power) * (exp(power)-1) * rij(3) / dis
+          f(:,i,Imode) = f(:,i,Imode) + fij(:)
+          f(:,j,Imode) = f(:,j,Imode) - fij(:)
+        end do
+      end do
+    end do
+    f(:,:,:) = f(:,:,:) / dble(Nbead)
   end subroutine force_morse
 
 
@@ -39,7 +59,7 @@ contains
     use mpi
     use communication
     implicit none
-    integer :: i,j, Iposi
+    integer :: i,Imode, Iposi
     integer :: Utemp, Ierr
     integer :: dummyI
     real(8) :: dummyD
@@ -66,15 +86,15 @@ contains
 
     call comm_coord
 
-    do j = Ista, Iend
-      write(Cnum,'(I5.5)') j
+    do Imode = Ista, Iend
+      write(Cnum,'(I5.5)') Imode
       path_scr_sub = path_scr//'/'//Cnum//'/'
 
       call system('cat '//path_scr_sub//'gauss.tmp1 > '//path_scr_sub//'gauss.com')
 
       open(newunit=Utemp,file=path_scr_sub//'gauss.com',status='old',position='append')
         do i = 1, Natom
-          write(Utemp,*) alabel(i), r(:,i,j) * AUtoAng
+          write(Utemp,*) alabel(i), r(:,i,Imode) * AUtoAng
         end do
         write(Utemp,*)
       close(Utemp)
@@ -95,9 +115,9 @@ contains
         end do
         if ( Ntheory == 0 ) then
           Iposi = index(line,'=')
-          read(line(Iposi+2:Iposi+17),*) energy(j)
+          read(line(Iposi+2:Iposi+17),*) energy(Imode)
         else if ( Ntheory == 1 ) then
-          read(line(38:60),*) energy(j)
+          read(line(38:60),*) energy(Imode)
         end if
   !  +++ End Reading "SCF Done" +++
 
@@ -109,7 +129,7 @@ contains
           end do
           read(Utemp,'()')
           do i = 1, Natom
-            read(Utemp,*) dummyI, dummyC, charge(i,j)
+            read(Utemp,*) dummyI, dummyC, charge(i,Imode)
           end do
         end if
   !  +++ End Reading "Mulliken charge" +++
@@ -120,7 +140,7 @@ contains
             read(Utemp,'(a)', end=403) line
             if ( index(line,key3) > 0) exit
           end do
-          read(Utemp,*) dummyC, dipole(1,j), dummyC, dipole(2,j), dummyC, dipole(3,j), dummyC, dipole(4,j)
+          read(Utemp,*) dummyC, dipole(1,Imode), dummyC, dipole(2,Imode), dummyC, dipole(3,Imode), dummyC, dipole(4,Imode)
         end if
   !  +++ End Reading "Dipole moment" +++
 
@@ -131,14 +151,14 @@ contains
         end do
         read(Utemp,'()')
         do i = 1, Natom
-          read(Utemp,*) dummyI, dummyI, f(:,i,j)
+          read(Utemp,*) dummyI, dummyI, f(:,i,Imode)
         end do
   !  +++ End Reading "Atomic Force" +++
 
       close(Utemp)
       call system('rm -rf '//path_scr_sub//'Gau*')
       dp_inv = 1 / dble(Nbead)
-      f(:,:,j) = f(:,:,j) * dp_inv
+      f(:,:,Imode) = f(:,:,Imode) * dp_inv
     end do
 
     call comm_output
@@ -167,7 +187,7 @@ contains
   !end if
   !call mpi_barrier(MPI_COMM_WORLD, Ierr)
   
-   if  ( Myrank == 0 ) call print_gaussian
+   if  ( Myrank == 0 ) call print_result
   
     return
     401 call program_abort('ERROR!!: We can not find "SCF Done" or "EUMP2" in Gaussian output')
@@ -179,7 +199,6 @@ contains
 ! ++++++++++++++++++++++
 ! +++ force_gaussian +++
 ! ++++++++++++++++++++++
->>>>>>> origin/main
 
 
 end subroutine get_force

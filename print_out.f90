@@ -2,12 +2,8 @@ module print_out
 
 
 contains
-<<<<<<< HEAD
 
 subroutine print_result
-=======
-subroutine print_gaussian
->>>>>>> origin/main
   use global_variable
   implicit none
   integer :: i, j
@@ -84,11 +80,7 @@ return
 8007 format(100F10.6)  ! Charge
 8006 format(F0.10)     ! Potential
 8005 format(3F15.10)   ! Force
-<<<<<<< HEAD
 end subroutine print_result
-=======
-end subroutine print_gaussian
->>>>>>> origin/main
 
 end module print_out
 
