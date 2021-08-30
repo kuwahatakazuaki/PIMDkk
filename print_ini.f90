@@ -36,20 +36,15 @@ contains
       &'#   Step      Hamiltonian            Potential               DKinetic                &
        QKinetic               EBath               EBath_Cent              Temperature            E_Virial   '
     write(iham,'("#  ",a)')  repeat('*',188)
-!    write(iham,'(a)') &
-!      &'#  **************************************************************************************&
-!      &*****************************************************************************************************'
     close(iham)
 
-    write(*,'(a)')  repeat('*',143)
-    write(*,'(a)') &
+    open(newunit=Uout,file=Oname,status='old',position='append')
+     write(Uout,'(a)')  repeat('*',143)
+     write(Uout,'(a)') &
       &'   Step    Hamiltonian       Potential         DKinetic         &
       QKinetic           EBath          EBath_Cent       Temperature      E_Virial '
-    write(*,'(a)')  repeat('*',143)
-!    write(*,'(a)') &
-!      &'******************************************************************************&
-!      &*****************************************************************'
-   close(iham)
+     write(Uout,'(a)')  repeat('*',143)
+    close(Uout)
   end subroutine print_ham_qm
 
 
@@ -63,9 +58,11 @@ contains
       write(iham,'("# ",a)') repeat('*',121)
     close(iham)
 
-    write(*,'(a)') ' ************************************************************************************************'
-    write(*,'(a)') '    Step     Hamiltonian      Potential        DKinetic        EBath_Cent      Temperature '
-    write(*,'(a)') ' ************************************************************************************************'
+    open(newunit=Uout,file=Oname,status='old',position='append')
+      write(Uout,'(a)') ' ************************************************************************************************'
+      write(Uout,'(a)') '    Step     Hamiltonian      Potential        DKinetic        EBath_Cent      Temperature '
+      write(Uout,'(a)') ' ************************************************************************************************'
+    close(Uout)
   end subroutine print_ham_cl
 
 end subroutine print_ini

@@ -54,8 +54,9 @@ program pimd
       call calc_hamil
     end if
   end if
+
   if ( myrank == 0 ) then
-  call getforce_ref
+    call getforce_ref
   end if
 
   do Istep = Nrestart, Nstep
