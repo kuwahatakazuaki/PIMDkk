@@ -11,13 +11,13 @@ program pimd
   call mpi_comm_rank(MPI_COMM_WORLD, myrank, ierr)
 
   if (myrank == 0) then
-    open(newunit=Uout,file='out.dat',status='replace')
-    write(Uout,'(a)') ' ***********************'
-    write(Uout,'(a)') '    Simulation Start!   '
-    write(Uout,'(a)') ' ***********************'
-    write(Uout,'(a)') '  Simulation Started at '
-    call print_time()
-    call read_input1
+    open(newunit=Uout,file=Oname,status='replace')
+      write(Uout,'(a)') ' ***********************'
+      write(Uout,'(a)') '    Simulation Start!   '
+      write(Uout,'(a)') ' ***********************'
+      write(Uout,'(a)') '  Simulation Started at '
+      call print_time()
+      call read_input1
     close(Uout)
   end if
   call broad_parameters1
@@ -66,11 +66,13 @@ program pimd
   end do
 
   if (myrank == 0) then
-     write(Uout,'(a)') ' ***********************'
-     write(Uout,'(a)') '     Simulation End!    '
-     write(Uout,'(a)') ' ***********************'
-     write(Uout,'(a)') '   Simulation Ended at  '
-    call print_time()
+    open(newunit=Uout,file=Oname,status='old',position='append')
+      write(Uout,'(a)') ' ***********************'
+      write(Uout,'(a)') '     Simulation End!    '
+      write(Uout,'(a)') ' ***********************'
+      write(Uout,'(a)') '   Simulation Ended at  '
+      call print_time()
+    close(Uout)
   end if
 
   call mpi_barrier(MPI_COMM_WORLD,ierr)

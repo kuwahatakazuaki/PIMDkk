@@ -109,13 +109,16 @@ contains
   end subroutine calc_estimator
 
   subroutine print_ham
+    use global_variable
     integer :: iham
     open(newunit=iham,file=path_result//'/ham.dat',position='append')
       write(iham,9998) Istep, hamiltonian, potential, dkinetic, qkinetic, ebath, ebath_cent, steptemp, virial
     close(iham)
 
     if ( mod(Istep,100) == 0 ) then
-      write(*,9999) Istep, hamiltonian, potential, dkinetic, qkinetic, ebath, ebath_cent, steptemp, virial
+      open(newunit=Uout,file=Oname,status='old',position='append')
+        write(Uout,9999) Istep, hamiltonian, potential, dkinetic, qkinetic, ebath, ebath_cent, steptemp, virial
+      close(Uout)
     end if
     return
 9999 format(i7,8e17.9)

@@ -18,6 +18,7 @@ module global_variable
     real(8), parameter :: boltz     = KtoAU
     real(8), parameter :: pi = 3.14159265358979d0
     integer :: Uout
+    character(len=7), parameter :: Oname='out.dat'
 ! +++ Constant parameters +++
 
 

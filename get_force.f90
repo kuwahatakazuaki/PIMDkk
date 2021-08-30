@@ -45,8 +45,11 @@ contains
           f(:,j,Imode) = f(:,j,Imode) - fij(:)
         end do
       end do
+      f(:,:,Imode) = f(:,:,Imode) / dble(Nbead)
     end do
-    f(:,:,:) = f(:,:,:) / dble(Nbead)
+
+    call comm_output
+    if ( Myrank == 0 ) call print_result
   end subroutine force_morse
 
 

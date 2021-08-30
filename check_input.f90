@@ -3,55 +3,57 @@ subroutine check_input
   implicit none
   integer :: i
 
-!  write(*,'(a)')  ' +++++ Input Check +++++   '
-  write(*,'(a)')  ' +++++ Input Check +++++++++++++++++++++++++++'
-  write(*,10000)  ' +++++ Process ID          ', getpid()
-  write(*,10000)  ' +++++ Simulation type     ', simulation
-  write(*,10000)  ' +++++ Number of Atoms     ', Natom
-  write(*,10000)  ' +++++ Number of Beads     ', Nbead
-  write(*,10000)  ' +++++ Number of Steps     ', Nstep
-  write(*,10001)  ' +++++ Given Temperature   ', temperature
-  write(*,10001)  ' +++++ Given time step     ', dt
-  write(*,10000)  ' +++++ Type of Ensemble    ', Nensemble
-  write(*,10000)  ' +++++ Method of QM calc.  ', Ntheory
-  write(*,10000)  ' +++++ Method of Center NHC', Ncent
-  write(*,10000)  ' +++++ Color of Center NHC ', Ncolor
-  write(*,10000)  ' +++++ Length of Center NHC', Nnhc
-  write(*,10002)  ' +++++ Flag for Restart    ', Lrestart
-  write(*,10000)  ' +++++ Flag for Force Calc.', Nforce
-  write(*,10002)  ' +++++ QM/MM calculation?  ', Lqmmm
-  write(*,10002)  ' +++++ Additional Basis?   ', Lgengau
-  write(*,10000)  ' +++++ Seed for Random No.1', iseed(1)
-  write(*,10000)  ' +++++ Seed for Random No.2', iseed(2)
-  write(*,10000)  ' +++++ Seed for Random No.3', iseed(3)
-  write(*,10000)  ' +++++ Seed for Random No.4', iseed(4)
-  write(*,10003)  ' +++++ Address of Result   ', path_result
-  write(*,10003)  ' +++++ Address of Scratch  ', path_scr
-  write(*,'()')
-  write(*,'(a)')  ' +++++   Calculate Some Constants   ++++++++++ '
-!  write(*,10001)  ' +++++ Random Number  ', rndnumber
-!  write(*,10001)  ' +++++ dp            ', dp
-  write(*,10001)  ' +++++ dt            ', dt
-  write(*,10001)  ' +++++ dt_ref        ', dt_ref
-!  write(*,10001)  ' +++++ omega_p       ', omega_p
-  write(*,10005)  ' +++++ omega_system  ', omega_system
-  write(*,10005)  ' +++++ omega2        ', omega2
-  write(*,10005)  ' +++++ omega_p2      ', omega_p2
-  write(*,10001)  ' +++++ gnkt          ', gnkt
-  write(*,10001)  ' +++++ gkt           ', gkt
-  write(*,10001)  ' +++++ ysweight1     ', ysweight(1)
-  write(*,10001)  ' +++++ ysweight2     ', ysweight(2)
-  write(*,10001)  ' +++++ ysweight3     ', ysweight(3)
-  write(*,10001)  ' +++++ ysweight4     ', ysweight(4)
-  write(*,10001)  ' +++++ ysweight5     ', ysweight(5)
-  write(*,'()')
-  write(*,'(a)')  ' +++++ Given Atomic Label, Mass, and Coords +++'
-  do i = 1, Natom
-    write(*,10004) alabel(i), physmass(i)/factmass, u(:,i,1) * AUtoAng
-  end do
-  write(*,'()')
-  write(*,'(a)')  ' +++++ End Input Check ++++++++++++++++++++++++'
-  write(*,'()')
+!   write(Uout,'(a)')  ' +++++ Input Check +++++   '
+  open(newunit=Uout,file=Oname,status='old',position='append')
+     write(Uout,'(a)')  ' +++++ Input Check +++++++++++++++++++++++++++'
+     write(Uout,10000)  ' +++++ Process ID          ', getpid()
+     write(Uout,10000)  ' +++++ Simulation type     ', simulation
+     write(Uout,10000)  ' +++++ Number of Atoms     ', Natom
+     write(Uout,10000)  ' +++++ Number of Beads     ', Nbead
+     write(Uout,10000)  ' +++++ Number of Steps     ', Nstep
+     write(Uout,10001)  ' +++++ Given Temperature   ', temperature
+     write(Uout,10001)  ' +++++ Given time step     ', dt
+     write(Uout,10000)  ' +++++ Type of Ensemble    ', Nensemble
+     write(Uout,10000)  ' +++++ Method of QM calc.  ', Ntheory
+     write(Uout,10000)  ' +++++ Method of Center NHC', Ncent
+     write(Uout,10000)  ' +++++ Color of Center NHC ', Ncolor
+     write(Uout,10000)  ' +++++ Length of Center NHC', Nnhc
+     write(Uout,10002)  ' +++++ Flag for Restart    ', Lrestart
+     write(Uout,10000)  ' +++++ Flag for Force Calc.', Nforce
+     write(Uout,10002)  ' +++++ QM/MM calculation?  ', Lqmmm
+     write(Uout,10002)  ' +++++ Additional Basis?   ', Lgengau
+     write(Uout,10000)  ' +++++ Seed for Random No.1', iseed(1)
+     write(Uout,10000)  ' +++++ Seed for Random No.2', iseed(2)
+     write(Uout,10000)  ' +++++ Seed for Random No.3', iseed(3)
+     write(Uout,10000)  ' +++++ Seed for Random No.4', iseed(4)
+     write(Uout,10003)  ' +++++ Address of Result   ', path_result
+     write(Uout,10003)  ' +++++ Address of Scratch  ', path_scr
+     write(Uout,'()')
+     write(Uout,'(a)')  ' +++++   Calculate Some Constants   ++++++++++ '
+!     write(Uout,10001)  ' +++++ Random Number  ', rndnumber
+!     write(Uout,10001)  ' +++++ dp            ', dp
+     write(Uout,10001)  ' +++++ dt            ', dt
+     write(Uout,10001)  ' +++++ dt_ref        ', dt_ref
+!     write(Uout,10001)  ' +++++ omega_p       ', omega_p
+     write(Uout,10005)  ' +++++ omega_system  ', omega_system
+     write(Uout,10005)  ' +++++ omega2        ', omega2
+     write(Uout,10005)  ' +++++ omega_p2      ', omega_p2
+     write(Uout,10001)  ' +++++ gnkt          ', gnkt
+     write(Uout,10001)  ' +++++ gkt           ', gkt
+     write(Uout,10001)  ' +++++ ysweight1     ', ysweight(1)
+     write(Uout,10001)  ' +++++ ysweight2     ', ysweight(2)
+     write(Uout,10001)  ' +++++ ysweight3     ', ysweight(3)
+     write(Uout,10001)  ' +++++ ysweight4     ', ysweight(4)
+     write(Uout,10001)  ' +++++ ysweight5     ', ysweight(5)
+     write(Uout,'()')
+     write(Uout,'(a)')  ' +++++ Given Atomic Label, Mass, and Coords +++'
+    do i = 1, Natom
+       write(Uout,10004) alabel(i), physmass(i)/factmass, u(:,i,1) * AUtoAng
+    end do
+     write(Uout,'()')
+     write(Uout,'(a)')  ' +++++ End Input Check ++++++++++++++++++++++++'
+     write(Uout,'()')
+  close(Uout)
 
 return
 10000 format(a,I7)
