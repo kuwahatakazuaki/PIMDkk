@@ -28,7 +28,7 @@
        enddo
 
 !     /*  start multiple time step integration  */
-       do iys = 1, nys 
+       do iys = 1, nys
 
 !     /*  set time increment at this loop  */
           dt_ys = dt*ysweight(iys)

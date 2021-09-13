@@ -117,7 +117,6 @@ Subroutine PI_NEW_MPI
          Call Restart_Write(istep)
       EndIf
     Enddo
-!tkawatsu
   else
     Do istep=nrstep+1, nstep
        istepsv=istep

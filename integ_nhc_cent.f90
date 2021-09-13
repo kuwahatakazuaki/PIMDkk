@@ -1,5 +1,50 @@
 subroutine integ_nhc_cent
-  use global_variable
+  use global_variable, only: Natom, Ncent, Ncolor, Nnhc, Nys, &
+      r, vu, fictmass, &
+      vbc11, fbc11, &
+      qmcent11, &
+      gnkt
+  use utility
+
+    select case(Ncent)
+      case(1)
+        call integ_nhc_cent1
+      case(3)
+        call integ_nhc_cent3
+      case default
+        call program_abort('Erro!!! Wrong "Ncent"')
+    end select
+  contains
+
+! *** Ncent = 1 ***
+  subroutine integ_nhc_cent1
+    real(8) :: skin
+    integer :: i, inhc, iys
+
+    skin = 0.0d0
+    do i = 1, Natom
+      skin = skin + fictmass(i,1) * dot_product(vu(:,i,1),vu(:,i,1))
+    end do
+
+    if ( Ncolor == 1 ) then
+      fbc11(1) = (skin-gnkt) / qmcent11(1)
+      do inhc = 2, Nnhc
+        fbc11(inhc) = (qmcent11(inhc-1)*vbc11(inhc-1)*vbc11(inhc-1) - gkt)/qmcent11(inhc)
+      end do
+
+      do iys = 1, Nys
+      end do
+    else if ( Ncolor > 1 ) then
+    end if
+
+  end subroutine integ_nhc_cent1
+! *** End Ncent = 1 ***
+
+! *** Ncent = 3 ***
+  subroutine integ_nhc_cent3
+  end subroutine integ_nhc_cent3
+! *** End Ncent = 3 ***
+
 end subroutine integ_nhc_cent
 
 
