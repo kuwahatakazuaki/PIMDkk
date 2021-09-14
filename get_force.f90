@@ -40,13 +40,21 @@ contains
           rij(:) = r(:,i,Imode) - r(:,j,Imode)
           dis = dsqrt( dot_product(rij(:), rij(:)) )
           power = (-1) * curvat * (dis - r0)
-          fij(3) = 2 * curvat * De * exp(power) * (exp(power)-1) * rij(3) / dis
+          fij(:) = 2 * curvat * De * exp(power) * (exp(power)-1) * rij(:) / dis
           f(:,i,Imode) = f(:,i,Imode) + fij(:)
           f(:,j,Imode) = f(:,j,Imode) - fij(:)
         end do
       end do
       f(:,:,Imode) = f(:,:,Imode) / dble(Nbead)
     end do
+
+!if ( Myrank == 0 ) then
+!  do j = 1, Nbead
+!    do i = 1, Natom
+!      print *, f(:,i,j)
+!    end do
+!  end do
+!end if
 
     call comm_output
     if ( Myrank == 0 ) call print_result
