@@ -114,7 +114,7 @@ Subroutine PI_NEW_MPI
       Call Ham_Temp
       If(MyRank==0) Then
          Call Print_Ham_tk(istep)
-         Call Restart_Write(istep)
+         Call Restart_Write_old(istep)
       EndIf
     Enddo
   else

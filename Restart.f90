@@ -124,7 +124,7 @@ Subroutine restart_read_old
   return
 End Subroutine
 
-Subroutine Restart_Write(istep)
+Subroutine Restart_Write_old(istep)
   use Parameters
   Implicit none
   Integer :: IStep

@@ -3,7 +3,7 @@ program pimd
   use communication
   use mpi
   implicit none
-  integer :: ierr
+  integer :: ierr, iref
   integer :: i, j
 
   call mpi_init(ierr)
@@ -35,7 +35,7 @@ program pimd
   call init_mass
 
   if (Lrestart .eqv. .True.) then
-!    if (myrank == 0) call restart_read
+    if (myrank == 0) call restart_read
 !    call broad_parameters3
   else
     if ( myrank == 0) call print_ini
@@ -72,6 +72,10 @@ call program_abort("HERE1")
   do Istep = Nrestart, Nstep
     if ( myrank == 0 ) then
       call integ_nhc_cent
+      do iref = 1, Nref
+      end do
+
+      call restart_write(Istep)
     else
     end if
   end do

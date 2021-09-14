@@ -122,19 +122,56 @@ subroutine restart_read
 !
 !  close(irst)
 !  return
-End Subroutine
+end Subroutine restart_read
 
 
+subroutine restart_write(Rstep)
+  use global_variable
+  implicit none
+  integer, intent(in) :: Rstep
+  integer :: i, j, inhc, Ures
 
+  if ( Nbead > 1 ) then
+    call restart_write_qm
+  end if
+contains
 
-!Subroutine Restart_Write(istep)
-!  use Parameters
-!  Implicit none
+  subroutine restart_write_qm
+    if ( Rstep > 1 ) call system('cat '//path_result//'/restart.dat >'//path_result//'/restart1.dat')
+    open(newunit=Ures,file=path_result//'/restart.dat',status='unknown')
+      write(Ures,'(I10)') Rstep
+      do j = 1, Nbead
+        do i = 1, Natom
+          write(Ures,'(d23.15,1x,d23.15,1x,d23.15)') u(:,i,j)
+        end do
+      end do
+
+      do j = 1, Nbead
+        do i = 1, Natom
+          write(Ures,'(d23.15,1x,d23.15,1x,d23.15)') vu(:,i,j)
+        end do
+      end do
+
+      do j = 1, Nbead
+        do i = 1, Natom
+          write(Ures,'(d23.15,1x,d23.15,1x,d23.15)') fu(:,i,j)
+        end do
+      end do
+
+      do j = 1, Nbead
+        do inhc = 1, Nnhc
+          do i = 1, Natom
+            write(Ures,'(d23.15,1x,d23.15,1x,d23.15)') bath(:,i,inhc,j)
+          end do
+        end do
+      end do
+      ! +++ HERE +++ !
+    close(Ures)
+  end subroutine restart_write_qm
+
+end subroutine restart_write
+
 !  Integer :: IStep
-!!
-!!        /*   write out restart file   */
-!!
-!
 !! Kuwahata 2020/01/23
 !if (istep > 1) call system('cat '//trim(address)//'/restart.dat >'//trim(address)//'/restart1.dat')
 !  open(irst, file=trim(address)//'/restart.dat', status = 'unknown')
@@ -259,14 +296,15 @@ End Subroutine
 !    end if
 !  end if
 !  close(irst)
-!! Kuwahata 2020/01/23
-!!  call system('cat '//trim(address)//'/restart1.dat >'//trim(address)//'/restart.dat')
-!! End Kuwahata 2020/01/23
-!
-!return
-!End Subroutine
-!
-!
+
+
+
+
+
+! +++++++++++++++++++++++
+! ++++++ Classical ++++++
+! +++++++++++++++++++++++
+
 !Subroutine restart_read_Classical
 !  use Parameters 
 !  Implicit none
