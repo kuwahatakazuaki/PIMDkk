@@ -129,7 +129,7 @@ subroutine restart_write(Rstep)
   use global_variable
   implicit none
   integer, intent(in) :: Rstep
-  integer :: i, j, inhc, Ures
+  integer :: i, j, inhc, icolor, Ures
 
   if ( Nbead > 1 ) then
     call restart_write_qm
@@ -165,140 +165,85 @@ contains
           end do
         end do
       end do
-      ! +++ HERE +++ !
+
+      do j = 1, Nbead
+        do inhc = 1, Nnhc
+          do i = 1, Natom
+            write(Ures,'(d23.15,1x,d23.15,1x,d23.15)') vbath(:,i,inhc,j)
+          end do
+        end do
+      end do
+
+      do j = 1, Nbead
+        do inhc = 1, Nnhc
+          do i = 1, Natom
+            write(Ures,'(d23.15,1x,d23.15,1x,d23.15)') fbath(:,i,inhc,j)
+          end do
+        end do
+      end do
+
+      if ( Ncent == 1 ) then
+
+        if ( Ncolor == 1 ) then
+          do inhc = 1, Nnhc
+            write(Ures,'(d23.15,1x,d23.15,1x,d23.15)') rbc11(inhc),vbc11(inhc),fbc11(inhc)
+          end do
+        else if ( Ncolor > 1 ) then
+          do icolor = 1, Ncolor
+            do inhc = 1, Nnhc
+              write(Ures,'(d23.15,1x,d23.15,1x,d23.15)') rbc1(inhc,icolor),vbc1(inhc,icolor),fbc1(inhc,icolor)
+            end do
+          end do
+        end if
+
+      else if ( Ncent == 3 ) then
+
+        if ( Ncolor == 1 ) then
+          do inhc = 1, Nnhc
+            do i = 1, Natom
+              write(Ures,'(d23.15,1x,d23.15,1x,d23.15)') rbc31(:,i,inhc)
+            end do
+          end do
+          do inhc = 1, Nnhc
+            do i = 1, Natom
+              write(Ures,'(d23.15,1x,d23.15,1x,d23.15)') vbc31(:,i,inhc)
+            end do
+          end do
+          do inhc = 1, Nnhc
+            do i = 1, Natom
+              write(Ures,'(d23.15,1x,d23.15,1x,d23.15)') fbc31(:,i,inhc)
+            end do
+          end do
+        else if ( Ncolor > 1 ) then
+          do icolor = 1, Ncolor
+            do inhc = 1, Nnhc
+              do i = 1, Natom
+                write(Ures,'(d23.15,1x,d23.15,1x,d23.15)') rbc3(:,i,inhc,icolor)
+              end do
+            end do
+          end do
+          do icolor = 1, Ncolor
+            do inhc = 1, Nnhc
+              do i = 1, Natom
+                write(Ures,'(d23.15,1x,d23.15,1x,d23.15)') vbc3(:,i,inhc,icolor)
+              end do
+            end do
+          end do
+          do icolor = 1, Ncolor
+            do inhc = 1, Nnhc
+              do i = 1, Natom
+                write(Ures,'(d23.15,1x,d23.15,1x,d23.15)') fbc3(:,i,inhc,icolor)
+              end do
+            end do
+          end do
+        end if
+
+      end if
+
     close(Ures)
   end subroutine restart_write_qm
 
 end subroutine restart_write
-
-!  Integer :: IStep
-!! Kuwahata 2020/01/23
-!if (istep > 1) call system('cat '//trim(address)//'/restart.dat >'//trim(address)//'/restart1.dat')
-!  open(irst, file=trim(address)//'/restart.dat', status = 'unknown')
-!!  open(irst, file=trim(address)//'/restart1.dat', status = 'unknown')
-!! End Kuwahata 2020/01/23
-!
-!  write(irst,'(i10)') IStep
-!  do imode = 1, NBEAD
-!    do iatom = 1, NATOM
-!      write(irst,'(d23.15,1x,d23.15,1x,d23.15)') &
-!        ux(iatom,imode), uy(iatom,imode), uz(iatom,imode)
-!    end do
-!  end do
-!
-!  do imode = 1, NBEAD
-!    do iatom = 1, NATOM
-!      write(irst,'(d23.15,1x,d23.15,1x,d23.15)') &
-!        vux(iatom,imode), vuy(iatom,imode), vuz(iatom,imode)
-!    end do
-!  end do
-!
-!  do imode = 1, NBEAD
-!    do iatom = 1, NATOM
-!      write(irst,'(d23.15,1x,d23.15,1x,d23.15)') &
-!        fux(iatom,imode), fuy(iatom,imode), fuz(iatom,imode)
-!    end do
-!  end do
-!
-!  do imode = 1, NBEAD
-!    do inhc = 1, NNHC
-!      do iatom = 1, NATOM
-!        write(irst,'(d23.15,1x,d23.15,1x,d23.15)') &
-!          xbath(iatom,inhc,imode),ybath(iatom,inhc,imode),zbath(iatom,inhc,imode)
-!      enddo
-!    enddo
-!  enddo
-!
-!  do imode = 1, NBEAD
-!    do inhc  = 1, NNHC
-!      do iatom = 1, NATOM
-!        write(irst,'(d23.15,1x,d23.15,1x,d23.15)') &
-!          vxbath(iatom,inhc,imode),vybath(iatom,inhc,imode),vzbath(iatom,inhc,imode)
-!      enddo
-!    enddo
-!  enddo
-!
-!  do imode = 1, NBEAD
-!    do inhc  = 1, NNHC
-!      do iatom = 1, NATOM
-!        write(irst,'(d23.15,1x,d23.15,1x,d23.15)') &
-!          fxbath(iatom,inhc,imode),fybath(iatom,inhc,imode),fzbath(iatom,inhc,imode)
-!      enddo
-!    enddo
-!  enddo
-!
-!  If(NCent==1) Then
-!    If(NColor==1) Then
-!      do inhc=1,nnhc
-!        write(irst,'(d23.15,1x,d23.15,1x,d23.15)') rbc11(inhc),vbc11(inhc),fbc11(inhc)
-!      enddo
-!    Else
-!      do icolor=1,ncolor
-!        do inhc=1,nnhc
-!          write(irst,'(d23.15,1x,d23.15,1x,d23.15)') rbc1(inhc,icolor),vbc1(inhc,icolor),fbc1(inhc,icolor)
-!        enddo
-!      enddo
-!    EndIf
-!  EndIf
-!
-!  If(NCent==3) Then
-!    If(NColor==1) Then
-!
-!      do inhc=1,nnhc
-!        do iatom=1,natom
-!          write(irst,'(d23.15,1x,d23.15,1x,d23.15)') &
-!            xbc31(iatom,inhc),ybc31(iatom,inhc),zbc31(iatom,inhc)
-!        enddo
-!      enddo
-!
-!      do inhc=1,nnhc
-!        do iatom=1,natom
-!          write(irst,'(d23.15,1x,d23.15,1x,d23.15)') &
-!            vxbc31(iatom,inhc),vybc31(iatom,inhc),vzbc31(iatom,inhc)
-!        enddo
-!      enddo
-!
-!      do inhc=1,nnhc
-!        do iatom=1,natom
-!          write(irst,'(d23.15,1x,d23.15,1x,d23.15)') &
-!            fxbc31(iatom,inhc),fybc31(iatom,inhc),fzbc31(iatom,inhc)
-!        enddo
-!      enddo
-!
-!    Else
-!
-!      do icolor=1,ncolor
-!        do inhc=1,nnhc
-!          do iatom=1,natom
-!            write(irst,'(d23.15,1x,d23.15,1x,d23.15)') &
-!              xbc3(iatom,inhc,icolor),ybc3(iatom,inhc,icolor),zbc3(iatom,inhc,icolor)
-!          enddo
-!        enddo
-!      enddo
-!
-!      do icolor=1,ncolor
-!        do inhc=1,nnhc
-!          do iatom=1,natom
-!            write(irst,'(d23.15,1x,d23.15,1x,d23.15)') &
-!              vxbc3(iatom,inhc,icolor),vybc3(iatom,inhc,icolor),vzbc3(iatom,inhc,icolor)
-!          enddo
-!        enddo
-!      enddo
-!
-!      do icolor=1,ncolor
-!        do inhc=1,nnhc
-!          do iatom=1,natom
-!            write(irst,'(d23.15,1x,d23.15,1x,d23.15)') &
-!              fxbc3(iatom,inhc,icolor),fybc3(iatom,inhc,icolor),fzbc3(iatom,inhc,icolor)
-!          enddo
-!        enddo
-!      enddo
-!    end if
-!  end if
-!  close(irst)
-
-
-
 
 
 ! +++++++++++++++++++++++
@@ -507,77 +452,4 @@ end subroutine restart_write
 !return
 !End Subroutine
 !
-!    Subroutine restart_read_Shoot
-!      use Parameters 
-!      Implicit none
-!!
-!!     /*   read in restart file   */
-!!
-!      open(irst, file=trim(address)//'/restart.dat', status = 'unknown')
-!      read(irst,*) nrstep
-!      read(irst,*) iseed1
-!      read(irst,*) iseed2
-!      read(irst,*) iseed3
-!      read(irst,*) iseed4
-!      read(irst,*) natom
-!      read(irst,*) nhydtot
-!      read(irst,*) nmshot
-!      read(irst,*) nhydrfl
-!      read(irst,*) nhyddel
-!      read(irst,*) nhydthr
-!      read(irst,*) gnkt
-!      do iatom=1,nshoot
-!         read(irst,*) index_hyd(iatom),ncontact(iatom),nhspin(iatom)
-!      enddo
-!      do iatom=1,nshoot
-!         read(irst,*) &
-!         hvelin(iatom),hvelout(iatom),hinitx(iatom),hinity(iatom)
-!      enddo
-!      do imode = 1, NBEAD
-!         do iatom = 1, NATOM0+NSHOOT
-!            read(irst,*) ux(iatom,imode), uy(iatom,imode), uz(iatom,imode)
-!         end do
-!      end do
-!!
-!      do imode = 1, NBEAD
-!         do iatom = 1, NATOM0+NSHOOT
-!            read(irst,*) vux(iatom,imode), vuy(iatom,imode), vuz(iatom,imode)
-!         end do
-!      end do
-!!
-!      do imode = 1, NBEAD
-!         do iatom = 1, NATOM0+NSHOOT
-!            read(irst,*) fux(iatom,imode), fuy(iatom,imode), fuz(iatom,imode)
-!         end do
-!      end do
-!!
-!      do imode = 1, NBEAD
-!         do inhc = 1, NNHC
-!            do iatom = 1, NATOM0+NSHOOT
-!               read(irst,*) xbath(iatom,inhc,imode),ybath(iatom,inhc,imode),zbath(iatom,inhc,imode)
-!            enddo
-!         enddo
-!      enddo
-!!
-!      do imode = 1, NBEAD
-!         do inhc  = 1, NNHC
-!            do iatom = 1, NATOM0+NSHOOT
-!               read(irst,*) vxbath(iatom,inhc,imode),vybath(iatom,inhc,imode),vzbath(iatom,inhc,imode)
-!            enddo
-!         enddo
-!      enddo
-!!
-!      do imode = 1, NBEAD
-!         do inhc  = 1, NNHC
-!            do iatom = 1, NATOM0+NSHOOT
-!               read(irst,*) fxbath(iatom,inhc,imode),fybath(iatom,inhc,imode),fzbath(iatom,inhc,imode)
-!            enddo
-!         enddo
-!      enddo
-!!
-!
-!
-!      close(irst)
-!      return
-!    End Subroutine
-!
+

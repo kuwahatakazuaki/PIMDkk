@@ -88,7 +88,6 @@ subroutine calc_hamil
 !  print *, ebath_cent
 
 
-!    Call Virial_Estimator
     call calc_estimator
     call print_ham
 

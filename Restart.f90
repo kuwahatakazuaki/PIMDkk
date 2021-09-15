@@ -256,9 +256,6 @@ if (istep > 1) call system('cat '//trim(address)//'/restart.dat >'//trim(address
     end if
   end if
   close(irst)
-! Kuwahata 2020/01/23
-!  call system('cat '//trim(address)//'/restart1.dat >'//trim(address)//'/restart.dat')
-! End Kuwahata 2020/01/23
 
 return
 End Subroutine
