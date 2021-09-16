@@ -1,6 +1,6 @@
 subroutine integ_nhc_cent
   use global_variable, only: Natom, Ncent, Ncolor, Nnhc, Nys, &
-      r, vu, fictmass, &
+      r, vu, fictmass, ysweight, &
       vbc11, fbc11, &
       qmcent11, &
       gnkt
@@ -18,7 +18,7 @@ subroutine integ_nhc_cent
 
 ! *** Ncent = 1 ***
   subroutine integ_nhc_cent1
-    real(8) :: skin
+    real(8) :: skin, dt_ys
     integer :: i, inhc, iys
 
     skin = 0.0d0
@@ -33,6 +33,13 @@ subroutine integ_nhc_cent
       end do
 
       do iys = 1, Nys
+        dt_ys = dt*ysweight(iys)
+
+        vbc11(Nnhc) = vbc11(Nnhc) + 0.25d0 * fbc11(Nnhc) * dt_ys
+        do inhc = 1, Nnhc-1
+          vfact = dexp( -0.125d0 * vbc11(Nnhc-inhc+1) * dt_ys )
+          vbc11(Nnhc-inhc) = vbc11(Nnhc-inhc)*vfact*vfact + 0.25d0*fbc11(Nnhc-inhc)*vfact*dt_ys
+        end do
       end do
     else if ( Ncolor > 1 ) then
     end if
