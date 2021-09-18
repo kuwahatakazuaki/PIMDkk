@@ -49,7 +49,6 @@
           fbc11(1)=(scale*scale*skin - gnkt)/qmcent11(1)
 !YK
 !     /* update the thermostat position */
-!          write(*,*) 'RBC'
           do inhc = 1, nnhc
              rbc11(inhc) = rbc11(inhc) &
                          + 0.5d0*vbc11(inhc)*dt_ys
