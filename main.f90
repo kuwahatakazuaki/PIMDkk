@@ -55,16 +55,6 @@ program pimd
     end if
   end if
 
-if ( myrank == 0 ) then
-  do j = 1, Nbead
-    do i = 1, Natom
-      print *, fu(:,i,j)
-    end do
-  end do
-end if
-call program_abort("HERE1")
-
-
   if ( myrank == 0 ) then
     call getforce_ref
   end if
@@ -116,6 +106,18 @@ contains
              newtime(5),':',newtime(6),':',newtime(7),':',newtime(8)
     write(Uout,'()')
   end subroutine print_time
+
+  subroutine print_check
+    if ( myrank == 0 ) then
+      call restart_write(Istep)
+      do j = 1, Nbead
+        do i = 1, Natom
+          print *, fu(:,i,j)
+        end do
+      end do
+    end if
+    call program_abort("HERE1")
+  end subroutine print_check
 
 
 end program pimd

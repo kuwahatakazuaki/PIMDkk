@@ -23,7 +23,7 @@ subroutine setup_whole
   if      ( Ncent == 1 ) then
 
     if      ( Ncolor == 1) then
-
+      ! the mass of thermostat
       qmcent11(1) = 3.0d0 * dble(Natom) / beta / omega2
       qmcent11(2:Nnhc) = 1.0d0 / beta / omega2
 

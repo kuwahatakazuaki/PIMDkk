@@ -8,6 +8,7 @@ contains
     integer :: ierr
 
     print *, message
+    call mpi_barrier(MPI_COMM_WORLD, ierr)
     call mpi_abort(MPI_COMM_WORLD, -1, ierr)
     stop
   end subroutine program_abort
