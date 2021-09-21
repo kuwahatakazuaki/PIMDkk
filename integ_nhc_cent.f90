@@ -1,8 +1,8 @@
 subroutine integ_nhc_cent
   use global_variable, only: Natom, Ncent, Ncolor, Nnhc, Nys, &
       r, vu, fictmass, ysweight, &
-      rbc11, vbc11, fbc11, &
-      qmcent11, &
+      rbc11, vbc11, fbc11, qmcent11, &
+      rbc1,  vbc1,  fbc1,  qmcent1, &
       gnkt, gkt
   use utility
   implicit none
@@ -21,7 +21,7 @@ subroutine integ_nhc_cent
   subroutine integ_nhc_cent1
     real(8) :: skin, dt_ys, vfact, pvfact
     real(8) :: dt
-    integer :: i, inhc, iys
+    integer :: i, inhc, iys, icolor
 
     skin = 0.0d0
     do i = 1, Natom
@@ -59,6 +59,23 @@ subroutine integ_nhc_cent
 !      qmcent11(2:Nnhc) = 1.0d0 / beta / omega2
 
     else if ( Ncolor > 1 ) then
+      do icolor = 1, Ncolor
+        fbc1(1,icolor) = (skin - gnkt)/qmcent1(1,icolor)
+        do inhc = 2, Nnhc
+          fbc1(inhc,icolor) = ( qmcent1(inhc-1,icolor) * vbc1(inhc-1,icolor) * vbc1(inhc-1,icolor) - gkt ) / qmcent1(inhc,icolor)
+        end do
+      end do
+
+      do icolor = 1, Ncolor
+        do iys = 1, Nys
+          dt_ys = dt*ysweight(iys)
+          vbc1(Nnhc,icolor) = vbc1(Nnhc,icolor) + 0.25d0 * fbc1(Nnhc,icolor) * dt_ys
+          do inhc = 1, Nnhc-1
+            vfact = dexp( -0.125d0 * vbc1(Nnhc-inhc+1,icolor) * dt_ys )
+            vbc1(Nnhc-inhc,icolor) = vbc1(Nnhc-inhc,icolor) * vfact * vfact + 0.25d0 * fbc1(Nnhc-inhc,icolor) * vfact * dt_ys
+          end do
+        end do
+      end do
     end if
 
   end subroutine integ_nhc_cent1

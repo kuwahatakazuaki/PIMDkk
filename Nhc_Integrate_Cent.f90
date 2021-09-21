@@ -75,7 +75,7 @@
              fbc1(inhc,icolor) = (qmcent1(inhc-1,icolor)*vbc1(inhc-1,icolor)*vbc1(inhc-1,icolor) &
                                - gkt)/qmcent1(inhc,icolor)
           enddo
-       enddo   
+       enddo
 
 !     /*  start multiple time step integration  */
        do icolor=1,ncolor
