@@ -70,13 +70,29 @@ subroutine integ_nhc_cent
         do iys = 1, Nys
           dt_ys = dt*ysweight(iys)
           vbc1(Nnhc,icolor) = vbc1(Nnhc,icolor) + 0.25d0 * fbc1(Nnhc,icolor) * dt_ys
+
           do inhc = 1, Nnhc-1
             vfact = dexp( -0.125d0 * vbc1(Nnhc-inhc+1,icolor) * dt_ys )
             vbc1(Nnhc-inhc,icolor) = vbc1(Nnhc-inhc,icolor) * vfact * vfact + 0.25d0 * fbc1(Nnhc-inhc,icolor) * vfact * dt_ys
           end do
+
+          pvfact = dexp(-0.5d0 * vbc1(1,icolor) * dt_ys )
+          fbc1(1,icolor) = (pvfact*pvfact*skin - gnkt) / qmcent1(1,icolor)
+
+          rbc1(:,icolor) = rbc1(:,icolor) + 0.5d0 * vbc1(:,icolor) * dt_ys
+
+          do inhc = 1, Nnhc-1
+            vfact = dexp( -0.125d0 * vbc1(inhc+1,icolor) * dt_ys )
+            vbc1(inhc,icolor) = vbc1(inhc,icolor) * vfact * vfact + 0.25d0 * fbc1(inhc,icolor) * vfact * dt_ys
+
+            fbc1(inhc+1,icolor) = (qmcent1(inhc,icolor) * vbc1(inhc,icolor) * vbc1(inhc,icolor) - gkt ) / qmcent1(inhc+1,icolor)
+          end do
+          vbc1(Nnhc,icolor) = vbc1(Nnhc,icolor) + 0.25d0 + fbc1(Nnhc,icolor) * dt_ys
         end do
       end do
     end if
+
+    vu(:,:,1) = vu(:,:,1) * pvfact
 
   end subroutine integ_nhc_cent1
 ! *** End Ncent = 1 ***
@@ -222,8 +238,8 @@ end subroutine integ_nhc_cent
 !
 !    Return
 !  End Subroutine
-!
-!
+
+
 !  Subroutine nhc_integrate_cent3
 !
 !    Use Parameters
