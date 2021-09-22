@@ -194,7 +194,7 @@
                vyfact=dexp(-0.125d0*vybc31(iatom,NNHC-inhc+1)*dt_ys)
                vzfact=dexp(-0.125d0*vzbc31(iatom,NNHC-inhc+1)*dt_ys)
                vxbc31(iatom,NNHC-inhc) = vxbc31(iatom,NNHC-inhc)*vxfact*vxfact &
-                                       + 0.25d0*fxbc31(iatom,NNHC-inhc)*vxfact*dt_ys   
+                                       + 0.25d0*fxbc31(iatom,NNHC-inhc)*vxfact*dt_ys
                vybc31(iatom,NNHC-inhc) = vybc31(iatom,NNHC-inhc)*vyfact*vyfact &
                                        + 0.25d0*fybc31(iatom,NNHC-inhc)*vyfact*dt_ys
                vzbc31(iatom,NNHC-inhc) = vzbc31(iatom,NNHC-inhc)*vzfact*vzfact &

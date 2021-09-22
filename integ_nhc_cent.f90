@@ -3,9 +3,12 @@ subroutine integ_nhc_cent
       r, vu, fictmass, ysweight, &
       rbc11, vbc11, fbc11, qmcent11, &
       rbc1,  vbc1,  fbc1,  qmcent1, &
+      rbc31, vbc31, fbc31, qmcent31, &
+      rbc3,  vbc3,  fbc3,  qmcent3, &
       gnkt, gkt
   use utility
   implicit none
+  integer :: i, inhc, iys, icolor
 
     select case(Ncent)
       case(1)
@@ -19,9 +22,8 @@ subroutine integ_nhc_cent
 
 ! *** Ncent = 1 ***
   subroutine integ_nhc_cent1
-    real(8) :: skin, dt_ys, vfact, pvfact
-    real(8) :: dt
-    integer :: i, inhc, iys, icolor
+    real(8) :: skin, vfact, pvfact
+    real(8) :: dt, dt_ys
 
     skin = 0.0d0
     do i = 1, Natom
@@ -99,6 +101,34 @@ subroutine integ_nhc_cent
 
 ! *** Ncent = 3 ***
   subroutine integ_nhc_cent3
+    !real(8) :: skin, dt_ys, vfact, pvfact
+    real(8) :: dt, dt_ys, vfact(3), pvfact(3)
+
+    real(8) :: dkin(3)
+
+    if (Ncolor == 1) then
+      do iys = 1, Nys
+        dt_ys = dt*ysweight(iys)
+
+        do i = 1, Natom
+          dkin(:) = fictmass(i,1) * vu(:,i,1) * vu(:,i,1)
+          fbc31(:,i,1) = (dkin(:) - gkt) / qmcent31(1)
+
+          do inhc = 2, Nnhc
+            fbc31(:,i,inhc) = (qmcent31(inhc-1) * vbc31(:,i,inhc-1) * vbc31(:,i,inhc-1) - gkt) / qmcent31(inhc)
+          end do
+
+          vbc31(:,i,Nnhc) = vbc31(:,i,inhc) + 0.25d0 * fbc31(:,i,Nnhc) * dt_ys
+
+          do inhc = 1, Nnhc-1
+          end do
+
+        end do
+
+      end do
+
+    else if (Ncolor > 1) then
+    end if
   end subroutine integ_nhc_cent3
 ! *** End Ncent = 3 ***
 
