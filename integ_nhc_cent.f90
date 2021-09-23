@@ -121,9 +121,32 @@ subroutine integ_nhc_cent
           vbc31(:,i,Nnhc) = vbc31(:,i,inhc) + 0.25d0 * fbc31(:,i,Nnhc) * dt_ys
 
           do inhc = 1, Nnhc-1
+            vfact(:) = dexp( -0.125d0 * vbc31(:,i,Nnhc-inhc+1) * dt_ys )
+            vbc31(:,i,Nnhc-inhc) = vbc31(:,i,Nnhc-inhc) + 0.25d0 * fbc31(:,i,Nnhc-inhc) * vfact(:) * dt_ys
           end do
 
+          pvfact(:) = dexp( -0.5d0 * vbc31(:,i,1) * dt_ys )
+          fbc31(:,i,1) = ( pvfact(:) * pvfact(:) * dkin(:) - gkt ) / qmcent31(1)
+
+          !rbc31(:,i,inhc) = rbc31(:,i,inhc) + 0.5d0 * vbc31(:,i,inhc) * dt_ys
+          do inhc = 1, Nnhc
+            rbc31(:,i,inhc) = rbc31(:,i,inhc) + 0.5d0 * vbc31(:,i,inhc) * dt_ys
+          end do
+
+          ! +++ HERE +++ !
+          do inhc = 1, Nnhc
+          end do
+
+
         end do
+
+          do inhc = 1, Nnhc-1
+            vfact(:) = dexp( -0.125d0 * vbc3(:,i,inhc+1,icolor) * dt_ys )
+            vbc3(:,i,inhc,icolor) = vbc3(:,i,inhc,icolor) * vfact(:) * vfact(:) &
+                                    + 0.25d0 * fbc3(:,i,inhc,icolor) * vfact(:) * dt_ys
+            fbc3(:,i,inhc+1,icolor) = &
+                (qmcent3(inhc,icolor) * vbc3(:,i,inhc,icolor) * vbc3(:,i,inhc,icolor) - gkt) / qmcent3(inhc+1,icolor) 
+          end do
 
       end do
 
@@ -135,139 +158,6 @@ subroutine integ_nhc_cent
 end subroutine integ_nhc_cent
 
 
-!  Subroutine Nhc_Integrate_Cent
-!
-!    Use Parameters
-!    Implicit None
-!
-!    Double Precision                   :: skin, scale, dt_ys, vfact, pvfact
-!    Integer                            :: i, iys
-!
-!    skin = 0.d0
-!    do iatom = 1, natom
-!       skin = skin                                        & 
-!            + fictmass(iatom,1)*vux(iatom,1)*vux(iatom,1) &
-!            + fictmass(iatom,1)*vuy(iatom,1)*vuy(iatom,1) &
-!            + fictmass(iatom,1)*vuz(iatom,1)*vuz(iatom,1)
-!    enddo
-!
-!    scale = 1.d0
-!
-!!     /* update the force */
-!!YK Rewrote using qmass_cent
-!
-!    If(NColor==1) Then
-!
-!       fbc11(1) = (skin - gnkt)/qmcent11(1)
-!       do inhc = 2, nnhc
-!          fbc11(inhc) = (qmcent11(inhc-1)*vbc11(inhc-1)*vbc11(inhc-1) &
-!                      - gkt)/qmcent11(inhc)
-!       enddo
-!
-!!     /*  start multiple time step integration  */
-!       do iys = 1, nys 
-!
-!!     /*  set time increment at this loop  */
-!          dt_ys = dt*ysweight(iys)
-!
-!!     /* update the thermostat velocities */
-!          vbc11(nnhc) = vbc11(nnhc) + 0.25d0*fbc11(nnhc)*dt_ys
-!          do inhc = 1, nnhc-1
-!             vfact=dexp(-0.125d0*   vbc11(nnhc-inhc+1)*dt_ys)
-!             vbc11(nnhc-inhc) = vbc11(nnhc-inhc)*vfact*vfact &
-!                              + 0.25d0*fbc11(nnhc-inhc)*vfact*dt_ys
-!          enddo
-!
-!!     /* update the particle velocities */
-!          pvfact = dexp(-0.5d0*vbc11(1)*dt_ys)
-!          scale = scale*pvfact
-!!     /* update the force */
-!!YK changed to qmass_cent
-!          fbc11(1)=(scale*scale*skin - gnkt)/qmcent11(1)
-!!YK
-!!     /* update the thermostat position */
-!!          write(*,*) 'RBC'
-!          do inhc = 1, nnhc
-!             rbc11(inhc) = rbc11(inhc) &
-!                         + 0.5d0*vbc11(inhc)*dt_ys
-!          enddo
-!!
-!!     /* update the thermostat velocities */
-!          do inhc = 1, nnhc-1
-!             vfact = dexp(-0.125d0*vbc11(inhc+1)*dt_ys)
-!             vbc11(inhc) = vbc11(inhc)*vfact*vfact &
-!                         + 0.25d0*fbc11(inhc)*vfact*dt_ys
-!!YK changed to qmass_cent
-!             fbc11(inhc+1) = (qmcent11(inhc)*vbc11(inhc)*vbc11(inhc) &
-!                           - gkt)/qmcent11(inhc+1)
-!          enddo
-!
-!          vbc11(nnhc) = vbc11(nnhc) + 0.25d0*fbc11(nnhc)*dt_ys
-!       enddo
-!    
-!    Else
-!
-!       do icolor=1,ncolor
-!          fbc1(1,icolor) = (skin - gnkt)/qmcent1(1,icolor)
-!          do inhc = 2, nnhc
-!             fbc1(inhc,icolor) = (qmcent1(inhc-1,icolor)*vbc1(inhc-1,icolor)*vbc1(inhc-1,icolor) &
-!                               - gkt)/qmcent1(inhc,icolor)
-!          enddo
-!       enddo   
-!
-!!     /*  start multiple time step integration  */
-!       do icolor=1,ncolor
-!          do iys = 1, nys 
-!
-!!     /*  set time increment at this loop  */
-!             dt_ys = dt*ysweight(iys)
-!
-!!     /* update the thermostat velocities */
-!             vbc1(nnhc,icolor) = vbc1(nnhc,icolor) + 0.25d0*fbc1(nnhc,icolor)*dt_ys
-!             do inhc = 1, nnhc-1
-!                vfact=dexp(-0.125d0*   vbc1(nnhc-inhc+1,icolor)*dt_ys)
-!                vbc1(nnhc-inhc,icolor) = vbc1(nnhc-inhc,icolor)*vfact*vfact &
-!                                       + 0.25d0*fbc1(nnhc-inhc,icolor)*vfact*dt_ys
-!             enddo
-!
-!!     /* update the particle velocities */
-!             pvfact = dexp(-0.5d0*vbc1(1,icolor)*dt_ys)
-!             scale = scale*pvfact
-!
-!!     /* update the force */
-!!YK changed to qmass_cent
-!             fbc1(1,icolor)=(scale*scale*skin - gnkt)/qmcent1(1,icolor)
-!!YK
-!!     /* update the thermostat position */
-!             do inhc = 1, nnhc
-!                rbc1(inhc,icolor) = rbc1(inhc,icolor) &
-!                                  + 0.5d0*vbc1(inhc,icolor)*dt_ys
-!             enddo
-!
-!!     /* update the thermostat velocities */
-!             do inhc = 1, nnhc-1
-!                vfact = dexp(-0.125d0*vbc1(inhc+1,icolor)*dt_ys)
-!                vbc1(inhc,icolor) = vbc1(inhc,icolor)*vfact*vfact &
-!                                  + 0.25d0*fbc1(inhc,icolor)*vfact*dt_ys
-!!YK changed to qmcent
-!                fbc1(inhc+1,icolor) = &
-!                                    + (qmcent1(inhc,icolor)*vbc1(inhc,icolor)*vbc1(inhc,icolor) &
-!                                    -  gkt)/qmcent1(inhc+1,icolor)
-!             enddo
-!             vbc1(nnhc,icolor) = vbc1(nnhc,icolor) + 0.25d0*fbc1(nnhc,icolor)*dt_ys
-!          enddo
-!       enddo
-!    EndIf
-!
-!!     /* update the paricle velocities */
-!    do iatom = 1, natom
-!       vux(iatom,1) = vux(iatom,1)*scale
-!       vuy(iatom,1) = vuy(iatom,1)*scale
-!       vuz(iatom,1) = vuz(iatom,1)*scale
-!    enddo
-!
-!    Return
-!  End Subroutine
 
 
 !  Subroutine nhc_integrate_cent3

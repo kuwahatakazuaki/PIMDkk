@@ -231,14 +231,14 @@
                 vxfact = dexp(-0.125d0*vxbc31(iatom,inhc+1)*dt_ys)
                 vyfact = dexp(-0.125d0*vybc31(iatom,inhc+1)*dt_ys)
                 vzfact = dexp(-0.125d0*vzbc31(iatom,inhc+1)*dt_ys)
-   
+
                 vxbc31(iatom,inhc) = vxbc31(iatom,inhc)*vxfact*vxfact &
                                    + 0.25d0*fxbc31(iatom,inhc)*vxfact*dt_ys
                 vybc31(iatom,inhc) = vybc31(iatom,inhc)*vyfact*vyfact &
                                    + 0.25d0*fybc31(iatom,inhc)*vyfact*dt_ys
                 vzbc31(iatom,inhc) = vzbc31(iatom,inhc)*vzfact*vzfact &
                                    + 0.25d0*fzbc31(iatom,inhc)*vzfact*dt_ys
-   
+
                 fxbc31(iatom,inhc+1) = (qmcent31(inhc)*vxbc31(iatom,inhc)*vxbc31(iatom,inhc) &
                                      - gkt)/qmcent31(inhc+1) 
                 fybc31(iatom,inhc+1) = (qmcent31(inhc)*vybc31(iatom,inhc)*vybc31(iatom,inhc) &
@@ -246,7 +246,7 @@
                 fzbc31(iatom,inhc+1) = (qmcent31(inhc)*vzbc31(iatom,inhc)*vzbc31(iatom,inhc) &
                                      - gkt)/qmcent31(inhc+1) 
              enddo
-   
+
              vxbc31(iatom,NNHC) = vxbc31(iatom,NNHC)  &
                                 + 0.25d0*fxbc31(iatom,NNHC)*dt_ys
              vybc31(iatom,NNHC) = vybc31(iatom,NNHC)  &
