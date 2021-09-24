@@ -133,24 +133,26 @@ subroutine integ_nhc_cent
             rbc31(:,i,inhc) = rbc31(:,i,inhc) + 0.5d0 * vbc31(:,i,inhc) * dt_ys
           end do
 
-          ! +++ HERE +++ !
           do inhc = 1, Nnhc
+            vfact(:) = dexp( -0.125d0 * vbc31(:,i,inhc+1) * dt_ys)
+            vbc31(:,i,inhc) = vbc31(:,i,inhc) * vfact * vfact + 0.25d0 * fbc31(:,i,inhc) * vfact * dt_ys
+            fbc31(:,i,inhc+1) = ( qmcent31(inhc) * vbc31(:,i,inhc) * vbc31(:,i,inhc) - gkt) / qmcent31(inhc+1)
           end do
 
+          ! +++ HERE +++
 
         end do
-
-          do inhc = 1, Nnhc-1
-            vfact(:) = dexp( -0.125d0 * vbc3(:,i,inhc+1,icolor) * dt_ys )
-            vbc3(:,i,inhc,icolor) = vbc3(:,i,inhc,icolor) * vfact(:) * vfact(:) &
-                                    + 0.25d0 * fbc3(:,i,inhc,icolor) * vfact(:) * dt_ys
-            fbc3(:,i,inhc+1,icolor) = &
-                (qmcent3(inhc,icolor) * vbc3(:,i,inhc,icolor) * vbc3(:,i,inhc,icolor) - gkt) / qmcent3(inhc+1,icolor) 
-          end do
 
       end do
 
     else if (Ncolor > 1) then
+          !do inhc = 1, Nnhc-1
+          !  vfact(:) = dexp( -0.125d0 * vbc3(:,i,inhc+1,icolor) * dt_ys )
+          !  vbc3(:,i,inhc,icolor) = vbc3(:,i,inhc,icolor) * vfact(:) * vfact(:) &
+          !                          + 0.25d0 * fbc3(:,i,inhc,icolor) * vfact(:) * dt_ys
+          !  fbc3(:,i,inhc+1,icolor) = &
+          !      (qmcent3(inhc,icolor) * vbc3(:,i,inhc,icolor) * vbc3(:,i,inhc,icolor) - gkt) / qmcent3(inhc+1,icolor) 
+          !end do
     end if
   end subroutine integ_nhc_cent3
 ! *** End Ncent = 3 ***
