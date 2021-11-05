@@ -101,7 +101,6 @@ subroutine integ_nhc_cent
 
 ! *** Ncent = 3 ***
   subroutine integ_nhc_cent3
-    !real(8) :: skin, dt_ys, vfact, pvfact
     real(8) :: dt, dt_ys, vfact(3), pvfact(3)
 
     real(8) :: dkin(3)
@@ -133,19 +132,34 @@ subroutine integ_nhc_cent
             rbc31(:,i,inhc) = rbc31(:,i,inhc) + 0.5d0 * vbc31(:,i,inhc) * dt_ys
           end do
 
-          do inhc = 1, Nnhc
+          do inhc = 1, Nnhc-1
             vfact(:) = dexp( -0.125d0 * vbc31(:,i,inhc+1) * dt_ys)
             vbc31(:,i,inhc) = vbc31(:,i,inhc) * vfact * vfact + 0.25d0 * fbc31(:,i,inhc) * vfact * dt_ys
             fbc31(:,i,inhc+1) = ( qmcent31(inhc) * vbc31(:,i,inhc) * vbc31(:,i,inhc) - gkt) / qmcent31(inhc+1)
           end do
 
-          ! +++ HERE +++
+          vbc31(:,i,Nnhc) = vbc31(:,i,Nnhc) + 0.25d0 * fbc31(:,i,Nnhc) * dt_ys
+          vu(:,i,1) = vu(:,i,1) * pvfact(:)
 
         end do
 
       end do
 
     else if (Ncolor > 1) then
+      do iys = 1, Nys
+        dt_ys = dt*ysweight(iys)
+        do i = 1, Natom
+          do icolor = 1, Ncolor
+            dkin(:) = fictmass(i,1) * vu(:,i,1) * vu(:,i,1)
+            fbc3(:,i,1,icolor) = (dkin(:) - gkt) / qmcent3(1,icolor)
+
+            do inhc = 2, Nnhc
+              ! +++ HERE +++ !
+            end do
+
+          end do
+        end do
+      end do
           !do inhc = 1, Nnhc-1
           !  vfact(:) = dexp( -0.125d0 * vbc3(:,i,inhc+1,icolor) * dt_ys )
           !  vbc3(:,i,inhc,icolor) = vbc3(:,i,inhc,icolor) * vfact(:) * vfact(:) &
@@ -159,137 +173,6 @@ subroutine integ_nhc_cent
 
 end subroutine integ_nhc_cent
 
-
-
-
-!  Subroutine nhc_integrate_cent3
-!
-!    Use Parameters
-!    Implicit None
-!    Double Precision                   :: skin, scale, dt_ys, vfact, pvfact
-!    Double Precision                   :: vxfact,vyfact,vzfact
-!    Double Precision                   :: pvxfact,pvyfact,pvzfact
-!    Double Precision                   :: scalex,scaley,scalez
-!    Double Precision                   :: dkinx,dkiny,dkinz
-!    Integer                            :: i, iys
-!
-!
-!    If(NColor==1) Then
-!
-!!     /*  start multiple time step integration  */
-!       do iys = 1, NYS
-!!     /*  set time increment at this loop  */
-!          dt_ys = dt*ysweight(iys)
-!          do iatom = 1, NATOM
-!
-!!     /*  calculate kinetic energy of centroid coordiates  */
-!!     /*  for each atom                                    */
-!
-!             dkinx = fictmass(iatom,1)*vux(iatom,1)*vux(iatom,1)
-!             dkiny = fictmass(iatom,1)*vuy(iatom,1)*vuy(iatom,1)
-!             dkinz = fictmass(iatom,1)*vuz(iatom,1)*vuz(iatom,1)
-!             scalex = 1.d0
-!             scaley = 1.d0
-!             scalez = 1.d0
-!
-!!     /* update the force */
-!
-!             fxbc31(iatom,1) = (dkinx - gkt)/qmcent31(1)
-!             fybc31(iatom,1) = (dkiny - gkt)/qmcent31(1)
-!             fzbc31(iatom,1) = (dkinz - gkt)/qmcent31(1)
-!   
-!             do inhc = 2, NNHC
-!                fxbc31(iatom,inhc) = &
-!                                    (qmcent31(inhc-1)*vxbc31(iatom,inhc-1)*vxbc31(iatom,inhc-1) &
-!                                   - gkt)/qmcent31(inhc)
-!                fybc31(iatom,inhc) = &
-!                                    (qmcent31(inhc-1)*vybc31(iatom,inhc-1)*vybc31(iatom,inhc-1) &
-!                                   - gkt)/qmcent31(inhc)
-!                fzbc31(iatom,inhc) = &
-!                                    (qmcent31(inhc-1)*vzbc31(iatom,inhc-1)*vzbc31(iatom,inhc-1) &
-!                                   - gkt)/qmcent31(inhc)
-!             enddo
-!
-!!     /* update the thermostat velocities */
-!
-!             vxbc31(iatom,NNHC) = vxbc31(iatom,NNHC) &
-!                                + 0.25d0*fxbc31(iatom,NNHC)*dt_ys
-!             vybc31(iatom,NNHC) = vybc31(iatom,NNHC) &
-!                                + 0.25d0*fybc31(iatom,NNHC)*dt_ys
-!             vzbc31(iatom,NNHC) = vzbc31(iatom,NNHC) &
-!                                + 0.25d0*fzbc31(iatom,NNHC)*dt_ys
-!
-!            do inhc = 1, NNHC-1
-!               vxfact=dexp(-0.125d0*vxbc31(iatom,NNHC-inhc+1)*dt_ys)
-!               vyfact=dexp(-0.125d0*vybc31(iatom,NNHC-inhc+1)*dt_ys)
-!               vzfact=dexp(-0.125d0*vzbc31(iatom,NNHC-inhc+1)*dt_ys)
-!               vxbc31(iatom,NNHC-inhc) = vxbc31(iatom,NNHC-inhc)*vxfact*vxfact &
-!                                       + 0.25d0*fxbc31(iatom,NNHC-inhc)*vxfact*dt_ys   
-!               vybc31(iatom,NNHC-inhc) = vybc31(iatom,NNHC-inhc)*vyfact*vyfact &
-!                                       + 0.25d0*fybc31(iatom,NNHC-inhc)*vyfact*dt_ys
-!               vzbc31(iatom,NNHC-inhc) = vzbc31(iatom,NNHC-inhc)*vzfact*vzfact &
-!                                       + 0.25d0*fzbc31(iatom,NNHC-inhc)*vzfact*dt_ys
-!            enddo
-!
-!!     /* update the particle velocities */
-!
-!             pvxfact = dexp(-0.5d0*vxbc31(iatom,1)*dt_ys)
-!             pvyfact = dexp(-0.5d0*vybc31(iatom,1)*dt_ys)
-!             pvzfact = dexp(-0.5d0*vzbc31(iatom,1)*dt_ys)
-!   
-!             scalex = scalex*pvxfact
-!             scaley = scaley*pvyfact
-!             scalez = scalez*pvzfact
-!
-!!     /* update the force */
-!             fxbc31(iatom,1)=(scalex*scalex*dkinx - gkt)/qmcent31(1)
-!             fybc31(iatom,1)=(scaley*scaley*dkiny - gkt)/qmcent31(1)
-!             fzbc31(iatom,1)=(scalez*scalez*dkinz - gkt)/qmcent31(1)
-!
-!!     /* update the thermostat position */
-!             do inhc = 1, NNHC
-!                xbc31(iatom,inhc) = xbc31(iatom,inhc) &
-!                                  + 0.5d0*vxbc31(iatom,inhc)*dt_ys
-!                ybc31(iatom,inhc) = ybc31(iatom,inhc) &
-!                                  + 0.5d0*vybc31(iatom,inhc)*dt_ys
-!                zbc31(iatom,inhc) = zbc31(iatom,inhc) &
-!                                  + 0.5d0*vzbc31(iatom,inhc)*dt_ys
-!             enddo
-!
-!!     /* update the thermostat velocities */
-!             do inhc = 1, NNHC-1
-!                vxfact = dexp(-0.125d0*vxbc31(iatom,inhc+1)*dt_ys)
-!                vyfact = dexp(-0.125d0*vybc31(iatom,inhc+1)*dt_ys)
-!                vzfact = dexp(-0.125d0*vzbc31(iatom,inhc+1)*dt_ys)
-!   
-!                vxbc31(iatom,inhc) = vxbc31(iatom,inhc)*vxfact*vxfact &
-!                                   + 0.25d0*fxbc31(iatom,inhc)*vxfact*dt_ys
-!                vybc31(iatom,inhc) = vybc31(iatom,inhc)*vyfact*vyfact &
-!                                   + 0.25d0*fybc31(iatom,inhc)*vyfact*dt_ys
-!                vzbc31(iatom,inhc) = vzbc31(iatom,inhc)*vzfact*vzfact &
-!                                   + 0.25d0*fzbc31(iatom,inhc)*vzfact*dt_ys
-!   
-!                fxbc31(iatom,inhc+1) = (qmcent31(inhc)*vxbc31(iatom,inhc)*vxbc31(iatom,inhc) &
-!                                     - gkt)/qmcent31(inhc+1) 
-!                fybc31(iatom,inhc+1) = (qmcent31(inhc)*vybc31(iatom,inhc)*vybc31(iatom,inhc) &
-!                                     - gkt)/qmcent31(inhc+1)
-!                fzbc31(iatom,inhc+1) = (qmcent31(inhc)*vzbc31(iatom,inhc)*vzbc31(iatom,inhc) &
-!                                     - gkt)/qmcent31(inhc+1) 
-!             enddo
-!   
-!             vxbc31(iatom,NNHC) = vxbc31(iatom,NNHC)  &
-!                                + 0.25d0*fxbc31(iatom,NNHC)*dt_ys
-!             vybc31(iatom,NNHC) = vybc31(iatom,NNHC)  &
-!                                + 0.25d0*fybc31(iatom,NNHC)*dt_ys
-!             vzbc31(iatom,NNHC) = vzbc31(iatom,NNHC)  &
-!                                + 0.25d0*fzbc31(iatom,NNHC)*dt_ys
-!
-!!     /* update the paricle velocities */
-!             vux(iatom,1) = vux(iatom,1)*scalex
-!             vuy(iatom,1) = vuy(iatom,1)*scaley
-!             vuz(iatom,1) = vuz(iatom,1)*scalez
-!          enddo
-!       enddo
 !
 !    Else
 !
@@ -429,6 +312,3 @@ end subroutine integ_nhc_cent
 !       enddo
 !
 !    EndIf   
-!
-!    return
-!    End Subroutine 
