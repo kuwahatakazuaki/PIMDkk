@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+# pimd execution file
+pimd_mpi
+tags
+*swp
+log*
+.DS_Store
+
