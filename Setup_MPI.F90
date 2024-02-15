@@ -1,6 +1,6 @@
-Subroutine Setup_MPI
-  Use Parameters
-  Implicit None
+subroutine Setup_MPI
+  use Parameters
+  implicit none
   double precision :: rndnumber
   integer :: inhc, icolor, imode
 
@@ -34,7 +34,7 @@ Subroutine Setup_MPI
 ! /*   thermostat attached to non-centroid modes   */
   qmass(1) = 0.0d0
   do imode = 2, nbead
-     qmass(imode) = 1.d0/beta/omega_p2
+    qmass(imode) = 1.d0/beta/omega_p2
   enddo
 !
 !     /*   For centroid MD, qmass should be scaled by gamma2, since   *
@@ -54,19 +54,19 @@ Subroutine Setup_MPI
 !      *   of propagator (Yoshida and Suzuki parameters)   */
 !
   if (nys==1) then
-      ysweight(1) = 1.d0
+    ysweight(1) = 1.d0
   else if (nys==3) then
-      ysweight(1) = 1.d0/(2.d0 - 2.d0**(1.d0/3.d0))
-      ysweight(2) = 1.d0 - 2.d0*ysweight(1)
-      ysweight(3) = ysweight(1)
+    ysweight(1) = 1.d0/(2.d0 - 2.d0**(1.d0/3.d0))
+    ysweight(2) = 1.d0 - 2.d0*ysweight(1)
+    ysweight(3) = ysweight(1)
   else if (nys==5) then
-      ysweight(1) = 1.d0/(4.d0 - 4.d0**(1.d0/3.d0))
-      ysweight(2) = ysweight(1)
-      ysweight(3) = 1.d0 - 4.d0*ysweight(1)
-      ysweight(4) = ysweight(1)
-      ysweight(5) = ysweight(1)
+    ysweight(1) = 1.d0/(4.d0 - 4.d0**(1.d0/3.d0))
+    ysweight(2) = ysweight(1)
+    ysweight(3) = 1.d0 - 4.d0*ysweight(1)
+    ysweight(4) = ysweight(1)
+    ysweight(5) = ysweight(1)
   end if
 
 
-Return
-End Subroutine
+return
+end subroutine

@@ -59,7 +59,7 @@ Module Parameters
 !YK Switch for Restarting from previous MD, Number of the previous MD step
     integer                       :: Nrstep = 0
 !YK Added for MPI
-    Integer                       :: NProcs,MyRank,IERR
+    Integer                       :: NProcs,MyRank!,IERR
 !YK Added to Specify How to Calculate Force
     Integer                       :: Iforce
 !YK Added to Set Random Number Generator Seed

@@ -3,6 +3,7 @@ Subroutine Init_Recv_Send_MPI_tk
   Use MPI
   Implicit None
   Integer :: i,j,k,ii,jj,isend,irecv,n
+  integer :: ierr
 
   if(myrank/=0) then
     ii=nrecv+1

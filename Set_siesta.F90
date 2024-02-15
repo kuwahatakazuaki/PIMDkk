@@ -1,6 +1,5 @@
-Subroutine Set_siesta
-  Use MPI
-  Use Parameters
+subroutine Set_siesta
+  use Parameters
   Implicit None
   Integer   :: i,j,k,id,imode
 
@@ -11,6 +10,6 @@ do imode=ista,iend
    call system('cp InputFile/* '//trim(addresstmp))
 enddo
 
-Return
-End Subroutine
+return
+end subroutine
 

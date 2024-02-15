@@ -1,8 +1,10 @@
 Subroutine Broad1
   Use Parameters
   Use MPI
-  Implicit None
+  implicit none
+  integer :: ierr
 
+#ifdef _mpi_
   Call MPI_BCAST(Natom,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   Call MPI_BCAST(temperature,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
   Call MPI_BCAST(Nbead,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
@@ -13,8 +15,6 @@ Subroutine Broad1
   Call MPI_BCAST(Nys,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   Call MPI_BCAST(Nnhc,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   Call MPI_BCAST(gamma,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-  !Call MPI_BCAST(Iensemble,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
-  !Call MPI_BCAST(NColor,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   Call MPI_BCAST(Iforce,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   call MPI_Bcast(Iseeds,4,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   Call MPI_BCAST(NCent,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
@@ -37,19 +37,22 @@ Subroutine Broad1
   Call MPI_BCAST(umbrella_atom1,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   Call MPI_BCAST(umbrella_atom2,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   Call MPI_BCAST(umbrella_atom3,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
-  Return
+#endif
+
+  return
 End Subroutine
 
 subroutine Broad2
   use Parameters
   use MPI
-  Implicit None
+  implicit none
+  integer :: ierr
   real(8) :: tempr(3,Natom)
 
-   Call MPI_BCAST(physmass,natom,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-   Call MPI_BCAST(atom_num,natom,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
-   Call MPI_BCAST(alabel,2*natom,MPI_CHARACTER,0,MPI_COMM_WORLD,IERR)
-
+#ifdef _mpi_
+  Call MPI_BCAST(physmass,natom,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(atom_num,natom,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  Call MPI_BCAST(alabel,2*natom,MPI_CHARACTER,0,MPI_COMM_WORLD,IERR)
 
   if ( MyRank == 0 ) then
     !x1(:)=ux(:,1)
@@ -67,15 +70,19 @@ subroutine Broad2
   !uy(:,1)=y1(:)
   !uz(:,1)=z1(:)
   ur(:,:,1) = tempr(:,:)
+#endif
 
-  Return
+  return
 end subroutine Broad2
 
 
-Subroutine Broad3
-  Use Parameters
-  Use MPI
-  Implicit None
+subroutine Broad3
+  use Parameters
+  use MPI
+  implicit none
+  integer :: ierr
+
+#ifdef _mpi_
   Call MPI_BCAST(Nrstep,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   !Call MPI_BCAST(ux(1,1),natom*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
   !Call MPI_BCAST(uy(1,1),natom*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
@@ -144,7 +151,8 @@ Subroutine Broad3
     !   Call MPI_BCAST(fbc1(1,1),nnhc*ncolor,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
     !EndIf
   EndIf
+#endif
 
-  Return
-End Subroutine
+  return
+end subroutine
 

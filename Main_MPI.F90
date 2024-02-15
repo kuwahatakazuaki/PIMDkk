@@ -1,12 +1,20 @@
 Program Path_Integral_MPI
   use Parameters
+#ifdef _mpi_
   use MPI
+#endif
   use utility, only: program_abort
   implicit none
+  integer :: ierr
 
+#ifdef _mpi_
   call MPI_INIT(IERR)
   call MPI_COMM_SIZE(MPI_COMM_WORLD,NProcs,IERR)
   call MPI_COMM_RANK(MPI_COMM_WORLD,MyRank,IERR)
+#else
+  MyRank = 0
+  NProcs = 0
+#endif
 
   call print_start
   if ( MyRank == 0 ) then
@@ -38,7 +46,9 @@ Program Path_Integral_MPI
 
   call Set_Deallocate
   call print_end
+#ifdef _mpi_
   call MPI_FINALIZE(IERR)
+#endif
 
 stop
 

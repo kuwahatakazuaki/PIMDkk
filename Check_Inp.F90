@@ -1,4 +1,4 @@
-Subroutine Check_Inp
+subroutine Check_Inp
   use Parameters
   implicit none
   integer :: Iatom, Uout

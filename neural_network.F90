@@ -1,7 +1,6 @@
 subroutine set_nnp_araidai
-  !Use MPI
-  Use Parameters
-  Implicit None
+  use Parameters
+  implicit none
   Integer   :: i,j,k! ,id
   integer :: imode
 
@@ -22,7 +21,6 @@ subroutine force_nnp_araidai
     !only: Eenergy, x, y, z, fx, fy, fz, Natom, bohr_inv, dp_inv, alabel, &
     only: Eenergy, r, fr, Natom, bohr_inv, dp_inv, alabel, &
           addresstmp, ista, iend, laddress
-  !use MPI
   implicit none
 
   character(Len=130) :: line

@@ -1,6 +1,6 @@
 Subroutine Set_Gaussian_MPI_tk
-  Use MPI
-  Use Parameters
+  !Use MPI
+  use Parameters
   use utility, only: program_abort
   Implicit None
   Integer   :: i,j,k,id, imode

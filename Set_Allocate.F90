@@ -3,7 +3,6 @@ subroutine Set_Allocate
   implicit none
   integer    :: th
 
-
 !YK Changed for allowing colors
   allocate (  atom_num(natom))
   allocate( r(3,Natom,Nbead) )
@@ -73,6 +72,6 @@ subroutine Set_Allocate
   allocate   (ysweight(nys), Stat = th)
     ysweight (1:nys) = 0.d0
 
-  Return
-End Subroutine
+  return
+end subroutine
 

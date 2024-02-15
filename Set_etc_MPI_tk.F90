@@ -1,8 +1,9 @@
 Subroutine Set_etc_MPI_tk
-  Use MPI
-  Use Parameters
-  Implicit None
-  Integer   :: i,j,k,n,n0
+  use Parameters
+#ifdef _mpi_
+  use MPI
+  implicit none
+  integer   :: i,j,k,n,n0
 
   Allocate (listeach(nprocs))
   Allocate (listeachtmp(nprocs))
@@ -70,11 +71,12 @@ Subroutine Set_etc_MPI_tk
 
 
 !for MPI_Send_init ver
-   Allocate(ireqa(11,nrecv+1))
-   Allocate(ireqb(3,nrecv+1))
-   Call Init_Send_Recv_MPI_tk
-   Call Init_Recv_Send_MPI_tk
+  Allocate(ireqa(11,nrecv+1))
+  Allocate(ireqb(3,nrecv+1))
+  call Init_Send_Recv_MPI_tk
+  call Init_Recv_Send_MPI_tk
+#endif
 
-  Return
-End Subroutine
+  return
+end subroutine
 

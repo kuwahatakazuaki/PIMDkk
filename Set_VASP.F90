@@ -1,7 +1,5 @@
 Subroutine Set_VASP
-
 !$  use omp_lib
-  Use MPI
   Use Parameters
   use utility, only: program_abort
   Implicit None

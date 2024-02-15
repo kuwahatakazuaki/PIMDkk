@@ -1,10 +1,9 @@
-Subroutine Init_Send_Recv_MPI_tk
-  Use Parameters
-  !Use Parameter_tk
-  Use MPI
-  Implicit None
-
-  Integer :: i,j,k,ii,jj,isend,irecv,n
+subroutine Init_Send_Recv_MPI_tk
+  use Parameters
+  use MPI
+  implicit none
+  integer :: i,j,k,ii,jj,isend,irecv,n
+  integer :: ierr
 
 !    print*,myrank," test ",nrecv
 !    wait(i)

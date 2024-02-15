@@ -1,9 +1,8 @@
 subroutine Set_mopac
-  use MPI
   use Parameters
   use utility, only: program_abort
-  Implicit None
-  Integer   :: i,j,k, imode
+  implicit none
+  integer   :: i,j,k, imode
   integer :: access
 
 if (MyRank == 0) then
