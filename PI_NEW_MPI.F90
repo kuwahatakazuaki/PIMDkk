@@ -50,7 +50,6 @@ subroutine PI_NEW_MPI
 
     call Force_New_MPI_tk
     call nmtrans_fr2fur     !call Getfnm  ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i)
-call program_abort("HERE00")
 
 !   call Vupdate 
 !   If(NCent==1) Then
@@ -128,7 +127,6 @@ call program_abort("HERE00")
 
   !call Unset_etc_MPI_tk
 
-!call program_abort("HERE00")
   if (MyRank == 0) then
     open(newunit=Uout,file=Fout,status='old',position='append')
       write(Uout,'(" ",a)')  repeat('*',121)

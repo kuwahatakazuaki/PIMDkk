@@ -5,13 +5,13 @@ subroutine print_result_qm
   integer :: i,j,k, imode, iatom
   integer :: Upre, Udip, Uchar, Uhfc, Ucoor, Ufor, Uene
 
-do i = 1, Natom
-  print *, alabel(i)
-end do
-do i = 1, Natom
-  print *, r(:,i,1)
-end do
-call program_abort("HERE3")
+!do i = 1, Natom
+!  print *, alabel(i)
+!end do
+!do i = 1, Natom
+!  print *, r(:,i,1)
+!end do
+!call program_abort("HERE3")
 
 if(MyRank==0) Then
 
@@ -73,7 +73,6 @@ if(MyRank==0) Then
       end do
     end do
   close(Ucoor)
-call program_abort("HERE4")
 
   if (Lsave_force .eqv. .True.) then
     open(newunit=Ufor,file=trim(address)//'/force.dat',status='unknown',form='formatted',position='append')
@@ -100,7 +99,6 @@ call program_abort("HERE4")
   potential=potential*dp_inv
 EndIf
 
-call program_abort("HERE0")
 
 9999 format(a,1x,E15.9,1x,E15.9,1x,E15.9)
 !9999 format(a2,1x,E15.9,1x,E15.9,1x,E15.9)

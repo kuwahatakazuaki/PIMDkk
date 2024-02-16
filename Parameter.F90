@@ -7,7 +7,7 @@ Module Parameters
 
     ! . . > fs -- > a.u.
 !    Double Precision, Parameter  :: facttime  = 1.d0/0.024d0
-   Double Precision, Parameter  :: facttime  = 1.d0 / 0.024188843d0
+   Double Precision, Parameter  :: facttime  = 1.d0 / 0.024188843d0   ! fstoAU
     !! Mass amu -- > A.U.
     Double Precision, Parameter  :: factmass  = 1.6605402d-27/9.1095d-31  ! 1822.866458
     ! . . > Boltzmann constant

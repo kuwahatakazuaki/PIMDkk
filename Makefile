@@ -34,7 +34,6 @@ Set_Allocate.F90                   \
 Check_Inp.F90                      \
 Calc_Constant.F90                  \
 Setup_MPI.F90                      \
-Setup.F90                          \
 Setup_Classical.F90                \
 Normal_Mode.F90                    \
 Init_Mass.F90                      \
@@ -102,6 +101,7 @@ exit.F90                           \
 # Recv_Send_MPI_tk2.F90              \
 # Recv_Send_MPI_tk3.F90              \
 # Force_DoubleHarmonic.F90           \
+# Setup.F90                          \
 
 
 SRCSF77 =  \
