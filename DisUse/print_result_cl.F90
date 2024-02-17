@@ -1,9 +1,9 @@
 subroutine print_result_cl
-use Parameters
-!use MPI
-implicit none
-integer :: i,j,k, imode, iatom
-integer :: Upre, Udip, Uchar, Uhfc, Ucoor, Ufor, Uene
+  use Parameters
+  use utility, only: program_abort
+  implicit none
+  integer :: i,j,k, imode, iatom
+  integer :: Upre, Udip, Uchar, Uhfc, Ucoor, Ufor, Uene
 
 If(MyRank==0) Then
 
@@ -12,7 +12,6 @@ If(MyRank==0) Then
       write(Udip,'("#",I10)') istepsv
       do imode=1,nbead
         write(Udip,8008) dipoler(:,imode)
-        !write(Udip,8008) dipolex(imode),dipoley(imode),dipolez(imode),dipole(imode)
       end do
     close(Udip)
   endif
@@ -35,13 +34,26 @@ If(MyRank==0) Then
     close(Uhfc)
   end if
 
-  !open(igetxyz,file=trim(address)//'/cent.xyz',status='unknown',form='formatted',position='append')
-  !  write(igetxyz,'(I5)') natom
-  !  write(igetxyz,'(I10)') istepsv
-  !  do iatom=1,natom
-  !    write(igetxyz,9999) alabel(iatom),ux(iatom,1)*bohr_inv,uy(iatom,1)*bohr_inv,uz(iatom,1)*bohr_inv
-  !  end do
-  !close(igetxyz)
+  if ( Iforce == 8 ) then
+    open(newunit=Upre,file=trim(address)//'/pressure.dat',status='unknown',form='formatted',position='append')
+      write(Upre,'("#", I10)') istepsv
+      do imode=1,nbead
+        write(Upre,'(F7.2)') pressure(imode)
+      end do
+    close(Upre)
+
+    open(newunit=Upre,file=trim(address)//'/PV.dat',status='unknown',form='formatted',position='append')
+      write(Upre,*) istepsv, PV
+    close(Upre)
+  end if
+
+!  open(igetxyz,file=trim(address)//'/cent.xyz',status='unknown',form='formatted',position='append')
+!    write(igetxyz,'(I5)') natom
+!    write(igetxyz,'(I10)') istepsv
+!    do iatom=1,natom
+!      write(igetxyz,9999) alabel(iatom),ux(iatom,1)*bohr_inv,uy(iatom,1)*bohr_inv,uz(iatom,1)*bohr_inv
+!    end do
+!  close(igetxyz)
 
   open(Ucoor,file=trim(address)//'/coor.xyz',status='unknown',form='formatted',position='append')
     write(Ucoor,'(I5)') natom*nbead
@@ -64,27 +76,19 @@ If(MyRank==0) Then
     close(Ufor)
   end if
 
-  if ( Iforce == 8 ) then
-    open(newunit=Upre,file=trim(address)//'/pressure.dat',status='unknown',form='formatted',position='append')
-    write(Upre,'("#", I10)') istepsv
-    do imode=1,nbead
-      write(Upre,'(F7.2)') pressure(imode)
-    end do
-    close(Upre)
-  end if
+!  open(newunit=Uene,file=trim(address)//'/ene.dat',status='unknown',form='formatted',position='append')
+!    write(Uene,'("#",I10)') istepsv
+!    do imode=1,nbead
+!      write(Uene,8006) Eenergy(imode)
+!    end do
+!  close(Uene)
 
-  open(newunit=Uene,file=trim(address)//'/ene.dat',status='unknown',form='formatted',position='append')
-    write(Uene,'("#",I10)') istepsv
-    do imode=1,nbead
-      write(Uene,8006) Eenergy(imode)
-    end do
-  close(Uene)
-
-  potential=0.D0
-  DO imode=1,nbead
-     potential=potential+Eenergy(imode)
-  ENDDO
-  potential=potential*dp_inv
+  !potential=0.D0
+  !DO imode=1,nbead
+  !   potential=potential+Eenergy(imode)
+  !ENDDO
+  !potential=potential*dp_inv
+  potential = sum(Eenergy(:)) * dp_inv
 EndIf
 
 9999 format(a2,1x,E15.9,1x,E15.9,1x,E15.9) 
@@ -100,4 +104,13 @@ EndIf
 
 return
 end subroutine print_result_cl
+
+!  if ( Iforce == 8 ) then
+!    open(newunit=Upre,file=trim(address)//'/pressure.dat',status='unknown',form='formatted',position='append')
+!    write(Upre,'("#", I10)') istepsv
+!    do imode=1,nbead
+!      write(Upre,'(F7.2)') pressure(imode)
+!    end do
+!    close(Upre)
+!  end if
 

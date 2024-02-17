@@ -1,5 +1,6 @@
 Subroutine Set_etc_MPI_tk
   use Parameters
+
 #ifdef _mpi_
   use MPI
   implicit none
@@ -68,7 +69,6 @@ Subroutine Set_etc_MPI_tk
          listeachtmp(j)=listeachtmp(j)+listeachtmp(j+n0)
       Enddo
     Enddo
-
 
 !for MPI_Send_init ver
   Allocate(ireqa(11,nrecv+1))

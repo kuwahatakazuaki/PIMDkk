@@ -22,7 +22,7 @@ Module Parameters
     real(8), parameter :: AUtoAng = 0.529177249d0
     real(8), parameter :: AUtoJ   = 4.35974434d-18
 
-    Double Precision, Parameter  :: bohr_inv      = 0.529177249d0
+    Double Precision, Parameter  :: bohr_inv      = 0.529177249d0   ! AUtoAng
 !    Double Precision, Parameter  :: bohr_inv      = 0.52918d0  ! AUtoAng
 
     real(8), allocatable :: r(:,:,:), fr(:,:,:), ur(:,:,:), vur(:,:,:)
@@ -37,23 +37,20 @@ Module Parameters
     Double Precision, Allocatable :: pot(:), physmass(:)
     Double Precision, Allocatable :: dnmmass(:,:),fictmass(:,:),qmass(:),ysweight(:)
     Double Precision, Allocatable :: qmcent11(:)
-    !Double Precision, Allocatable :: qmcent1(:,:)
     Double Precision, Allocatable :: qmcent31(:)
-    !Double Precision, Allocatable :: qmcent3(:,:)
     real(8), allocatable :: dipoler(:,:), atom_num(:)
     Double Precision, Allocatable :: charge(:,:),nbo(:,:),Eenergy(:),homo(:),lumo(:), hfcc(:,:)
     character (Len=2),Allocatable :: alabel(:)
     character(len=8) :: simulation
 
     Double Precision              :: gamma, gamma2, omega_system
-    Double Precision              :: omega_p, omega_p2, omega2, vsigma, usigma
+    Double Precision              :: omega_p, omega_p2, omega2!, usigma!, vsigma
     Double Precision              :: gkt, gnkt, dp, dp_inv
     Double Precision              :: factor_color
 !YK Made Some Variables Global for Ham_Temp
     Double Precision              :: ebath,ebath_cent,dkinetic,qkinetic
     Integer                       :: Nref, Nys, Nnhc
 ! !YK Type of Ensemble NVE=0, NVT with Nose-Hoover Chain=1
-!     Integer                       :: Iensemble
 !YK Method and Color of NHC on centroid
     Integer                       :: NCent
 !YK Switch for Restarting from previous MD, Number of the previous MD step
@@ -76,7 +73,7 @@ Module Parameters
     character (Len=80)            :: address2
     Character(len=81)  :: address0
     Character(len=87)  :: addresstmp
-    Double Precision :: E_Virial! ,freq1
+    Double Precision :: E_Virial
     real(8) :: freq1 = 10.0d0
 
     integer :: istepsv !, nrandomc

@@ -1,7 +1,7 @@
 Subroutine Init_Velocity
   Use Parameters
   Implicit None
-  Double Precision :: gasd
+  Double Precision :: gasd, vsigma
   integer :: imode, iatom
 !
 !     /*  vsigma: standard deviation of Maxwell distribution  */

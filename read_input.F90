@@ -115,6 +115,9 @@ subroutine read_structure
     end if
   end do
 
+!do i = 1, Natom
+!  print *, alabel(i)
+!end do
   if ( Langstrom .eqv. .True. ) then
     ur(:,:,1) = ur(:,:,1)*bohr
   end if

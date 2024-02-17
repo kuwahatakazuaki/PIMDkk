@@ -6,7 +6,7 @@ Subroutine NM_Position
   use Parameters
   use utility, only: program_abort
   implicit none
-  Double Precision :: gasd
+  Double Precision :: gasd, usigma
   integer :: i, j
 
 

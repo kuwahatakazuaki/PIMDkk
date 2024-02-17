@@ -27,7 +27,8 @@ Subroutine Force_Classical
 
   fur(:,:,1)=fr(:,:,1)
 
-  call print_result_cl
+  !call print_result_cl
+  call print_result_qm
 
   Return
 contains
@@ -121,7 +122,6 @@ contains
      close(imopac+ID)
        call system('rm -rf '//trim(addresstmp)//'mopac.*')
     enddo
-    call print_result_cl
 
     return
 401 call program_abort('ERROR!!: We can not find "TOTAL ENERGY" in mopac.out')

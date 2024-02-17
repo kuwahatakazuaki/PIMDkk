@@ -34,7 +34,6 @@ subroutine Classical
     call Print_Ham_Classical(nrstep)
   end if
 
-  !Do istep=nrstep+1, nstep
   do istep = nrstep+1, nstep
     istepsv=istep
     select case(Ncent)

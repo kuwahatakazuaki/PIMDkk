@@ -5,13 +5,13 @@ subroutine print_result_qm
   integer :: i,j,k, imode, iatom
   integer :: Upre, Udip, Uchar, Uhfc, Ucoor, Ufor, Uene
 
+! === HERE ===
 !do i = 1, Natom
 !  print *, alabel(i)
 !end do
 !do i = 1, Natom
 !  print *, r(:,i,1)
 !end do
-!call program_abort("HERE3")
 
 if(MyRank==0) Then
 
@@ -68,8 +68,7 @@ if(MyRank==0) Then
     write(Ucoor,'(I10)') istepsv
     do imode=1,nbead
       do iatom=1,natom
-        write(Ucoor,*) alabel(iatom)!,r(:,iatom,imode)*bohr_inv
-        !write(Ucoor,9999) alabel(iatom),r(:,iatom,imode)*bohr_inv
+        write(Ucoor,9999) alabel(iatom),r(:,iatom,imode)*bohr_inv
       end do
     end do
   close(Ucoor)
@@ -85,23 +84,24 @@ if(MyRank==0) Then
     close(Ufor)
   end if
 
-!  open(igete,file=trim(address)//'/ene.dat',status='unknown',form='formatted',position='append')
-!    write(igete,'("#",I10)') istepsv
+!  open(newunit=Uene,file=trim(address)//'/ene.dat',status='unknown',form='formatted',position='append')
+!    write(Uene,'("#",I10)') istepsv
 !    do imode=1,nbead
-!      write(igete,8006) Eenergy(imode)
+!      write(Uene,8006) Eenergy(imode)
 !    end do
-!  close(igete)
+!  close(Uene)
 
-  potential=0.D0
-  DO imode=1,nbead
-     potential=potential+Eenergy(imode)
-  ENDDO
-  potential=potential*dp_inv
+  !potential=0.D0
+  !DO imode=1,nbead
+  !   potential=potential+Eenergy(imode)
+  !ENDDO
+  !potential=potential*dp_inv
+  potential = sum(Eenergy(:)) * dp_inv
 EndIf
 
 
-9999 format(a,1x,E15.9,1x,E15.9,1x,E15.9)
 !9999 format(a2,1x,E15.9,1x,E15.9,1x,E15.9)
+9999 format(a,1x,E15.9,1x,E15.9,1x,E15.9)
 9998 format(3E23.15)
 9997 format(2E23.15)
 9996 format(E23.15)

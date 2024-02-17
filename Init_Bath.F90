@@ -1,7 +1,7 @@
 Subroutine Init_Bath
-  Use Parameters
+  use Parameters
   Implicit None
-  Double Precision :: gasd
+  Double Precision :: gasd, vsigma
   integer :: inhc, imode, iatom, icolor
 
 !     /*  massive Nose-Hoover chain  */
@@ -40,15 +40,12 @@ Subroutine Init_Bath
 !YK how about one NH chain?
   select case(Ncent)
     case(1)
-  !If(NCent==1) Then
       do inhc = 1, nnhc
         vsigma = dsqrt(1.d0/beta/qmcent11(inhc))
         call gasdev(gasd)
         vbc11(inhc) = vsigma*gasd
         rbc11(inhc) = 0.d0
       enddo
-  !EndIf ! NCent==1
-  !If(NCent==3) Then
     case(3)
       do inhc = 1, nnhc
         do iatom=1,natom
@@ -59,7 +56,6 @@ Subroutine Init_Bath
           rbc31(:,iatom,inhc) = 0.d0
         enddo
       enddo
-  !EndIf ! NCent==3
   end select
 
   Return

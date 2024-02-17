@@ -79,7 +79,6 @@ Force_model_DoubleWell.F90         \
 Set_siesta.F90                     \
 Force_VASP_MPI.F90                 \
 print_result_qm.F90                \
-print_result_cl.F90                \
 calc_umbrella.F90                  \
 force_siesta.F90                   \
 Set_mopac.F90                      \
@@ -97,11 +96,8 @@ exit.F90                           \
 #CMD_NEW_MPI.F90                    \
 #RPMD_NEW_MPI.F90                   \
 # Read_Inp.F90                       \
-# Send_Recv_MPI_tk2.F90              \
-# Recv_Send_MPI_tk2.F90              \
-# Recv_Send_MPI_tk3.F90              \
-# Force_DoubleHarmonic.F90           \
 # Setup.F90                          \
+#print_result_cl.F90                \
 
 
 SRCSF77 =  \

@@ -7,16 +7,13 @@ Subroutine Calc_Constant
   !! fs  -- > A.U.
   dt = dt * facttime
   !! amu -- > A.U.
-  !do iatom=1,natom
-  !   physmass(iatom) = physmass(iatom)*factmass
-  !enddo
   physmass(1:natom) = physmass(1:natom)*factmass
 
 
   beta   = 1.d0/(boltz*temperature)
   !! Frequency of the system
-  omega_system = 2.d0*pi/freq1
-  omega_system = omega_system/facttime
+  omega_system = 2.d0*pi/(freq1*facttime)
+  !omega_system = omega_system/facttime
 
   gnkt = 3.d0*dble(natom)/beta
   gkt = 1.d0/beta
