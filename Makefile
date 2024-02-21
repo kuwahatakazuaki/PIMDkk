@@ -2,24 +2,30 @@ PROG = pimd.exe
 SHELL   = /bin/bash
 OBJS    = $(SRCS:%.F90=%.o)
 OBJSF77 = $(SRCSF77:%.f=%.o)
+# MPI  = True
 
-ifeq ($(HOSTNAME),wisteria)
-FC = mpifrtpx
-else
-FC = mpif90
-endif
-
-ifeq ($(HOSTNAME),ito)
-FC = mpiifort
-endif
+#ifeq ($(HOSTNAME),wisteria)
+#FC = mpifrtpx
+#else
+#FC = mpif90
+#endif
+#ifeq ($(HOSTNAME),ito)
+#FC = mpiifort
+#endif
 
 
 #fcopt = -g -mcmodel=medium -O3 -no-gcc -traceback
 #fcopt = -g -mcmodel=medium -O3 -no-gcc -traceback -cpp
 
-#fcopt = -O2 -cpp -pipe -Dmpi
-#fcopt = -O2 -cpp -pipe
+ifeq ($(MPI),True)
+FC = mpif90
 fcopt = -O2 -pipe -D_mpi_
+else
+FC = gfortran
+fcopt = -O2 -pipe
+endif
+
+#fcopt = -O2 -cpp -pipe -Dmpi
 
 # Debug
 #fcopt = -g -check all -cpp
@@ -58,7 +64,6 @@ Force_Classical.F90                \
 GasDev.F90                         \
 PI_NEW_MPI.F90                     \
 Classical.F90                      \
-Print_Ham.F90                      \
 Print_Ham_Classical.F90            \
 print_ini.F90                      \
 Restart.F90                        \
@@ -98,6 +103,7 @@ exit.F90                           \
 # Read_Inp.F90                       \
 # Setup.F90                          \
 #print_result_cl.F90                \
+#Print_Ham.F90                      \
 
 
 SRCSF77 =  \
