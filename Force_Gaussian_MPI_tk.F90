@@ -1,6 +1,5 @@
 subroutine Force_Gaussian_MPI_tk
   use Parameters
-  !use MPI
   use utility, only: program_abort
   implicit none
 
@@ -30,7 +29,6 @@ subroutine Force_Gaussian_MPI_tk
 
   id=0
   Call Start_Recv_Send_MPI_tk
-!  Call Recv_Send_MPI_tk2
 
    do imode2=ista,iend
      write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode2,'/'

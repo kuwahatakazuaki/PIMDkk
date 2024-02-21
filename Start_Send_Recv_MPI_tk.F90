@@ -1,5 +1,6 @@
 Subroutine Start_Send_Recv_MPI_tk
   Use Parameters
+#ifdef _mpi_
   Use MPI
   Implicit None
   Integer :: i,j,k,ii,jj,isend,irecv,n
@@ -112,6 +113,7 @@ Subroutine Start_Send_Recv_MPI_tk
        Call MPI_Wait(ireqa(10,ii),mstatus,IERR)
     endif
   endif
+#endif
 
 Return
 End Subroutine

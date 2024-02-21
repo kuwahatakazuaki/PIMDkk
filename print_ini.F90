@@ -1,10 +1,12 @@
 subroutine print_ini
   use Parameters
+  use utility, only: program_abort
   implicit none
   integer :: i, Uham, Uchar, Uhfc, Uout, Udip
 
 if(myrank==0) then
 
+! +++ Start Nbead == 1 +++
   if (Nbead == 1) then
 
     open(newunit=Uham,file=trim(address)//'/ham.dat',status='replace',form='formatted',position='append')
@@ -19,7 +21,9 @@ if(myrank==0) then
       write(Uout,'(" "a)') repeat('*',95)
     close(Uout)
 
+! +++ End Nbead == 1 +++
   else if (Nbead > 1) then
+! +++ Start Nbead > 1 +++
 
     open(newunit=Uham,file=trim(address)//'/ham.dat',status='replace',form='formatted',position='append')
       write(Uham,'("# ",a)')  repeat('*',132)
@@ -37,6 +41,7 @@ if(myrank==0) then
     close(Uout)
 
   end if
+! +++ End Nbead > 1 +++
 
   if( Lsave_charge .eqv. .True.) then
     open(newunit=Uchar,file=trim(address)//'/charge.dat',status='replace',form='formatted',position='append')

@@ -89,7 +89,7 @@ subroutine Force_Harmonic
   integer :: Udis, Ucent
   real(8), parameter :: qh = 1.0d0, qo = -1.0d0
   real(8) :: f_two(3), power, dis
-  real(8) :: rij(3), temp, rij2
+  real(8) :: rij(3), temp!, rij2
   real(8) :: dis_beads(Nbead)
   real(8) :: rcent(3,Natom), dipo_cent(3)
 
@@ -109,15 +109,31 @@ subroutine Force_Harmonic
 !  cons = reduce_mass * omega * omega
   cons = kb
 
+!do j = 1, Nbead
+!  !do i = 1, Natom
+!  !  print *, i,j,r(:,i,j)
+!  !end do
+!  !print *, r(:,1,j) - r(:,2,j)
+!  rij(:) = r(:,1,j) - r(:,2,j)
+!  print *, imode, rij(:)
+!end do
+!call program_abort("hello2")
   ! +++ Calculating Force in which atom (i) feels from atom (j) +++
   fr(:,:,:) = 0.0d0
   Eenergy(:) = 0.0d0
   do imode = 1, Nbead
+!    i = 1
+!    j = 2
+!        rij(:) = r(:,i,imode)-r(:,j,imode)
+!        dis = norm2(rij(:))
+!!print *, i, j, imode!, r(:,i,imode)!, rij(:)
+!print *, imode, rij(:)
+!        f_two(:) = (-1) * cons * (dis - r0) * rij(:) / dis
+!        fr(:,i,imode) = fr(:,i,imode) + f_two(:)
+!        fr(:,j,imode) = fr(:,j,imode) - f_two(:)
     do i = 1, Natom
       do j = i+1, Natom
         rij(:) = r(:,i,imode)-r(:,j,imode)
-        !rij2 = dot_product( rij(:),rij(:) )
-        !dis = dsqrt(rij2)
         dis = norm2(rij(:))
         f_two(:) = (-1) * cons * (dis - r0) * rij(:) / dis
         fr(:,i,imode) = fr(:,i,imode) + f_two(:)
@@ -144,22 +160,19 @@ subroutine Force_Harmonic
   dis = norm2(rij(:)*AUtoAng)
   ! +++ Centroid +++
 
+
   ! +++ Print distance +++
   if ( MyRank == 0 ) then
-    open(Udis,file=trim(address)//'/distance.out',status='unknown',position='append')
+    open(newunit=Udis,file=trim(address)//'/distance.out',status='unknown',position='append')
       write(Udis,*) "# ", istepsv
       do imode = 1, Nbead
         write(Udis,*) dis_beads(imode)
       end do
     close(Udis)
 
-    open(Ucent,file=trim(address)//'/cent_dipo.out',position='append')
+    open(newunit=Ucent,file=trim(address)//'/cent_dipo.out',position='append')
       write(Ucent,*) istepsv, dis, dipo_cent(:)
     close(Ucent)
-
-    !open(Ucent,file=trim(address)//'/cent_dist.out',position='append')
-    !  write(Ucent,*) istepsv, dis
-    !close(Ucent)
   end if
   ! +++ End Print distance +++
 

@@ -1,5 +1,6 @@
 subroutine Init_Send_Recv_MPI_tk
   use Parameters
+#ifdef _mpi_
   use MPI
   implicit none
   integer :: i,j,k,ii,jj,isend,irecv,n
@@ -67,6 +68,7 @@ subroutine Init_Send_Recv_MPI_tk
 !     end if
 
   endif
+#endif
 
 Return
 End Subroutine

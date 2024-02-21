@@ -1,5 +1,6 @@
 Subroutine Init_Recv_Send_MPI_tk
   Use Parameters
+#ifdef _mpi_
   Use MPI
   Implicit None
   Integer :: i,j,k,ii,jj,isend,irecv,n
@@ -25,6 +26,7 @@ Subroutine Init_Recv_Send_MPI_tk
     !Call MPI_Send_init(z(1,i),n,MPI_DOUBLE_PRECISION,isend,110000+isend,MPI_COMM_WORLD,ireqb(3,ii),IERR)
     Call MPI_Send_init(r(1,1,i),3*n,MPI_DOUBLE_PRECISION,isend,90000+isend,MPI_COMM_WORLD,ireqb(1,ii),IERR)
   Enddo
+#endif
 
   Return
 End Subroutine

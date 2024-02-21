@@ -3,7 +3,6 @@ subroutine Set_Allocate
   implicit none
   integer    :: th
 
-!YK Changed for allowing colors
   allocate (  atom_num(natom))
   allocate( r(3,Natom,Nbead) )
   allocate( ur(3,Natom,Nbead) )
@@ -36,7 +35,7 @@ subroutine Set_Allocate
 
   allocate (alabel(natom), Stat=th)
      alabel(1:natom) = '  '
-  allocate(dipoler(3,Natom))
+  allocate(dipoler(3,Nbead))
   allocate(pressure(nbead))
   allocate (charge(natom,nbead), Stat=th)
      charge(1:natom,1:nbead) = 0.d0

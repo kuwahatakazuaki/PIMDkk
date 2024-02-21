@@ -22,7 +22,8 @@ FC = mpif90
 fcopt = -O2 -pipe -D_mpi_
 else
 FC = gfortran
-fcopt = -O2 -pipe
+#fcopt = -O2 -pipe
+fcopt = -g -O0 -pipe
 endif
 
 #fcopt = -O2 -cpp -pipe -Dmpi

@@ -1,6 +1,8 @@
-Subroutine Broad1
-  Use Parameters
-  Use MPI
+subroutine Broad1
+  use Parameters
+#ifdef _mpi_
+  use MPI
+#endif
   implicit none
   integer :: ierr
 
@@ -44,7 +46,9 @@ End Subroutine
 
 subroutine Broad2
   use Parameters
+#ifdef _mpi_
   use MPI
+#endif
   implicit none
   integer :: ierr
   real(8) :: tempr(3,Natom)
@@ -78,7 +82,9 @@ end subroutine Broad2
 
 subroutine Broad3
   use Parameters
+#ifdef _mpi_
   use MPI
+#endif
   implicit none
   integer :: ierr
 
