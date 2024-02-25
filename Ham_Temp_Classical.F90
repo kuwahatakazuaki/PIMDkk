@@ -2,9 +2,8 @@ Subroutine Ham_Temp_Classical
   use Parameters
   use utility, only: norm_seq, outer_product
   implicit none
-  !Integer          :: i, j, k
   integer :: iatom, imode, icolor, inhc, i, j
-  real(8) :: get_kinetic_ene
+  real(8) :: get_kinetic_ene!, temp
 
 
   !dkinetic = 0.0d0

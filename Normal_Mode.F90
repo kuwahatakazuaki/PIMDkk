@@ -2,10 +2,10 @@ Subroutine Normal_Mode
   Use Parameters
   use utility, only: program_abort
   Implicit None
-
   Double Precision     :: sqp, sqpinv, dnorm, dum
   Double Precision     :: di, dj
   integer :: i, j, jmode, imode
+  real(8) :: dp
 
 !     /* parameters */
   dp = dble(nbead)

@@ -44,19 +44,19 @@ Module Parameters
     character(len=8) :: simulation
 
     Double Precision              :: gamma, gamma2, omega_system
-    Double Precision              :: omega_p, omega_p2, omega2!, usigma!, vsigma
-    Double Precision              :: gkt, gnkt, dp, dp_inv
-    Double Precision              :: factor_color
+    Double Precision              :: omega_p2, omega2!omega_p, , usigma!, vsigma
+    Double Precision              :: gkt, gnkt, dp_inv! , dp
+    !Double Precision              :: factor_color
 !YK Made Some Variables Global for Ham_Temp
     Double Precision              :: ebath,ebath_cent,dkinetic,qkinetic
     Integer                       :: Nref, Nys, Nnhc
 ! !YK Type of Ensemble NVE=0, NVT with Nose-Hoover Chain=1
 !YK Method and Color of NHC on centroid
-    Integer                       :: NCent
+    Integer                       :: Ncent
 !YK Switch for Restarting from previous MD, Number of the previous MD step
     integer                       :: Nrstep = 0
 !YK Added for MPI
-    Integer                       :: NProcs,MyRank!,IERR
+    Integer                       :: Nprocs,MyRank!,IERR
 !YK Added to Specify How to Calculate Force
     Integer                       :: Iforce
 !YK Added to Set Random Number Generator Seed
@@ -95,7 +95,7 @@ Module Parameters
     integer :: umbrella_atom1 = 0, umbrella_atom2 = 0, umbrella_atom3 = 0
 ! End Kuwahata 2020/10/06
 
-  Integer   :: numeach, ista, iend, nhmod
+  Integer   :: ista, iend !, nhmod, numeach
   Integer, Allocatable :: listeach(:),listeachtmp(:),ireqa(:,:),ireqb(:,:)
   Integer, Allocatable :: recvlist(:),recvlist1(:),recvlist2(:)
   Integer  ::  laddress,na31,na3,nsendrecv,ireq(9),ireq0,npacksize

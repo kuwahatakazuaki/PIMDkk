@@ -33,7 +33,7 @@ Program Path_Integral_MPI
   select case(Isimulation)
     case(0)
       call PI_NEW_MPI
-    case(1)
+    !case(1)
     !  call RPMD_NEW_MPI
     !case(2)
     !  call CMD_NEW_MPI

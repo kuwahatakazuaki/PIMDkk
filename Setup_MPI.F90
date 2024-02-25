@@ -9,7 +9,11 @@ subroutine Setup_MPI
 
 !     /*   for multiple time step   */
 
-  dt_ref = dt/dble(nref)
+  if ( Isimulation == 10 ) then
+    dt_ref = dt
+  else
+    dt_ref = dt/dble(nref)
+  end if
 !
 !     /*   bath parameters for path integral MD   */
 !

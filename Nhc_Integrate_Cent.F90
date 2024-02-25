@@ -6,7 +6,7 @@ Subroutine Nhc_Integrate_Cent
   integer :: i, iys, imode, iatom, inhc, icolor
 
   skin = 0.d0
-  do iatom = 1, natom
+  do iatom = 1, Natom
      skin = skin + fictmass(iatom,1) * norm_seq( vur(:,iatom,1) )
   enddo
 

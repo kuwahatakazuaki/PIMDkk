@@ -1,6 +1,6 @@
-Subroutine Uupdate
-  Use Parameters
-  Implicit None
+subroutine Uupdate
+  use Parameters
+  implicit none
   integer :: imode, iatom
 
   do imode = 1, nbead
@@ -9,12 +9,12 @@ Subroutine Uupdate
       !ur(:,iatom,imode) = ur(:,iatom,imode) + 0.5 * dt_ref*vur(:,iatom,imode)
     enddo
   enddo
-  Return
-End Subroutine
+  return
+end subroutine
 
-Subroutine Vupdate
-  Use Parameters
-  Implicit None
+subroutine Vupdate
+  use Parameters
+  implicit none
   integer :: imode, iatom
 
   do imode = 1, nbead
@@ -22,5 +22,5 @@ Subroutine Vupdate
       vur(:,iatom,imode) = vur(:,iatom,imode) + 0.5d0*dt*fur(:,iatom,imode)/fictmass(iatom,imode)
     enddo
   enddo
-  Return
-End Subroutine
+  return
+end subroutine

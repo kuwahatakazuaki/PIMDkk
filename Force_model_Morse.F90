@@ -82,7 +82,8 @@ subroutine Force_Harmonic
     only: r, fr, Natom, Nbead, Eenergy, potential, &
           alabel, dp_inv, address, istepsv, MyRank, &
           Lsave_force, beta, physmass, dipoler, &
-          AUtoAng => bohr_inv, AngtoAU => bohr
+          AUtoAng => bohr_inv, AngtoAU => bohr, &
+          ista, iend
   use utility, only: program_abort
   implicit none
   integer :: i, j, imode, xyz
@@ -109,28 +110,11 @@ subroutine Force_Harmonic
 !  cons = reduce_mass * omega * omega
   cons = kb
 
-!do j = 1, Nbead
-!  !do i = 1, Natom
-!  !  print *, i,j,r(:,i,j)
-!  !end do
-!  !print *, r(:,1,j) - r(:,2,j)
-!  rij(:) = r(:,1,j) - r(:,2,j)
-!  print *, imode, rij(:)
-!end do
-!call program_abort("hello2")
   ! +++ Calculating Force in which atom (i) feels from atom (j) +++
   fr(:,:,:) = 0.0d0
   Eenergy(:) = 0.0d0
-  do imode = 1, Nbead
-!    i = 1
-!    j = 2
-!        rij(:) = r(:,i,imode)-r(:,j,imode)
-!        dis = norm2(rij(:))
-!!print *, i, j, imode!, r(:,i,imode)!, rij(:)
-!print *, imode, rij(:)
-!        f_two(:) = (-1) * cons * (dis - r0) * rij(:) / dis
-!        fr(:,i,imode) = fr(:,i,imode) + f_two(:)
-!        fr(:,j,imode) = fr(:,j,imode) - f_two(:)
+  !do imode = 1, Nbead
+  do imode = ista, iend
     do i = 1, Natom
       do j = i+1, Natom
         rij(:) = r(:,i,imode)-r(:,j,imode)

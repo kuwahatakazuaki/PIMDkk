@@ -1,9 +1,9 @@
 Subroutine Calc_Constant
-  Use Parameters
+  use Parameters
   Implicit None
   integer :: iatom
+  real(8) :: omega_p, dp
 
-!   twopi=2.d0*pi
   !! fs  -- > A.U.
   dt = dt * facttime
   !! amu -- > A.U.
@@ -25,10 +25,11 @@ Subroutine Calc_Constant
 !
 !     /*   parameters for path integral simulation   */
 !
-    dp = dble(nbead)
+    dp = dble(Nbead)
     dp_inv = 1.0d0/dp
-    omega_p = dsqrt(dp)/beta
-    omega_p2 = omega_p*omega_p
+    !omega_p = dsqrt(dp)/beta
+    !omega_p2 = omega_p*omega_p
+    omega_p2 = dp/(beta*beta)
 !    omega2 = omega_system*omega_system/dp
     omega2 = omega_system*omega_system
 

@@ -5,9 +5,6 @@ Subroutine Temp_ctr
   integer :: imode, iatom
   real(8) :: get_kinetic_ene
 
-  !tempi=0.0D+00
-  !call kinetic_energy(tempi)
-  !tempi = 0.5d0*tempi
   tempi = get_kinetic_ene()
   tempi = 2.d0*tempi/(3.d0*dble(natom))/boltz
   tempi = tempi/dble(nbead)

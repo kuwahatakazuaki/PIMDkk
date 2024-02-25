@@ -4,7 +4,7 @@ Subroutine Ham_Temp
   Implicit None
   Double Precision                   :: qdummy, factqk, dkin
   integer :: i, j, k, iatom, imode, inhc, icolor
-  real(8) :: get_kinetic_ene
+  real(8) :: get_kinetic_ene!, temp
 
   !dkin  = 0.d0
   !call Kinetic_Energy(dkin)

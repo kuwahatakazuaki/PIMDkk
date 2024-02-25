@@ -24,7 +24,6 @@ subroutine Classical
     call restart_read_classical
   else
     call print_ini
-    !call print_ini_cl
     call Init_Velocity
     call Init_Bath_Classical
     call Temp_ctr
