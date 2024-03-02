@@ -7,7 +7,6 @@ Subroutine Force_Gaussian_classical
   character(len=120) :: line
   Integer            :: iline, id,imode2,iatom2
   Double Precision   :: enetemp
-  !integer            :: chr, chl
   Integer            :: index1
   integer :: igauss = 20
 
@@ -24,16 +23,13 @@ Subroutine Force_Gaussian_classical
   else
     print *, '"version" is ', version
     call program_abort('ERROR!!! wrong keyword of "version"')
-    !stop 'ERROR!!! wrong keyword of "version"'
   end if
 
   id=0
 
     do imode2=1,nbead
 
-!  Kuwahata 2019/11/05
     write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode2,'/'
-!  End Kuwahata 2019/11/05
 
      call system('cp gauss.tmp '//trim(addresstmp))
 

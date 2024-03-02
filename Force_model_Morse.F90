@@ -140,7 +140,6 @@ subroutine Force_Harmonic
   end do
   rij(:) = rcent(:,1) - rcent(:,2)
   dipo_cent(:) = rij(:)
-  !dis = dsqrt( dot_product(rij(:),rij(:)) )
   dis = norm2(rij(:)*AUtoAng)
   ! +++ Centroid +++
 

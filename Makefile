@@ -40,8 +40,7 @@ read_input.F90                     \
 Set_Allocate.F90                   \
 Check_Inp.F90                      \
 Calc_Constant.F90                  \
-Setup_MPI.F90                      \
-Setup_Classical.F90                \
+Setup_time_mass.F90                \
 Normal_Mode.F90                    \
 Init_Mass.F90                      \
 NM_Position.F90                    \
@@ -105,6 +104,8 @@ exit.F90                           \
 # Setup.F90                          \
 #print_result_cl.F90                \
 #Print_Ham.F90                      \
+# Setup_MPI.F90                      \
+# Setup_Classical.F90                \
 
 
 SRCSF77 =  \

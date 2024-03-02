@@ -1,4 +1,4 @@
-subroutine Setup_MPI
+subroutine Setup_time_mass
   use Parameters
   implicit none
   double precision :: rndnumber
@@ -8,9 +8,10 @@ subroutine Setup_MPI
   Call RandomG(0,rndnumber)
 
 !     /*   for multiple time step   */
-
   if ( Isimulation == 10 ) then
     dt_ref = dt
+    ista = 1
+    iend = 1
   else
     dt_ref = dt/dble(nref)
   end if
@@ -34,18 +35,17 @@ subroutine Setup_MPI
   end select
 
 
-!YK different qmass required for centroid MD
 ! /*   thermostat attached to non-centroid modes   */
-  qmass(1) = 0.0d0
-  do imode = 2, nbead
-    qmass(imode) = 1.d0/beta/omega_p2
-  enddo
+  if ( Isimulation /= 10 ) then
+    qmass(1) = 0.0d0
+    do imode = 2, nbead
+      qmass(imode) = 1.d0/beta/omega_p2
+    enddo
+  end if
 !
-!     /*   For centroid MD, qmass should be scaled by gamma2, since   *
-!      *   natural frequencies of modes are omega_p**2/gamma**2       */
-!
-!YK If CMD
-!     /*   adiabaticity parameter for centroid MD   */
+!  For centroid MD, qmass should be scaled by gamma2, since
+!  natural frequencies of modes are omega_p**2/gamma**2
+!  adiabaticity parameter for centroid MD
   gamma2 = gamma*gamma
   If( Isimulation == 2 ) then
     do imode = 2, nbead
@@ -73,4 +73,4 @@ subroutine Setup_MPI
 
 
 return
-end subroutine
+end subroutine Setup_time_mass

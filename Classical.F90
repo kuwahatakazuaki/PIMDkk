@@ -4,7 +4,9 @@ subroutine Classical
   implicit none
   integer :: istep, iref, Uout
 
-  Call Setup_Classical
+  !call Setup_Classical
+  call Setup_time_mass
+  call Init_Mass
 
   select case(Iforce)
     case(1)

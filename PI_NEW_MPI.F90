@@ -4,8 +4,11 @@ subroutine PI_NEW_MPI
   implicit none
   integer :: istep, iref, Uout
 
-  call Setup_MPI
+  !call Setup_MPI
+  call Setup_time_mass
   call Set_etc_MPI_tk
+  call Normal_Mode
+  call Init_Mass
 
   select case(Iforce)
     case(1)
@@ -27,8 +30,6 @@ subroutine PI_NEW_MPI
     !  call program_abort('ERROR!!! Wrong "Iforce" option')
   end select
 
-  call Normal_Mode
-  call Init_Mass
   if ( Lrestart .eqv. .True. ) then
     If(MyRank==0) Then
        call restart_read

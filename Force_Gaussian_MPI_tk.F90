@@ -24,7 +24,6 @@ subroutine Force_Gaussian_MPI_tk
   else
     print *, '"version" is ', version
     call program_abort('ERROR!!! wrong keyword of "version"')
-    !stop ''
   end if
 
   id=0
