@@ -7,12 +7,14 @@ Subroutine Init_Bath
 !     /*  massive Nose-Hoover chain  */
 !YK Remove the initial velocity for the centroid 
 ! which is not used
-  do inhc = 1, nnhc
-    do iatom= 1, natom
-      rbath(:,iatom,inhc,1) = 0.d0
-      vrbath(:,iatom,inhc,1) = 0.d0
-    enddo
-  enddo
+  !do inhc = 1, nnhc
+  !  do iatom= 1, natom
+  !    rbath(:,iatom,inhc,1) = 0.d0
+  !    vrbath(:,iatom,inhc,1) = 0.d0
+  !  enddo
+  !enddo
+  rbath(:, :,:,1) = 0.d0
+  vrbath(:,:,:,1) = 0.d0
 
   do imode = 2, nbead
     vsigma = dsqrt(1.d0/beta/qmass(imode))
@@ -26,17 +28,7 @@ Subroutine Init_Bath
       enddo
     enddo
   enddo
-!
-!   /*  single thermostat attached to centroids  */
 
-!YK Commented out original since qmass_cent differs when i=1 or not
-!     vsigma = dsqrt(1.d0/beta/qmass(1))
-!     do i = 1, nnhc
-!       vbathcent(i) = vsigma*gasdev()
-!       rbathcent(i) = 0.d0
-!     enddo
-!YK
-!     /*  single thermostat attached to centroids  */
 !YK how about one NH chain?
   select case(Ncent)
     case(1)

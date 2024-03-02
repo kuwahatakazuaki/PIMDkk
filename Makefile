@@ -100,7 +100,6 @@ exit.F90                           \
 #nmtrans_force_r2ur.F90             \
 #CMD_NEW_MPI.F90                    \
 #RPMD_NEW_MPI.F90                   \
-# Read_Inp.F90                       \
 # Setup.F90                          \
 #print_result_cl.F90                \
 #Print_Ham.F90                      \

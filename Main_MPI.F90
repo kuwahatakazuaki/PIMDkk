@@ -32,7 +32,7 @@ Program Path_Integral_MPI
 
 ! Isimulation = 0:PIMD, 1:RPMD, 2CMD
   select case(Isimulation)
-    case(0)
+    case(0:2)
       call PI_NEW_MPI
     case(10)
       call Classical
