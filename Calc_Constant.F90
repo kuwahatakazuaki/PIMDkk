@@ -10,11 +10,11 @@ Subroutine Calc_Constant
   physmass(1:natom) = physmass(1:natom)*factmass
 
 
-  beta   = 1.d0/(boltz*temperature)
+  beta   = 1.d0/(KtoAU*temperature)
   !! Frequency of the system
   omega_system = 2.d0*pi/(freq1*facttime)
 
-  gnkt = 3.d0*dble(natom)/beta
+  gnkt = 3.d0*dble(Natom)/beta
   gkt = 1.d0/beta
 
   address0=trim(address2)//'/'

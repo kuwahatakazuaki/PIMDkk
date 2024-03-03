@@ -12,7 +12,7 @@ Module Parameters
     ! . . > Boltzmann constant
 !    Double Precision, Parameter  :: boltz     = 1.98624d-3/627.51d0 ! Boltzmann constant K to AU (kcal/K hartree/kcal)
 !   Double Precision, Parameter  :: boltz     = 0.316682968d-5
-    Double Precision, Parameter  :: boltz     = 8.617333262145d-5/27.211396132 ! Boltzmann constant K to AU (eV/K hartree/eV) from NIST
+!    Double Precision, Parameter  :: boltz     = 8.617333262145d-5/27.211396132 ! Boltzmann constant K to AU (eV/K hartree/eV) from NIST
     ! . . > Boltzmann constant
     !Double Precision, Parameter  :: bohr      = 1.d0/0.529177249d0  ! AngtoAU
     !Double Precision, Parameter  :: bohr_inv      = 0.529177249d0   ! AUtoAng

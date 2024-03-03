@@ -8,7 +8,7 @@ subroutine Force_model_DoubleWell1D
     only: r, fr, Natom, Nbead, Eenergy, potential, &
           alabel, dp_inv, address, istepsv, &
           Lsave_force, &
-          AUtoAng, KtoAU => boltz, AngtoAU
+          AUtoAng, KtoAU, AngtoAU
   !Use Parameter_tk
   implicit none
   integer :: i, j, imode, iatom
@@ -55,7 +55,7 @@ subroutine Force_model_DoubleWell3D
     only: r, fr, Natom, Nbead, Eenergy, potential, &
           alabel, dp_inv, address, istepsv, &
           Lsave_force, &
-          AUtoAng, KtoAU => boltz, AngtoAU
+          AUtoAng, KtoAU, AngtoAU
   implicit none
   integer :: i, j, imode, iatom
   real(8) :: f_two(3), power

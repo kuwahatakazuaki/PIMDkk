@@ -71,7 +71,7 @@ Remove_TnR_All.F90                 \
 Virial_Estimator.F90               \
 Set_Deallocate.F90                 \
 Force_New_MPI_tk.F90               \
-Set_etc_MPI_tk.F90                 \
+set_pallarel.F90                   \
 Init_Send_Recv_MPI_tk.F90          \
 Init_Recv_Send_MPI_tk.F90          \
 Start_Recv_Send_MPI_tk.F90         \
@@ -90,6 +90,7 @@ Set_mopac.F90                      \
 Set_VASP.F90                       \
 neural_network.F90                 \
 force_water.F90                    \
+mpi_pimd_gather.F90                \
 exit.F90                           \
 
 # print_ini_cl.F90                   \
@@ -105,6 +106,7 @@ exit.F90                           \
 #Print_Ham.F90                      \
 # Setup_MPI.F90                      \
 # Setup_Classical.F90                \
+# Set_etc_MPI_tk.F90                 \
 
 
 SRCSF77 =  \

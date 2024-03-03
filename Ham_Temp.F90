@@ -11,7 +11,7 @@ Subroutine Ham_Temp
   !dkinetic = dkin
   !dkinetic = 0.5d0*dkinetic
   dkinetic = get_kinetic_ene()
-  temp = 2.d0*dkinetic/dble(natom)/boltz/3.d0
+  temp = 2.d0*dkinetic/dble(natom)/KtoAU/3.d0
   temp = temp/dble(nbead)
 
 !

@@ -35,7 +35,6 @@
 pimd_mpi
 tags
 *swp
-*sh
 log*
 .DS_Store
 

@@ -41,6 +41,8 @@ Subroutine Force_New_MPI_tk
 ! +++ Start Writting output +++
   call print_result_qm
 ! +++ End Writting output +++
+  call mpi_pimd_gather
+
 
   if (umbrella_sampling > 0) call calc_umbrella
 

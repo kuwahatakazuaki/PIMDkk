@@ -113,7 +113,6 @@ subroutine Force_Harmonic
   ! +++ Calculating Force in which atom (i) feels from atom (j) +++
   fr(:,:,:) = 0.0d0
   Eenergy(:) = 0.0d0
-  !do imode = 1, Nbead
   do imode = ista, iend
     do i = 1, Natom
       do j = i+1, Natom

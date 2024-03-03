@@ -6,7 +6,8 @@ subroutine PI_NEW_MPI
 
   !call Setup_MPI
   call Setup_time_mass
-  call Set_etc_MPI_tk
+  !call Set_etc_MPI_tk
+  call set_pallarel
   call Normal_Mode
   call Init_Mass
 

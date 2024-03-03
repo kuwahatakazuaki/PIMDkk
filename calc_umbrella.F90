@@ -3,7 +3,7 @@ subroutine calc_umbrella
   Use Parameters, &
     only: r, fr, Natom, Nbead,  Eenergy, potential, myrank, &
           alabel, dp_inv, address, istepsv, Iforce, &
-          AUtoAng, KtoAU => boltz, AngtoAU, &
+          AUtoAng, KtoAU, AngtoAU, &
           atom1 => umbrella_atom1, atom2  => umbrella_atom2, &
           umbrella_width, umbrella_height, ista, iend, &
           umbrella_constant, umbrella_sampling

@@ -70,6 +70,10 @@ subroutine read_parameter
       Isimulation = 10
     end if
 
+    if ( Isimulation == 1 .and. Ncent > 0 ) then
+      call program_abort("You should be NVE for RPMD")
+    end if
+
   close(Uin)
 
 end subroutine read_parameter
