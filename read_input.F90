@@ -116,7 +116,8 @@ subroutine read_structure
   end do
 
   if ( Langstrom .eqv. .True. ) then
-    ur(:,:,1) = ur(:,:,1)*bohr
+    ur(:,:,1) = ur(:,:,1) * AngtoAU
+    !ur(:,:,1) = ur(:,:,1)*bohr
   end if
 
 end subroutine read_structure

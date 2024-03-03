@@ -67,8 +67,7 @@ contains
 
       open(imopac+id,file=trim(addresstmp)//'mopac.mop',status='old',position='append')
         do i = 1, natom
-         write(imopac+ID,*) alabel(i),r(:,i,imode)*bohr_inv
-         !write(imopac+ID,*) alabel(i),x(i,imode)*bohr_inv, y(i,imode)*bohr_inv,z(i,imode)*bohr_inv
+         write(imopac+ID,*) alabel(i),r(:,i,imode)*AUtoAng
         end do
       close(imopac)
 
@@ -96,10 +95,10 @@ contains
       read(imopac+id,*) Idummy, Idummy, Cdummy(1:3), Ddummy, fr(2,i,imode)
       read(imopac+id,*) Idummy, Idummy, Cdummy(1:3), Ddummy, fr(3,i,imode)
     end do
-    !fx(:,imode) = -fx(:,imode)*0.00159362D0 * bohr_inv * dp_inv
-    !fy(:,imode) = -fy(:,imode)*0.00159362D0 * bohr_inv * dp_inv
-    !fz(:,imode) = -fz(:,imode)*0.00159362D0 * bohr_inv * dp_inv
-    fr(:,:,imode) = -fr(:,:,imode)*0.00159362D0 * bohr_inv * dp_inv
+    !fx(:,imode) = -fx(:,imode)*0.00159362D0 * AUtoAng * dp_inv
+    !fy(:,imode) = -fy(:,imode)*0.00159362D0 * AUtoAng * dp_inv
+    !fz(:,imode) = -fz(:,imode)*0.00159362D0 * AUtoAng * dp_inv
+    fr(:,:,imode) = -fr(:,:,imode)*0.00159362D0 * AUtoAng * dp_inv
 !  +++ End Reading "Atomic Force" +++
 
 
@@ -166,8 +165,7 @@ contains
 
     open(igauss+id,file=trim(addresstmp)//'POSCAR',status='old',position='append')
       do iatom2=1,natom
-        write(igauss+id,9999) r(:,iatom2,imode2)*bohr_inv
-        !write(igauss+id,9999) x(iatom2,imode2)*bohr_inv, y(iatom2,imode2)*bohr_inv, z(iatom2,imode2)*bohr_inv
+        write(igauss+id,9999) r(:,iatom2,imode2)*AUtoAng
       enddo
       write(igauss+id,*)
     close(igauss+id)
@@ -198,7 +196,6 @@ contains
       read(igauss+id,'()') !skip 1line
       do iatom2=1,natom
         read(igauss+id,*) dummy, dummy, dummy, fr(:,iatom2,imode2)
-        !read(igauss+id,*) dummy, dummy, dummy, fx(iatom2,imode2), fy(iatom2,imode2), fz(iatom2,imode2)
       enddo
 ! +++ End Reading "TOTAL-FORCE" +++
 
@@ -215,9 +212,6 @@ contains
 
     close(igauss+id)
 
-    !fx(:,imode2)=fx(:,imode2)*eVAng_HartBohr*dp_inv
-    !fy(:,imode2)=fy(:,imode2)*eVAng_HartBohr*dp_inv
-    !fz(:,imode2)=fz(:,imode2)*eVAng_HartBohr*dp_inv
     fr(:,:,imode2)=fr(:,:,imode2)*eVAng_HartBohr*dp_inv
 
   enddo

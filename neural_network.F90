@@ -1,7 +1,7 @@
 subroutine set_nnp_araidai
   use Parameters
   implicit none
-  Integer   :: i,j,k! ,id
+  Integer   :: i,j,k
   integer :: imode
 
 do imode=ista,iend
@@ -18,8 +18,7 @@ end subroutine set_nnp_araidai
 
 subroutine force_nnp_araidai
   use Parameters, &
-    !only: Eenergy, x, y, z, fx, fy, fz, Natom, bohr_inv, dp_inv, alabel, &
-    only: Eenergy, r, fr, Natom, bohr_inv, dp_inv, alabel, &
+    only: Eenergy, r, fr, Natom, AUtoAng, dp_inv, alabel, &
           addresstmp, ista, iend, laddress
   implicit none
 
@@ -41,8 +40,7 @@ subroutine force_nnp_araidai
       write(Uout,*) "lattice   0.0000000000E+00  0.0000000000E+00  1.4190003000E+01"
       do i=1,Natom
         write(Uout,9998) &
-         "atom", r(:,i,imode)*bohr_inv, alabel(i), 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0
-         !"atom", x(i,imode)*bohr_inv, y(i,imode)*bohr_inv, z(i,imode)*bohr_inv, alabel(i), 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0
+         "atom", r(:,i,imode)*AUtoAng, alabel(i), 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0
       enddo
       write(Uout,*) "energy   -2.0683566596E+02"
       write(Uout,*) "charge    0.0000000000E+00"

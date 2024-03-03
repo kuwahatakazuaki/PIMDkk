@@ -33,8 +33,7 @@ subroutine Force_VASP_MPI
 
     open(igauss+id,file=trim(addresstmp)//'POSCAR',status='old',position='append')
       do iatom2=1,natom
-        write(igauss+id,9999) r(:,iatom2,imode2)*bohr_inv
-        !write(igauss+id,9999) x(iatom2,imode2)*bohr_inv, y(iatom2,imode2)*bohr_inv, z(iatom2,imode2)*bohr_inv
+        write(igauss+id,9999) r(:,iatom2,imode2)*AUtoAng
       enddo
       write(igauss+id,*)
     close(igauss+id)

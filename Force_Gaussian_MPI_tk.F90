@@ -38,8 +38,7 @@ subroutine Force_Gaussian_MPI_tk
 !     open(igauss+id,file=trim(addresstmp)//'gauss.xyz',status='unknown')
      open(igauss+id,file=trim(addresstmp)//'gauss.com',status='old',position='append')
        do iatom2=1,natom
-         write(igauss+id,*) alabel(iatom2),r(:,iatom2,imode2)*bohr_inv
-         !write(igauss+id,*) alabel(iatom2),x(iatom2,imode2)*bohr_inv,y(iatom2,imode2)*bohr_inv,z(iatom2,imode2)*bohr_inv
+         write(igauss+id,*) alabel(iatom2),r(:,iatom2,imode2)*AUtoAng
        enddo
        write(igauss+id,*)
      close(igauss+id)

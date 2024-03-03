@@ -25,8 +25,7 @@ subroutine force_siesta
        write(igauss+id,'("AtomicCoordinatesFormat  Ang")')
        write(igauss+id,'("%block AtomicCoordinatesAndAtomicSpecies")')
        do i = 1, Natom
-         write(igauss+id,*) r(:,i,imode2)*bohr_inv
-         !write(igauss+id,*) x(i,imode2)*bohr_inv, y(i,imode2)*bohr_inv, z(i,imode2)*bohr_inv, atom_num(i)
+         write(igauss+id,*) r(:,i,imode2)*AUtoAng
        end do
        write(igauss+id,'("%endblock AtomicCoordinatesAndAtomicSpecies")')
      close(igauss+id)

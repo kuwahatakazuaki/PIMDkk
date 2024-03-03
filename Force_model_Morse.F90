@@ -8,7 +8,7 @@ subroutine Force_model_Morse
     only: r, fr, Natom, Nbead, Eenergy, potential, &
           alabel, dp_inv, address, istepsv, &
           Lsave_force, beta, &
-          AUtoAng => bohr_inv, AngtoAU => bohr
+          AUtoAng, AngtoAU
   implicit none
   integer :: i, j
   integer :: Udis, Ucoor, Ufor, Uene, imode
@@ -82,7 +82,7 @@ subroutine Force_Harmonic
     only: r, fr, Natom, Nbead, Eenergy, potential, &
           alabel, dp_inv, address, istepsv, MyRank, &
           Lsave_force, beta, physmass, dipoler, &
-          AUtoAng => bohr_inv, AngtoAU => bohr, &
+          AUtoAng, AngtoAU, &
           ista, iend
   use utility, only: program_abort
   implicit none

@@ -2,14 +2,12 @@
 subroutine calc_umbrella
   Use Parameters, &
     only: r, fr, Natom, Nbead,  Eenergy, potential, myrank, &
-    !only: x, y, z, fx, fy, fz, Natom, Nbead,  Eenergy, potential, myrank, &
           alabel, dp_inv, address, istepsv, Iforce, &
-          AUtoAng => bohr_inv, KtoAU => boltz, AngtoAU => bohr, &
+          AUtoAng, KtoAU => boltz, AngtoAU, &
           atom1 => umbrella_atom1, atom2  => umbrella_atom2, &
           umbrella_width, umbrella_height, ista, iend, &
           umbrella_constant, umbrella_sampling
           ! cons => umbrella_constant, umbrella_sampling
-  !use MPI
 implicit none
 integer :: i, j, imode, iatom
 real(8) :: r12(3), f12(3), d12

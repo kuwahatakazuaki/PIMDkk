@@ -29,8 +29,7 @@ Subroutine Force_MOPAC_MPI
 
       open(imopac+id,file=trim(addresstmp)//'mopac.mop',status='old',position='append')
         do i = 1, natom
-         !write(imopac+ID,*) alabel(i),x(i,imode)*bohr_inv, y(i,imode)*bohr_inv,z(i,imode)*bohr_inv
-         write(imopac+ID,*) alabel(i),r(:,i,imode)*bohr_inv
+         write(imopac+ID,*) alabel(i),r(:,i,imode)*AUtoAng
         end do
       close(imopac)
 
@@ -60,10 +59,7 @@ Subroutine Force_MOPAC_MPI
       read(imopac+id,*) Idummy, Idummy, Cdummy(1:3), Ddummy, fr(2,i,imode)
       read(imopac+id,*) Idummy, Idummy, Cdummy(1:3), Ddummy, fr(3,i,imode)
     end do
-    !fx(:,imode) = -fx(:,imode)*0.00159362D0 * bohr_inv * dp_inv
-    !fy(:,imode) = -fy(:,imode)*0.00159362D0 * bohr_inv * dp_inv
-    !fz(:,imode) = -fz(:,imode)*0.00159362D0 * bohr_inv * dp_inv
-    fr(:,:,imode) = -fr(:,:,imode)*0.00159362D0 * bohr_inv * dp_inv
+    fr(:,:,imode) = -fr(:,:,imode)*0.00159362D0 * AUtoAng * dp_inv
 !  +++ End Reading "Atomic Force" +++
 
 
