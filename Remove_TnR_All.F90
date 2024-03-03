@@ -12,10 +12,9 @@ Subroutine Remove_TnR_All
 !   Remove Translation and Rotation Velocity of 
 !   COM for Centroids and Noncentroids
 !
-  do j=1,nbead
+  do j=1, Nbead
     comr(:) = 0.0d0
     sumvr(:) = 0.0d0
-    !totmas= 0.0d0
     ang_vel(:) = 0.0d0
 !
 ! Calculate Center of Mass and Translational Velocity of COM

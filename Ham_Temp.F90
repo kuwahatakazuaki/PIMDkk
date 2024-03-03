@@ -47,7 +47,6 @@ Subroutine Ham_Temp
 !
   ebath = 0.d0
   ebath_cent=0.d0
-  !if (Iensemble == 0) goto 100
   if ( Ncent > 0 ) then
   !YK removed i=1 since this is not used
   ! and the first qmass_cent differs from others do i = 1, nbead
@@ -67,16 +66,12 @@ Subroutine Ham_Temp
 !
 !YK First qmass_cent differs from others!!!
 
-  !If( Iensemble == 0 ) goto 100
   select case(Ncent)
-  !if(NCent==1) then
     case(1)
       ebath_cent=ebath_cent + 0.5d0*qmcent11(1)*vbc11(1)*vbc11(1) + gnkt*rbc11(1)
       do imode=2,nnhc
         ebath_cent=ebath_cent + 0.5d0*qmcent11(imode)*vbc11(imode)*vbc11(imode) + gkt*rbc11(imode)
       enddo
-  !endif
-  !if(NCent==3) then
     case(3)
     do inhc=1,nnhc
       do iatom=1,natom
@@ -84,9 +79,7 @@ Subroutine Ham_Temp
                               + gkt * sum( rbc31(:,iatom,inhc) )
       enddo
     enddo
-  !endif
   end select
-!100  Continue
 !YK include new centroid thermostat energies
     hamiltonian = hamiltonian + ebath + ebath_cent
 

@@ -17,11 +17,11 @@ subroutine Print_Ham_tk(ij)
     close(Uout)
   EndIf
 
- 9999 format(i7,8e17.9)
- 9998 format(i7,8e23.15)
- 9997 format(a137)
- 9996 format(i7,8e16.8)
- 9995 format(i7,7e13.5,a20)
- Return
+9999 format(i7,8e17.9)
+9998 format(i7,8e23.15)
+9997 format(a137)
+9996 format(i7,8e16.8)
+9995 format(i7,7e13.5,a20)
+Return
 End Subroutine
 

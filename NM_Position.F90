@@ -19,11 +19,6 @@ Subroutine NM_Position
         call gasdev(gasd); ur(3,i,j) = usigma*gasd
       enddo
     enddo
-!do i = 1, Natom
-!  do j = 1, Nbead
-!    print *, ur(:,i,j)
-!  end do
-!end do
   Else
     ur(:,:,2:Nbead) = 0.d0
   EndIf

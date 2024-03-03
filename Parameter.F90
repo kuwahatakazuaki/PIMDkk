@@ -1,7 +1,6 @@
 Module Parameters
    Double Precision, Parameter  :: pi        = 3.14159265358979d0
 !   !! Mass amu -- > A.U.
-!   Double Precision, Parameter  :: factmass  = 1.6605402d-27 / 9.1093897d-31
 !   ! . . > Boltzmann constant
 !   Double Precision, Parameter  :: boltz     = 0.316682968d-5
 
@@ -9,21 +8,20 @@ Module Parameters
 !    Double Precision, Parameter  :: facttime  = 1.d0/0.024d0
    Double Precision, Parameter  :: facttime  = 1.d0 / 0.024188843d0   ! fstoAU
     !! Mass amu -- > A.U.
+!   Double Precision, Parameter  :: factmass  = 1.6605402d-27/9.1093897d-31
     Double Precision, Parameter  :: factmass  = 1.6605402d-27/9.1095d-31  ! 1822.866458
     ! . . > Boltzmann constant
 !    Double Precision, Parameter  :: boltz     = 1.98624d-3/627.51d0 ! Boltzmann constant K to AU (kcal/K hartree/kcal)
     Double Precision, Parameter  :: boltz     = 8.617333262145d-5/27.211396132 ! Boltzmann constant K to AU (eV/K hartree/eV) from NIST
     ! . . > Boltzmann constant
-!    Double Precision, Parameter  :: bohr      = 1.d0/0.52918d0
-    Double Precision, Parameter  :: bohr      = 1.d0/0.529177249d0
+    Double Precision, Parameter  :: bohr      = 1.d0/0.529177249d0  ! AngtoAU
+    Double Precision, Parameter  :: bohr_inv      = 0.529177249d0   ! AUtoAng
   ! +++ Constants for conversion +++
     real(8), parameter :: eVtoAU    = 1.0d0/27.21162
-    real(8), parameter :: AngtoAU = 1/0.529177249d0
+    real(8), parameter :: AngtoAU = 1.0d0/0.529177249d0
     real(8), parameter :: AUtoAng = 0.529177249d0
     real(8), parameter :: AUtoJ   = 4.35974434d-18
 
-    Double Precision, Parameter  :: bohr_inv      = 0.529177249d0   ! AUtoAng
-!    Double Precision, Parameter  :: bohr_inv      = 0.52918d0  ! AUtoAng
 
     real(8), allocatable :: r(:,:,:), fr(:,:,:), ur(:,:,:), vur(:,:,:)
     real(8), allocatable :: fur(:,:,:), fur_ref(:,:,:)

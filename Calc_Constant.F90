@@ -13,7 +13,6 @@ Subroutine Calc_Constant
   beta   = 1.d0/(boltz*temperature)
   !! Frequency of the system
   omega_system = 2.d0*pi/(freq1*facttime)
-  !omega_system = omega_system/facttime
 
   gnkt = 3.d0*dble(natom)/beta
   gkt = 1.d0/beta
