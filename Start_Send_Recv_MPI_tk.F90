@@ -30,11 +30,9 @@ Subroutine Start_Send_Recv_MPI_tk
 
   Do ii=1,nrecv
      Call MPI_Start(ireqa(4,ii),IERR)
-   !if(nocharge==0) then
    if( Lsave_charge .eqv. .True.) then
      Call MPI_Start(ireqa(8,ii),IERR)
    endif
-   !if(nohfcc==0) then
    if( Lsave_hfcc .eqv. .True. ) then
      Call MPI_Start(ireqa(9,ii),IERR)
    endif
@@ -42,11 +40,9 @@ Subroutine Start_Send_Recv_MPI_tk
 
   Do i=1,nrecv
        Call MPI_Wait(ireqa(4,i),mstatus,IERR)
-     !if(nocharge==0) then
      if( Lsave_charge .eqv. .True.) then
        Call MPI_Wait(ireqa(8,i),mstatus,IERR)
      endif
-     !if(nohfcc==0) then
      if( Lsave_hfcc .eqv. .True. ) then
        Call MPI_Wait(ireqa(9,i),mstatus,IERR)
      endif
@@ -55,20 +51,16 @@ Subroutine Start_Send_Recv_MPI_tk
   if(myrank/=0) then
      ii=nrecv+1
      Call MPI_Start(ireqa(4,ii),IERR)
-    !if(nocharge==0) then
     if( Lsave_charge .eqv. .True.) then
      Call MPI_Start(ireqa(8,ii),IERR)
     endif
-    !if(nohfcc==0) then
     if( Lsave_hfcc .eqv. .True. ) then
      Call MPI_Start(ireqa(9,ii),IERR)
     endif
      Call MPI_Wait(ireqa(4,ii),mstatus,IERR)
-    !if(nocharge==0) then
     if( Lsave_charge .eqv. .True.) then
      Call MPI_Wait(ireqa(8,ii),mstatus,IERR)
     endif
-    !if(nohfcc==0) then
     if( Lsave_hfcc .eqv. .True. ) then
      Call MPI_Wait(ireqa(9,ii),mstatus,IERR)
     endif
@@ -82,12 +74,8 @@ Subroutine Start_Send_Recv_MPI_tk
     call MPI_Gather(pressure(ista),listeach(MyRank+1),MPI_DOUBLE_PRECISION, & 
                     pressure(ista),listeach(MyRank+1),MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
     end if
-    !tmp = pressure(ista)
-    !call MPI_Gather(tmp,listeach(MyRank+1),MPI_DOUBLE_PRECISION, & 
-    !                pressure(ista),listeach(MyRank+1),MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
   end if
 
-  !if(nodipole==0) then
   if( Lsave_dipole .eqv. .True. ) then
     Do ii=1,nrecv
        Call MPI_Start(ireqa(5,ii),IERR)

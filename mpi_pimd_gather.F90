@@ -1,12 +1,46 @@
 subroutine mpi_pimd_gather
-  Use Parameters
+  use Parameters
 #ifdef _mpi_
-  Use MPI
-  Implicit None
-  Integer :: i,j,k,ii,jj,isend,irecv,n
-  Integer :: mstatus(MPI_STATUS_SIZE)
+  use MPI
+  use utility, only: program_abort
+  implicit none
+  integer :: i, j, k, Irank
+  integer :: mstatus(MPI_STATUS_SIZE)
   integer :: ierr
-  real(8) :: tmp
+  integer :: MyNbead, Ncomm
+
+  MyNbead = Iend - Ista + 1
+
+!if (MyRank == 0) print *, "Before"
+!do Irank = 0, Nprocs
+!  if (MyRank == Irank) then
+!    print *, "MyRank Ista, Iend, MyNbead", MyRank, Ista, Iend, MyNbead
+!    do j = 1, Nbead
+!      do i = 1, Natom
+!        print *, j, fr(:,i,j)
+!      end do
+!    end do
+!  end if
+!  call MPI_Barrier(MPI_COMM_WORLD,Ierr)
+!end do
+
+  if ( MyRank == 0 ) then
+    call MPI_Gather(MPI_IN_PLACE,3*Natom*MyNbead,MPI_DOUBLE_PRECISION, &
+                    fr(1,1,Ista),3*Natom*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+  else
+    call MPI_Gather(fr(1,1,Ista),3*Natom*MyNbead,MPI_DOUBLE_PRECISION, &
+                    fr(1,1,Ista),3*Natom*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+  end if
+
+!if (MyRank == 0) then
+!print *, "After"
+!do j = 1, Nbead
+!  do i = 1, Natom
+!    print *, j, fr(:,i,j)
+!  end do
+!end do
+!end if
+!call program_abort("HERE_MPI")
 
   if ( Iforce == 8 ) then
     if ( MyRank == 0 ) then

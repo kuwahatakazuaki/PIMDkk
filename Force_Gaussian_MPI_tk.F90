@@ -27,7 +27,7 @@ subroutine Force_Gaussian_MPI_tk
   end if
 
   id=0
-  Call Start_Recv_Send_MPI_tk
+  Call Start_Recv_Send_MPI_tk  ! Gather r (Coordinate)
 
    do imode2=ista,iend
      write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode2,'/'

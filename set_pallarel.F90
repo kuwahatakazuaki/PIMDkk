@@ -1,5 +1,4 @@
 subroutine set_pallarel
-!subroutine Set_etc_MPI_tk
   use Parameters
 
 #ifdef _mpi_
