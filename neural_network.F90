@@ -28,7 +28,7 @@ subroutine force_nnp_araidai
   real(8), parameter :: ev_to_hartree  = 1.0 / 27.21138505
   real(8), parameter :: eVAng_HartBohr = 0.5291772108 / 27.21138505
 
-  Call Start_Recv_Send_MPI_tk
+  !Call Start_Recv_Send_MPI_tk
   do imode=ista,iend
     write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/' 
 
@@ -58,14 +58,11 @@ subroutine force_nnp_araidai
       end do
     close(Uinp)
 
-    !fx(:,imode)=fx(:,imode)*eVAng_HartBohr*dp_inv
-    !fy(:,imode)=fy(:,imode)*eVAng_HartBohr*dp_inv
-    !fz(:,imode)=fz(:,imode)*eVAng_HartBohr*dp_inv
     fr(:,:,imode)=fr(:,:,imode)*eVAng_HartBohr*dp_inv
     Eenergy(imode) = Eenergy(imode) * ev_to_hartree
   end do
 
-  call Start_Send_Recv_MPI_tk
+  !call Start_Send_Recv_MPI_tk
 
 return
 9999 format(3F24.16)

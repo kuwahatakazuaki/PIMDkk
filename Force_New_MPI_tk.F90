@@ -1,15 +1,15 @@
 Subroutine Force_New_MPI_tk
   use Parameters
   use utility, only: program_abort
+  use mpi_module
   implicit none
 
+#ifdef _mpi_
+  call MyMPI_bcast_r
+#endif
   select case(Iforce)
     case(1)
       call Force_MOPAC_MPI
-!    case(3)
-!      call Force_DFTB_MPI
-!    case(5)
-!      call Force_Gamess_MPI_tk
     case(6)
       call Force_Gaussian_MPI_tk
     case(8)
@@ -38,10 +38,12 @@ Subroutine Force_New_MPI_tk
       stop 'ERROR!!! Wrong "Iforce" option'
   end select
 
+#ifdef _mpi_
+  call MyMPI_gather_fr
+#endif
 ! +++ Start Writting output +++
   call print_result_qm
 ! +++ End Writting output +++
-  call mpi_pimd_gather
 
 
   if (umbrella_sampling > 0) call calc_umbrella

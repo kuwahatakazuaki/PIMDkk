@@ -34,6 +34,7 @@ endif
 SRCS  = \
 Parameter.F90                      \
 utility.F90                        \
+mpi_module.F90                     \
 Main_MPI.F90                       \
 Broad.F90                          \
 read_input.F90                     \
@@ -72,10 +73,6 @@ Virial_Estimator.F90               \
 Set_Deallocate.F90                 \
 Force_New_MPI_tk.F90               \
 set_pallarel.F90                   \
-Init_Send_Recv_MPI_tk.F90          \
-Init_Recv_Send_MPI_tk.F90          \
-Start_Recv_Send_MPI_tk.F90         \
-Start_Send_Recv_MPI_tk.F90         \
 Set_Gaussian_MPI_tk.F90            \
 Force_Gaussian_MPI_tk.F90          \
 Print_Ham_tk2.F90                  \
@@ -90,23 +87,12 @@ Set_mopac.F90                      \
 Set_VASP.F90                       \
 neural_network.F90                 \
 force_water.F90                    \
-mpi_pimd_gather.F90                \
 exit.F90                           \
 
-# print_ini_cl.F90                   \
-# print_ini_qm.F90                   \
-# Unset_etc_MPI_tk.F90               \
-# Set_Allocate_Classical.F90         \
-# Set_Deallocate_Classical.F90       \
-#nmtrans_force_r2ur.F90             \
-#CMD_NEW_MPI.F90                    \
-#RPMD_NEW_MPI.F90                   \
-# Setup.F90                          \
-#print_result_cl.F90                \
-#Print_Ham.F90                      \
-# Setup_MPI.F90                      \
-# Setup_Classical.F90                \
-# Set_etc_MPI_tk.F90                 \
+#Init_Send_Recv_MPI_tk.F90          \
+#Init_Recv_Send_MPI_tk.F90          \
+#Start_Recv_Send_MPI_tk.F90         \
+#Start_Send_Recv_MPI_tk.F90         \
 
 
 SRCSF77 =  \

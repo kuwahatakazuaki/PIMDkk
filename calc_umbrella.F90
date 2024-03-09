@@ -11,7 +11,6 @@ subroutine calc_umbrella
 implicit none
 integer :: i, j, imode, iatom
 real(8) :: r12(3), f12(3), d12
-!real(8) :: r(3,Natom,Nbead), f(3,Natom,Nbead)
 real(8) :: cons
 
 ! cons = cons / AngtoAU
@@ -65,7 +64,7 @@ end if
 !fy(:,:) = f(2,:,:)
 !fz(:,:) = f(3,:,:)
 
-Call Start_Send_Recv_MPI_tk
+!Call Start_Send_Recv_MPI_tk
 
 
 return

@@ -82,7 +82,7 @@ subroutine PI_NEW_MPI
       end select
       call Vupdate
 
-      if ( Ncent == 0 ) then
+      if ( Ncent == 0 ) then ! NVE simulation
         do iref=1, Nref   ! Nref = 5
           call Vupdate_Ref
           call Uupdate

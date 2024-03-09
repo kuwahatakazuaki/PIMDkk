@@ -1,6 +1,5 @@
 Subroutine Force_MOPAC_MPI
     Use Parameters
-    !Use MPI
     use utility, only: program_abort
     Implicit None
 
@@ -22,7 +21,7 @@ Subroutine Force_MOPAC_MPI
 
 
     id=0
-  Call Start_Recv_Send_MPI_tk
+  !Call Start_Recv_Send_MPI_tk
     do imode=ista,iend
       write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
        call system('cp mopac.mop '//trim(addresstmp))
@@ -86,20 +85,8 @@ Subroutine Force_MOPAC_MPI
        call system('rm -rf '//trim(addresstmp)//'mopac.*')
     enddo
 
-Call Start_Send_Recv_MPI_tk
+!Call Start_Send_Recv_MPI_tk
 
-!do k = 0, NProcs-1
-!if ( MyRank == k ) then
-!  print *, "After MyRank is ", MyRank
-!  do j = 1, nbead
-!  do i = 1, natom
-!    print *, fx(i,j), fy(i,j), fz(i,j)
-!  end do
-!  end do
-!  print *, ""
-!end if
-!    Call MPI_BARRIER(MPI_COMM_WORLD,IERR)
-!end do
 
 !    potential=0.0D+00
 !    do imode=1,nbead

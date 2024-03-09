@@ -1,6 +1,5 @@
 subroutine force_siesta
   use Parameters
-  !use MPI
 
   implicit none
   character(len=120) :: line
@@ -14,7 +13,7 @@ subroutine force_siesta
 
 
   id=0
-  Call Start_Recv_Send_MPI_tk
+  !Call Start_Recv_Send_MPI_tk
 
    do imode2=ista,iend
      write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode2,'/'
@@ -63,16 +62,12 @@ subroutine force_siesta
      call system('rm -rf '//trim(addresstmp)//'INPUT_TMP*')
      call system('rm -rf '//trim(addresstmp)//'*log')
 
-     !fx(:,imode2) = fx(:,imode2) * dp_inv * eVtoAU * AUtoAng
-     !fy(:,imode2) = fy(:,imode2) * dp_inv * eVtoAU * AUtoAng
-     !fz(:,imode2) = fz(:,imode2) * dp_inv * eVtoAU * AUtoAng
      fr(:,:,imode2) = fr(:,:,imode2) * dp_inv * eVtoAU * AUtoAng
      Eenergy(imode2) = Eenergy(imode2) * eVtoAU
    enddo
 
 
-Call Start_Send_Recv_MPI_tk
-call print_result_qm
+!Call Start_Send_Recv_MPI_tk
 
 
 9999 format(a2,1x,E15.9,1x,E15.9,1x,E15.9)

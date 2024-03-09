@@ -131,31 +131,29 @@ subroutine Force_Harmonic
   dis_beads(:) = dis_beads(:) * AUtoAng
   ! +++ End Calculating Force in which atom (i) feels from atom (j) +++
 
-  ! +++ Centroid +++
-  do i = 1, Natom
-    do xyz = 1, 3
-      rcent(xyz,i) = sum(r(xyz,i,:))/dble(Nbead)
-    end do
-  end do
-  rij(:) = rcent(:,1) - rcent(:,2)
-  dipo_cent(:) = rij(:)
-  dis = norm2(rij(:)*AUtoAng)
-  ! +++ Centroid +++
+  !! +++ Centroid +++
+  !do i = 1, Natom
+  !  do xyz = 1, 3
+  !    rcent(xyz,i) = sum(r(xyz,i,:))/dble(Nbead)
+  !  end do
+  !end do
+  !rij(:) = rcent(:,1) - rcent(:,2)
+  !dipo_cent(:) = rij(:)
+  !dis = norm2(rij(:)*AUtoAng)
+  !! +++ Centroid +++
+  !! +++ Print distance +++
+  !if ( MyRank == 0 ) then
+  !  open(newunit=Udis,file=trim(address)//'/distance.out',status='unknown',position='append')
+  !    write(Udis,*) "# ", istepsv
+  !    do imode = 1, Nbead
+  !      write(Udis,*) dis_beads(imode)
+  !    end do
+  !  close(Udis)
 
-
-  ! +++ Print distance +++
-  if ( MyRank == 0 ) then
-    open(newunit=Udis,file=trim(address)//'/distance.out',status='unknown',position='append')
-      write(Udis,*) "# ", istepsv
-      do imode = 1, Nbead
-        write(Udis,*) dis_beads(imode)
-      end do
-    close(Udis)
-
-    open(newunit=Ucent,file=trim(address)//'/cent_dipo.out',position='append')
-      write(Ucent,*) istepsv, dis, dipo_cent(:)
-    close(Ucent)
-  end if
+  !  open(newunit=Ucent,file=trim(address)//'/cent_dipo.out',position='append')
+  !    write(Ucent,*) istepsv, dis, dipo_cent(:)
+  !  close(Ucent)
+  !end if
   ! +++ End Print distance +++
 
   9998 format(3E23.15)

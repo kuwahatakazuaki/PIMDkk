@@ -27,7 +27,7 @@ subroutine Force_Gaussian_MPI_tk
   end if
 
   id=0
-  Call Start_Recv_Send_MPI_tk  ! Gather r (Coordinate)
+!  Call Start_Recv_Send_MPI_tk  ! Gather r (Coordinate)
 
    do imode2=ista,iend
      write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode2,'/'
@@ -152,9 +152,6 @@ subroutine Force_Gaussian_MPI_tk
      read(igauss+id,*)
      do iatom2=1,natom
        read(igauss+id,'(a)') line
-       !read(line(24:38),*) fx(iatom2,imode2)
-       !read(line(39:53),*) fy(iatom2,imode2)
-       !read(line(54:68),*) fz(iatom2,imode2)
        read(line(24:38),*) fr(1,iatom2,imode2)
        read(line(39:53),*) fr(2,iatom2,imode2)
        read(line(54:68),*) fr(3,iatom2,imode2)
@@ -165,13 +162,10 @@ subroutine Force_Gaussian_MPI_tk
 
      call system('rm -rf '//trim(addresstmp)//'Gau*')
 
-     !fx(:,imode2) = fx(:,imode2) * dp_inv
-     !fy(:,imode2) = fy(:,imode2) * dp_inv
-     !fz(:,imode2) = fz(:,imode2) * dp_inv
      fr(:,:,imode2) = fr(:,:,imode2) * dp_inv
    enddo
 
-Call Start_Send_Recv_MPI_tk
+! Call Start_Send_Recv_MPI_tk
 
 return
 401 print *, 'ERROR!!: We can not find "SCF Done" or "EUMP2" in Gaussian output'; stop

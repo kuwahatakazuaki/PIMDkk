@@ -1,6 +1,5 @@
 subroutine Force_VASP_MPI
   use Parameters
-  !use MPI
   implicit none
 
   character(Len=130) :: line
@@ -16,7 +15,7 @@ subroutine Force_VASP_MPI
   key3  = ('external pressure')
 
   id=0
-  Call Start_Recv_Send_MPI_tk
+  !Call Start_Recv_Send_MPI_tk
 
   do imode2=ista,iend
 
@@ -85,14 +84,10 @@ subroutine Force_VASP_MPI
 
     close(igauss+id)
 
-    !fx(:,imode2)=fx(:,imode2)*eVAng_HartBohr*dp_inv
-    !fy(:,imode2)=fy(:,imode2)*eVAng_HartBohr*dp_inv
-    !fz(:,imode2)=fz(:,imode2)*eVAng_HartBohr*dp_inv
     fr(:,:,imode2)=fr(:,:,imode2)*eVAng_HartBohr*dp_inv
-!print *, imode2, pressure(imode2)
   enddo
 
-  call Start_Send_Recv_MPI_tk
+  !call Start_Send_Recv_MPI_tk
 
 9999 format(3F24.16)
 9998 format(3E23.15)
