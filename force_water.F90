@@ -6,10 +6,9 @@ subroutine force_spcf
 ! NOTE:  the atoms must be sorted as O, H, H, O, H, H, ...
 !
 !===================================================================
-  !use common_variables, only :  &
-  !   r, fr, pot, dipr, au_energy, boltz, au_length, pi, natom, nbead
   use Parameters, only: &
-    r, fr, pi, dipr => dipoler, Natom, Nbead, pot => Eenergy
+    r, fr, pi, dipr => dipoler, Natom, Nbead, pot => Eenergy, &
+    Ista, Iend
   use utility, only: program_abort
 
   implicit none
@@ -18,7 +17,7 @@ subroutine force_spcf
       real(8), parameter:: au_energy = 4.3597482d-18
       real(8), parameter:: au_time   = 0.024188843d-15
       real(8), parameter:: au_charge = 1.60217646d-19
-      real(8), parameter:: boltz     = 0.316682968d-5
+      real(8), parameter:: boltz     = 0.316682968d-5   ! KtoAU
 
   integer ::  i, j, k, m, i_o, i_h, i_g
   real(8) ::  rho_w, d_w, b_oh, b_hh, b_const, c_const, d_const,  &
@@ -61,7 +60,8 @@ subroutine force_spcf
 ! /*   intra-molecular term                                       */
 !-------------------------------------------------------------------
 
-  do k = 1, nbead
+  !do k = 1, nbead
+  do k = Ista, Iend
      do i = 1, natom, 3
 
         i_o = i
@@ -123,7 +123,8 @@ subroutine force_spcf
   es6  = epsilon*sigma**6
   es12 = epsilon*sigma**12
 
-  do k = 1, nbead
+  !do k = 1, nbead
+  do k = Ista, Iend
 
      do i = 1, natom, 3
 
@@ -159,7 +160,8 @@ subroutine force_spcf
 ! /*   inter-molecular Coulomb term                               */
 !-------------------------------------------------------------------
 
-  do k = 1, nbead
+  !do k = 1, nbead
+  do k = Ista, Iend
 
      do i = 1, natom
 
@@ -201,7 +203,8 @@ subroutine force_spcf
 ! /*   dipole moment                                              */
 !-------------------------------------------------------------------
 
-  do k = 1, nbead
+  !do k = 1, nbead
+  do k = Ista, Iend
 
      dipr(:,k) = 0.d0
 
@@ -214,11 +217,6 @@ subroutine force_spcf
      end do
 
   end do
-
-!do i = 1, Natom
-!  print *, r(:,i,1)
-!end do
-!call program_abort("Hello0")
 
   return
 end subroutine force_spcf

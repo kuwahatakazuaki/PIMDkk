@@ -43,7 +43,7 @@ Module Parameters
     character(len=8) :: simulation
 
     Double Precision              :: gamma, gamma2, omega_system
-    Double Precision              :: omega_p2, omega2!omega_p, , usigma!, vsigma
+    Double Precision              :: omega_p2, omega2
     Double Precision              :: gkt, gnkt, dp_inv! , dp
 !YK Made Some Variables Global for Ham_Temp
     Double Precision              :: ebath,ebath_cent,dkinetic,qkinetic
@@ -54,7 +54,7 @@ Module Parameters
 !YK Switch for Restarting from previous MD, Number of the previous MD step
     integer                       :: Nrstep = 0
 !YK Added for MPI
-    Integer                       :: Nprocs,MyRank
+    Integer                       :: Nproc,MyRank
 !YK Added to Specify How to Calculate Force
     Integer                       :: Iforce
 !YK Added to Set Random Number Generator Seed

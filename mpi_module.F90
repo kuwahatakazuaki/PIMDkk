@@ -51,53 +51,43 @@ contains
 !call program_abort("HERE_MPI")
   end subroutine MyMPI_gather_fr
 
-  subroutine MyMPI_gather_r
-    integer :: i, j, k, MyNbead
-    MyNbead = Iend - Ista + 1
-    if ( MyRank == 0 ) then
-      call MPI_Gather(MPI_IN_PLACE,3*Natom*MyNbead,MPI_DOUBLE_PRECISION, &
-                      r(1,1,Ista), 3*Natom*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-    else
-      call MPI_Gather(r(1,1,Ista),3*Natom*MyNbead,MPI_DOUBLE_PRECISION, &
-                      r(1,1,Ista),3*Natom*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-    end if
-  end subroutine MyMPI_gather_r
-
   subroutine MyMPI_bcast_r
-    integer :: i, j, k, MyNbead
-    integer :: Irank
     call MPI_Bcast(r(1,1,1),3*Natom*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,Ierr)
   end subroutine MyMPI_bcast_r
 
-  subroutine MyMPI_allgather_r
+  subroutine MyMPI_scatter_r
     integer :: i, j, k, MyNbead
-    integer :: Irank
-!if (MyRank == 0) print *, "Before"
-!do Irank = 0, Nprocs
-!  if (MyRank == Irank) then
-!    print *, "MyRank Ista, Iend, MyNbead", MyRank, Ista, Iend, MyNbead
-!    do j = 1, Nbead
-!      do i = 1, Natom
-!        print *, j, i, r(:,i,j)*AUtoAng
-!      end do
-!    end do
-!  end if
-!  call MPI_Barrier(MPI_COMM_WORLD,Ierr)
-!end do
-!call MPI_Barrier(MPI_COMM_WORLD,Ierr)
     MyNbead = Iend - Ista + 1
-    call MPI_Allgather(r(1,1,Ista),3*Natom*MyNbead,MPI_DOUBLE_PRECISION, &
-                       r(1,1,Ista),3*Natom*MyNbead,MPI_DOUBLE_PRECISION,MPI_COMM_WORLD,ierr)
-!if (MyRank == 0) then
-!print *, "After"
-!do j = 1, Nbead
-!  do i = 1, Natom
-!    print *, j, i, r(:,i,j)*AUtoAng
-!  end do
-!end do
-!end if
-!call program_abort("HERE_MPI")
-  end subroutine MyMPI_allgather_r
+    if ( MyRank == 0 ) then
+      call MPI_Scatter(r(1,1,Ista),3*Natom*MyNbead,MPI_DOUBLE_PRECISION, &
+                       MPI_IN_PLACE,3*Natom*MyNbead,MPI_DOUBLE_PRECISION, &
+                       0,MPI_COMM_WORLD,ierr)
+    else
+      call MPI_Scatter(r(1,1,Ista),3*Natom*MyNbead,MPI_DOUBLE_PRECISION, &
+                       r(1,1,Ista),3*Natom*MyNbead,MPI_DOUBLE_PRECISION, &
+                       0,MPI_COMM_WORLD,ierr)
+    end if
+  end subroutine MyMPI_scatter_r
+
+  !subroutine MyMPI_gather_r
+  !  integer :: i, j, k, MyNbead
+  !  MyNbead = Iend - Ista + 1
+  !  if ( MyRank == 0 ) then
+  !    call MPI_Gather(MPI_IN_PLACE,3*Natom*MyNbead,MPI_DOUBLE_PRECISION, &
+  !                    r(1,1,Ista), 3*Natom*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+  !  else
+  !    call MPI_Gather(r(1,1,Ista),3*Natom*MyNbead,MPI_DOUBLE_PRECISION, &
+  !                    r(1,1,Ista),3*Natom*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+  !  end if
+  !end subroutine MyMPI_gather_r
+
+  !subroutine MyMPI_allgather_r
+  !  integer :: i, j, k, MyNbead
+  !  integer :: Irank
+  !  MyNbead = Iend - Ista + 1
+  !  call MPI_Allgather(r(1,1,Ista),3*Natom*MyNbead,MPI_DOUBLE_PRECISION, &
+  !                     r(1,1,Ista),3*Natom*MyNbead,MPI_DOUBLE_PRECISION,MPI_COMM_WORLD,ierr)
+  !end subroutine MyMPI_allgather_r
 
   subroutine para_range(N1,N2,Nproc,Irank,Ista,Iend)
     integer, intent(in) :: N1, N2, Nproc, Irank
@@ -111,19 +101,6 @@ contains
   end subroutine para_range
 
 #endif
-!  subroutine program_abort(message)
-!#ifdef _mpi_
-!    use mpi
-!#endif
-!    character(*) :: message
-!    integer :: ierr
-!    print *, message
-!#ifdef _mpi_
-!    call mpi_abort(MPI_COMM_WORLD, -1, ierr)
-!#else
-!    stop
-!#endif
-!  end subroutine program_abort
 
 end module mpi_module
 

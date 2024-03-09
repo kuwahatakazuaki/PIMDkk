@@ -35,9 +35,6 @@ subroutine nmtrans_fr2fur
   Do iatom = 1, natom
     Do imode = 1, nbead
       Do jmode = 1, nbead
-        !fux(iatom,imode) = fux(iatom,imode) + fx(iatom,jmode)*tnm(jmode,imode)
-        !fuy(iatom,imode) = fuy(iatom,imode) + fy(iatom,jmode)*tnm(jmode,imode)
-        !fuz(iatom,imode) = fuz(iatom,imode) + fz(iatom,jmode)*tnm(jmode,imode)
         fur(:,iatom,imode) = fur(:,iatom,imode) + fr(:,iatom,jmode)*tnm(jmode,imode)
       Enddo
     Enddo

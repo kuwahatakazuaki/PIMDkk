@@ -53,14 +53,6 @@ subroutine PI_NEW_MPI
     call Force_New_MPI_tk
     call nmtrans_fr2fur     !call Getfnm  ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i)
 
-!   call Vupdate 
-!   If(NCent==1) Then
-!      call Nhc_Integrate_Cent 
-!   EndIf
-!   If(NCent==3) Then
-!      call Nhc_Integrate_Cent3
-!   EndIf
-
     if ( MyRank == 0 ) then
       call Ham_Temp
       call Print_Ham_tk(nrstep)

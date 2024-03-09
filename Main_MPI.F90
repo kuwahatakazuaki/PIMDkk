@@ -9,7 +9,7 @@ Program Path_Integral_MPI
 
 #ifdef _mpi_
   call MPI_INIT(IERR)
-  call MPI_COMM_SIZE(MPI_COMM_WORLD,NProcs,IERR)
+  call MPI_COMM_SIZE(MPI_COMM_WORLD,NProc,IERR)
   call MPI_COMM_RANK(MPI_COMM_WORLD,MyRank,IERR)
 #else
   MyRank = 0

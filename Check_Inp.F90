@@ -10,6 +10,9 @@ subroutine Check_Inp
       write(Uout,9999) ' +++++ Number of Atoms     ', Natom
       write(Uout,9999) ' +++++ Number of Beads     ', Nbead
       write(Uout,9999) ' +++++ Number of Steps     ', Nstep
+#ifdef _mpi_
+      write(Uout,9999) ' +++++ Number of Nproc     ', Nproc
+#endif
       write(Uout,9998) ' +++++ Given Temperature   ', Temperature
       write(Uout,9998) ' +++++ Given time step     ', dt / facttime
       write(Uout,9998) ' +++++ Adiabaticity param. ', gamma

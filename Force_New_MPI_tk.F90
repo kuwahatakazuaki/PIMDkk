@@ -5,7 +5,8 @@ Subroutine Force_New_MPI_tk
   implicit none
 
 #ifdef _mpi_
-  call MyMPI_bcast_r
+  !call MyMPI_bcast_r
+  call MyMPI_scatter_r
 #endif
   select case(Iforce)
     case(1)

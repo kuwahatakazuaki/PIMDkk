@@ -7,16 +7,16 @@ subroutine set_pallarel
   integer   :: i,j,k,n,n0
   integer :: Nhmod, numeach
 
-  Allocate (listeach(nprocs))
-  Allocate (listeachtmp(nprocs))
+  Allocate (listeach(Nproc))
+  Allocate (listeachtmp(Nproc))
 
-  Nhmod=mod(Nbead,nprocs)
-  numeach=(Nbead-Nhmod)/nprocs
+  Nhmod=mod(Nbead,Nproc)
+  numeach=(Nbead-Nhmod)/Nproc
 
   Do i=1,Nhmod
     listeach(i)=numeach+1
   Enddo
-  Do i=Nhmod+1,nprocs
+  Do i=Nhmod+1,Nproc
     listeach(i)=numeach
   Enddo
   numeach=listeach(myrank+1)
@@ -31,15 +31,13 @@ subroutine set_pallarel
   iend = Nbead
 #endif
 
-! === till here ===
-
 !#ifdef _mpi_
 !  na3=3*natom
 !  na31=na3+1
 !  npacksize=(natom*4)+4
 !  Allocate(work((Nbead-ista+1)*npacksize))
 !
-!  j=nprocs
+!  j=Nproc
 !  Do i=1,1000
 !   j=(j+1)/2
 !   if(j==1) then
@@ -56,13 +54,13 @@ subroutine set_pallarel
 !  sendlist=0
 !  sendlist1=ista
 !  sendlist2=0
-!  Do i=myrank+1,nprocs
+!  Do i=myrank+1,Nproc
 !    listeachtmp(i)=listeach(i)
 !  Enddo
 !  Do i=1,nsendrecv
 !    n0=n
 !    n=n0*2
-!    if((mod(myrank,n)==0) .AND. (myrank+n0<nprocs)) then
+!    if((mod(myrank,n)==0) .AND. (myrank+n0<Nproc)) then
 !      nrecv=nrecv+1
 !      recvlist(nrecv)=myrank+n0
 !      recvlist1(nrecv)=ista+listeachtmp(myrank+1)
@@ -72,7 +70,7 @@ subroutine set_pallarel
 !      sendlist1=ista
 !      sendlist2=listeachtmp(myrank+1)
 !    endif
-!    Do j=myrank+1,nprocs-n0,n
+!    Do j=myrank+1,Nproc-n0,n
 !       listeachtmp(j)=listeachtmp(j)+listeachtmp(j+n0)
 !    Enddo
 !  Enddo
