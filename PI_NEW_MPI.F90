@@ -127,5 +127,5 @@ subroutine PI_NEW_MPI
     close(Uout)
   end if
 
-  Return
-  End Subroutine
+  return
+end subroutine PI_NEW_MPI

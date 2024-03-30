@@ -92,23 +92,68 @@ contains
     elseif ( trim(cha) == 'cl' ) then
       mass = 35.4515d0
     else
-      !print *, cha_in, ''
       call program_abort('ERROR!! "'//cha_in//'" is not exist in atom2mass')
     end if
   end function atom2mass
 
-  function lowerchr(str)
-    character(*), intent(in) :: str
-    character(len(str)) :: lowerchr
-    integer :: i
-    do i = 1, len_trim(str)
-      if ( str(i:i) >= 'A' .and. str(i:i) <= 'Z' ) then
-        lowerchr(i:i) = char(ichar(str(i:i))+32)
-      else
-        lowerchr(i:i) = str(i:i)
-      end if
+  !function lowerchr(str)
+  !  character(*), intent(in) :: str
+  !  character(len(str)) :: lowerchr
+  !  integer :: i
+  !  do i = 1, len_trim(str)
+  !    if ( str(i:i) >= 'A' .and. str(i:i) <= 'Z' ) then
+  !      lowerchr(i:i) = char(ichar(str(i:i))+32)
+  !    else
+  !      lowerchr(i:i) = str(i:i)
+  !    end if
+  !  end do
+  !end function lowerchr
+
+  function lowerchr(str_in) result(str_out)
+    character(len=*), intent(in) :: str_in
+    character(len=len(str_in))   :: str_out
+    integer, parameter :: ilowerA = ichar('a')
+    integer, parameter :: iupperA = ichar('A')
+    integer, parameter :: iupperZ = ichar('Z')
+
+    integer :: i, ichr, nchr, iconv
+
+    iconv = ilowerA - iupperA
+
+    nchr = len(str_in)
+    do i = 1, nchr
+       ichr = ichar(str_in(i:i))
+       if ((ichr >= iupperA) .and. (ichr <= iupperZ)) then
+          str_out(i:i) = char(ichr + iconv)
+       else
+          str_out(i:i) = str_in(i:i)
+       end if
     end do
   end function lowerchr
+
+  !--------------------------------------------------------------------!
+
+  function upperchr(str_in) result(str_out)
+    character(len=*), intent(in) :: str_in
+    character(len=len(str_in))   :: str_out
+    integer, parameter :: ilowerA = ichar('a')
+    integer, parameter :: ilowerZ = ichar('z')
+    integer, parameter :: iupperA = ichar('A')
+
+    integer :: i, ichr, nchr, iconv
+
+    iconv = iupperA - ilowerA
+
+    nchr = len(str_in)
+    do i = 1, nchr
+       ichr = ichar(str_in(i:i))
+       if ((ichr >= ilowerA) .and. (ichr <= ilowerZ)) then
+          str_out(i:i) = char(ichr + iconv)
+       else
+          str_out(i:i) = str_in(i:i)
+       end if
+    end do
+  end function upperchr
 
   function get_time() result(date_time)
     character(len=19) :: date_time

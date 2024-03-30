@@ -57,20 +57,11 @@ subroutine Broad2
   Call MPI_BCAST(alabel,2*natom,MPI_CHARACTER,0,MPI_COMM_WORLD,IERR)
 
   if ( MyRank == 0 ) then
-    !x1(:)=ux(:,1)
-    !y1(:)=uy(:,1)
-    !z1(:)=uz(:,1)
     tempr(:,:) = ur(:,:,1)
   EndIf
 
-  !Call MPI_BCAST(x1,natom,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-  !Call MPI_BCAST(y1,natom,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-  !Call MPI_BCAST(z1,natom,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
   call MPI_Bcast(tempr,3*natom,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
 
-  !ux(:,1)=x1(:)
-  !uy(:,1)=y1(:)
-  !uz(:,1)=z1(:)
   ur(:,:,1) = tempr(:,:)
 #endif
 

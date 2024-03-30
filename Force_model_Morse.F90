@@ -142,18 +142,18 @@ subroutine Force_Harmonic
   !dis = norm2(rij(:)*AUtoAng)
   !! +++ Centroid +++
   !! +++ Print distance +++
-  !if ( MyRank == 0 ) then
-  !  open(newunit=Udis,file=trim(address)//'/distance.out',status='unknown',position='append')
-  !    write(Udis,*) "# ", istepsv
-  !    do imode = 1, Nbead
-  !      write(Udis,*) dis_beads(imode)
-  !    end do
-  !  close(Udis)
+  if ( MyRank == 0 ) then
+    open(newunit=Udis,file=trim(address)//'/distance.out',status='unknown',position='append')
+      write(Udis,*) "# ", istepsv
+      do imode = 1, Nbead
+        write(Udis,*) dis_beads(imode)
+      end do
+    close(Udis)
 
   !  open(newunit=Ucent,file=trim(address)//'/cent_dipo.out',position='append')
   !    write(Ucent,*) istepsv, dis, dipo_cent(:)
   !  close(Ucent)
-  !end if
+  end if
   ! +++ End Print distance +++
 
   9998 format(3E23.15)
