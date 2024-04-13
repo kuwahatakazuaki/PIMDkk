@@ -127,7 +127,7 @@ subroutine Force_Harmonic
     Eenergy(imode) = Eenergy(imode) + 0.5d0 * cons * (dis - r0)**2
     dis_beads(imode) = dis
   end do
-  fr(:,:,:) = fr(:,:,:) * dp_inv
+  fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv
   dis_beads(:) = dis_beads(:) * AUtoAng
   ! +++ End Calculating Force in which atom (i) feels from atom (j) +++
 

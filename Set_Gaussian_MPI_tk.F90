@@ -1,52 +1,50 @@
 Subroutine Set_Gaussian_MPI_tk
-  !Use MPI
   use Parameters
   use utility, only: program_abort
-  Implicit None
-  Integer   :: i,j,k,id, imode
+  implicit none
+  integer   :: i,j,k,id, imode
   integer :: access
   integer :: igauss = 20
 
-if ( MyRank == 0 ) then
-  if      ( access("./gauss.tmp", " ") .ne. 0) then
-    call err_set_tmp
-  else if ( access("./g0xrun_p", " ") .ne. 0) then
-    call err_set_g0xrun
+  if ( MyRank == 0 ) then
+    if      ( access("./gauss.tmp", " ") .ne. 0) then
+      call err_set_tmp
+    else if ( access("./g0xrun_p", " ") .ne. 0) then
+      call err_set_g0xrun
+    end if
   end if
-end if
 
 
   id=0
-do imode=ista,iend
-   write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
-   call system('mkdir -p '//trim(addresstmp))
-   call system('cp gauss.tmp '//trim(addresstmp))
+  do imode=ista,iend
+     write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
+     call system('mkdir -p '//trim(addresstmp))
+     call system('cp gauss.tmp '//trim(addresstmp))
 ! kuwahata 2021/06/06 for ITO
-    call system('cp -f g0xrun_p '//trim(address0))
+     call system('cp -f g0xrun_p '//trim(address0))
 !    call system('cp g0xrun_p '//trim(addresstmp))
 ! End kuwahata 2021/06/06 for ITO
-   !If(NGenGau==1) Then
-   !   call system('cp gauss.bss '//trim(addresstmp))
-   !EndIf
-   open(igauss+id,file=trim(addresstmp)//'gauss.tmp1',status='unknown')
-     write(igauss+id,'(a)') '%Chk='//trim(addresstmp)//'gauss.chk'
-     write(igauss+id,'(a)') '%RWF='//trim(addresstmp)
-     write(igauss+id,'(a)') '%Int='//trim(addresstmp)
-     write(igauss+id,'(a)') '%D2E='//trim(addresstmp)
-   close(igauss+id)
-   call system('cat '//trim(addresstmp)//'gauss.tmp >> '//trim(addresstmp)//'gauss.tmp1')
+     !If(NGenGau==1) Then
+     !   call system('cp gauss.bss '//trim(addresstmp))
+     !EndIf
+     open(igauss+id,file=trim(addresstmp)//'gauss.tmp1',status='unknown')
+       write(igauss+id,'(a)') '%Chk='//trim(addresstmp)//'gauss.chk'
+       write(igauss+id,'(a)') '%RWF='//trim(addresstmp)
+       write(igauss+id,'(a)') '%Int='//trim(addresstmp)
+       write(igauss+id,'(a)') '%D2E='//trim(addresstmp)
+     close(igauss+id)
+     call system('cat '//trim(addresstmp)//'gauss.tmp >> '//trim(addresstmp)//'gauss.tmp1')
 
-!! Udagawa Start 2021.05.24 --->
-!     If(istepsv == 0 .OR. (nRestart ==1 .AND. istepsv == nrstep+1)) then
-!       call system ('sed -e "s/[Gg][Uu][Ee][Ss][Ss]=[Rr][Ee][Aa][Dd]//g" '//trim(addresstmp)//'gauss.tmp1  &
-!         & > '//trim(addresstmp)//'gauss.tmp2')
-!       call system ('mv '//trim(addresstmp)//'gauss.tmp2 '//trim(addresstmp)//'gauss.tmp1')
-!     Endif
-!! <--- Udagawa End 2021.05.24
+  !! Udagawa Start 2021.05.24 --->
+  !     If(istepsv == 0 .OR. (nRestart ==1 .AND. istepsv == nrstep+1)) then
+  !       call system ('sed -e "s/[Gg][Uu][Ee][Ss][Ss]=[Rr][Ee][Aa][Dd]//g" '//trim(addresstmp)//'gauss.tmp1  &
+  !         & > '//trim(addresstmp)//'gauss.tmp2')
+  !       call system ('mv '//trim(addresstmp)//'gauss.tmp2 '//trim(addresstmp)//'gauss.tmp1')
+  !     Endif
+  !! <--- Udagawa End 2021.05.24
+  enddo
 
-enddo
-
-Return
+  return
 contains
 
   subroutine err_set_tmp

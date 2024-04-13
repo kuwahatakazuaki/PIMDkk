@@ -29,40 +29,40 @@ subroutine Force_Gaussian_MPI_tk
   id=0
 !  Call Start_Recv_Send_MPI_tk  ! Gather r (Coordinate)
 
-   do imode2=ista,iend
-     write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode2,'/'
+  do imode2=ista,iend
+    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode2,'/'
 
-     call system('cat '//trim(addresstmp)//'gauss.tmp1 > '//trim(addresstmp)//'gauss.com')
-
-
-!     open(igauss+id,file=trim(addresstmp)//'gauss.xyz',status='unknown')
-     open(igauss+id,file=trim(addresstmp)//'gauss.com',status='old',position='append')
-       do iatom2=1,natom
-         write(igauss+id,*) alabel(iatom2),r(:,iatom2,imode2)*AUtoAng
-       enddo
-       write(igauss+id,*)
-     close(igauss+id)
+    call system('cat '//trim(addresstmp)//'gauss.tmp1 > '//trim(addresstmp)//'gauss.com')
 
 
-     !If(NGenGau==1) Then
-     !   call system('cat '//trim(addresstmp)//'gauss.bss >> '//trim(addresstmp)//'gauss.com')
-     !EndIf
+!    open(igauss+id,file=trim(addresstmp)//'gauss.xyz',status='unknown')
+    open(igauss+id,file=trim(addresstmp)//'gauss.com',status='old',position='append')
+      do iatom2=1,natom
+        write(igauss+id,*) alabel(iatom2),r(:,iatom2,imode2)*AUtoAng
+      enddo
+      write(igauss+id,*)
+    close(igauss+id)
+
+
+    !If(NGenGau==1) Then
+    !   call system('cat '//trim(addresstmp)//'gauss.bss >> '//trim(addresstmp)//'gauss.com')
+    !EndIf
 
 ! Udagawa Start 2021.05.24 --->
-     !If(istepsv == 0 .OR. (nRestart ==1 .AND. istepsv == nrstep+1)) then
-     If(istepsv == 0 .OR. ( (Lrestart .eqv. .True. ) .AND. istepsv == nrstep+1)) then
-       call system ('sed -e "s/[Gg][Uu][Ee][Ss][Ss]=[Rr][Ee][Aa][Dd]//g" '//trim(addresstmp)//'gauss.com  &
-         & > '//trim(addresstmp)//'gauss.com1')
-       call system ('mv '//trim(addresstmp)//'gauss.com1 '//trim(addresstmp)//'gauss.com')
-     Endif
+    !If(istepsv == 0 .OR. (nRestart ==1 .AND. istepsv == nrstep+1)) then
+    If(istepsv == 0 .OR. ( (Lrestart .eqv. .True. ) .AND. istepsv == nrstep+1)) then
+      call system ('sed -e "s/[Gg][Uu][Ee][Ss][Ss]=[Rr][Ee][Aa][Dd]//g" '//trim(addresstmp)//'gauss.com  &
+        & > '//trim(addresstmp)//'gauss.com1')
+      call system ('mv '//trim(addresstmp)//'gauss.com1 '//trim(addresstmp)//'gauss.com')
+    Endif
 ! <--- Udagawa End 2021.05.24
 
 ! kuwahata 2021/06/06 for ITO
-     call system(trim(address0)//'g0xrun_p '//trim(addresstmp)//'gauss.com '//trim(addresstmp)//'gauss.log '//trim(addresstmp))
-     !call system(trim(addresstmp)//'g0xrun_p '//trim(addresstmp)//'gauss.com '//trim(addresstmp)//'gauss.log '//trim(addresstmp))
+    call system(trim(address0)//'g0xrun_p '//trim(addresstmp)//'gauss.com '//trim(addresstmp)//'gauss.log '//trim(addresstmp))
+    !call system(trim(addresstmp)//'g0xrun_p '//trim(addresstmp)//'gauss.com '//trim(addresstmp)//'gauss.log '//trim(addresstmp))
 ! End kuwahata 2021/06/06 for ITO
 
-     open(igauss+id,file=trim(addresstmp)//'gauss.log')
+    open(igauss+id,file=trim(addresstmp)//'gauss.log')
 
 !  +++ Reading "SCF Done" or "EUMP2" +++
 !  +++ Automatically read EUMP2 with MP2 method +++
@@ -83,19 +83,11 @@ subroutine Force_Gaussian_MPI_tk
      read(line(38:60),*) enetemp ! For MP2
 101 continue
 
-     !if (theory == 0) then
-     !  index1 = index(line,'=')
-     !  read(line(index1+2:index1+17),*) enetemp ! For DFT
-     !else if (theory == 1) then
-     !  read(line(38:60),*) enetemp ! For MP2
-     !end if
-
      Eenergy(imode2)=enetemp
      rewind(igauss+id)
 !  +++ End Reading "SCF Done" +++
 
 !  +++ Reading "Mulliken charge" +++
-     !if(nocharge==0) then
      if( Lsave_charge .eqv. .True.) then
        do
          read(igauss+id,'(a)',end=404) line
@@ -111,7 +103,6 @@ subroutine Force_Gaussian_MPI_tk
 !  +++ End Reading "Mulliken charge" +++
 
 !  +++ Reading "Dipole moment" +++
-     !if(nodipole==0) then
      if( Lsave_dipole .eqv. .True. ) then
        do
          read(igauss+id,'(a)',end=403) line
@@ -122,12 +113,10 @@ subroutine Force_Gaussian_MPI_tk
        Read(line(20:26),*) dipoler(1,imode2)
        Read(line(46:52),*) dipoler(2,imode2)
        Read(line(72:78),*) dipoler(3,imode2)
-       !Read(line(98:104),*) dipole(imode2)
      endif
 !  +++ End Reading "Dipole moment" +++
 
 !  +++ Reading "Isotropic Fermi" +++
-     !if(nohfcc==0) then
      if( Lsave_hfcc .eqv. .True. ) then
        do
          Read(igauss+id,'(a)',end=405) line
@@ -164,6 +153,7 @@ subroutine Force_Gaussian_MPI_tk
 
      fr(:,:,imode2) = fr(:,:,imode2) * dp_inv
    enddo
+  fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv
 
 ! Call Start_Send_Recv_MPI_tk
 
