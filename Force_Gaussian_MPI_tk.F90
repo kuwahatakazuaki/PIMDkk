@@ -3,10 +3,11 @@ subroutine Force_Gaussian_MPI_tk
   use utility, only: program_abort
   implicit none
 
-  Character (Len=90) :: key1, key2, key3, key4, key5, key6
+  !Character (Len=90) :: key1, key2, key3, key4, key5, key6
+  character(len=:), allocatable :: key1, key2, key3, key4, key5, key6
   character(len=120) :: line
-  Integer            :: iline, id,imode2,iatom2
-  Integer            :: index1
+  integer            :: iline, imode2, iatom2
+  integer            :: index1
   Double Precision   :: enetemp
   Integer :: i,j,k
   integer :: igauss = 20
@@ -26,7 +27,6 @@ subroutine Force_Gaussian_MPI_tk
     call program_abort('ERROR!!! wrong keyword of "version"')
   end if
 
-  id=0
 !  Call Start_Recv_Send_MPI_tk  ! Gather r (Coordinate)
 
   do imode2=ista,iend
@@ -35,13 +35,13 @@ subroutine Force_Gaussian_MPI_tk
     call system('cat '//trim(addresstmp)//'gauss.tmp1 > '//trim(addresstmp)//'gauss.com')
 
 
-!    open(igauss+id,file=trim(addresstmp)//'gauss.xyz',status='unknown')
-    open(igauss+id,file=trim(addresstmp)//'gauss.com',status='old',position='append')
+!    open(igauss,file=trim(addresstmp)//'gauss.xyz',status='unknown')
+    open(igauss,file=trim(addresstmp)//'gauss.com',status='old',position='append')
       do iatom2=1,natom
-        write(igauss+id,*) alabel(iatom2),r(:,iatom2,imode2)*AUtoAng
+        write(igauss,*) alabel(iatom2),r(:,iatom2,imode2)*AUtoAng
       enddo
-      write(igauss+id,*)
-    close(igauss+id)
+      write(igauss,*)
+    close(igauss)
 
 
     !If(NGenGau==1) Then
@@ -62,21 +62,23 @@ subroutine Force_Gaussian_MPI_tk
     !call system(trim(addresstmp)//'g0xrun_p '//trim(addresstmp)//'gauss.com '//trim(addresstmp)//'gauss.log '//trim(addresstmp))
 ! End kuwahata 2021/06/06 for ITO
 
-    open(igauss+id,file=trim(addresstmp)//'gauss.log')
+    open(igauss,file=trim(addresstmp)//'gauss.log')
 
 !  +++ Reading "SCF Done" or "EUMP2" +++
 !  +++ Automatically read EUMP2 with MP2 method +++
 !  +++ We don't need to change 'theory' option  +++
-     do
-       read(igauss+id,'(a)',end=401) line
-       iline=index(line,trim(key1))  ! Reading "SCE Done"
-       if(iline > 0) exit
-     end do
-     index1 = index(line,'=')
-     read(line(index1+2:index1+17),*) enetemp ! For DFT
+     !do
+     !  read(igauss,'(a)',end=401) line
+     !  iline=index(line,trim(key1))  ! Reading "SCE Done"
+     !  if(iline > 0) exit
+     !end do
+     !index1 = index(line,'=')
+     !read(line(index1+2:index1+17),*) enetemp ! For DFT
+     call search_line(igauss,key1,line)
+     call read_val_next(line,'=',enetemp)
 
      do
-       read(igauss+id,'(a)',end=101) line
+       read(igauss,'(a)',end=101) line
        iline=index(line,trim(key6))  ! Reading "SCE Done"
        if(iline > 0) exit
      end do
@@ -84,19 +86,19 @@ subroutine Force_Gaussian_MPI_tk
 101 continue
 
      Eenergy(imode2)=enetemp
-     rewind(igauss+id)
+     rewind(igauss)
 !  +++ End Reading "SCF Done" +++
 
 !  +++ Reading "Mulliken charge" +++
      if( Lsave_charge .eqv. .True.) then
        do
-         read(igauss+id,'(a)',end=404) line
+         read(igauss,'(a)',end=404) line
          iline=index(trim(line),trim(key4))  ! Reading "Mulliken charge"
          if(iline > 0) exit
        end do
-       read(igauss+id,*)
+       read(igauss,*)
        do iatom2=1,natom
-          Read(igauss+id,'(a)') line
+          Read(igauss,'(a)') line
           Read(line(11:21),*) charge(iatom2,imode2)
        enddo
      endif
@@ -105,11 +107,11 @@ subroutine Force_Gaussian_MPI_tk
 !  +++ Reading "Dipole moment" +++
      if( Lsave_dipole .eqv. .True. ) then
        do
-         read(igauss+id,'(a)',end=403) line
+         read(igauss,'(a)',end=403) line
          iline=index(trim(line),trim(key3))  ! Reading "Dipole moment"
          if(iline > 0) exit
        end do
-       Read(igauss+id,'(a)') line
+       Read(igauss,'(a)') line
        Read(line(20:26),*) dipoler(1,imode2)
        Read(line(46:52),*) dipoler(2,imode2)
        Read(line(72:78),*) dipoler(3,imode2)
@@ -119,35 +121,34 @@ subroutine Force_Gaussian_MPI_tk
 !  +++ Reading "Isotropic Fermi" +++
      if( Lsave_hfcc .eqv. .True. ) then
        do
-         Read(igauss+id,'(a)',end=405) line
+         Read(igauss,'(a)',end=405) line
          iline=index(trim(line),trim(key5))
          if(iline > 0) exit
        end do
-       read(igauss+id,'()')
+       read(igauss,'()')
        do iatom2=1,natom
-         Read(igauss+id,'(a)') line
+         Read(igauss,'(a)') line
          Read(line(36:49),*) hfcc(iatom2,imode2)
        enddo
      endif
 !  +++ End Reading "Isotropic Fermi" +++
 
 !  +++ Reading "Atomic Force" +++
-!     rewind(igauss+id)
      do
-       read(igauss+id,'(a)',end=402) line  ! Reading "Force"
+       read(igauss,'(a)',end=402) line  ! Reading "Force"
        iline=index(line,trim(key2))
        if(iline > 0) exit
      end do
-     read(igauss+id,*)
+     read(igauss,*)
      do iatom2=1,natom
-       read(igauss+id,'(a)') line
+       read(igauss,'(a)') line
        read(line(24:38),*) fr(1,iatom2,imode2)
        read(line(39:53),*) fr(2,iatom2,imode2)
        read(line(54:68),*) fr(3,iatom2,imode2)
      enddo
 !  +++ End Reading "Atomic Force" +++
 
-     close(igauss+id)
+     close(igauss)
 
      call system('rm -rf '//trim(addresstmp)//'Gau*')
 
@@ -155,7 +156,6 @@ subroutine Force_Gaussian_MPI_tk
    enddo
   fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv
 
-! Call Start_Send_Recv_MPI_tk
 
 return
 401 print *, 'ERROR!!: We can not find "SCF Done" or "EUMP2" in Gaussian output'; stop
@@ -163,5 +163,29 @@ return
 403 print *, 'ERROR!!: We can not find "Dipole moment" in Gaussian output'; stop
 404 print *, 'ERROR!!: We can not find "Mulliken charges" in Gaussian output'; stop
 405 print *, 'ERROR!!: We can not find "Fermi Contact" in Gaussian output'; stop
+
+contains
+
+  subroutine read_val_next(line,key,val)
+    character(len=*), intent(in) :: key, line
+    real(8), intent(out) :: val
+    integer :: pos
+    pos = index(line,key)
+    read( line(pos+1:),* ) val
+  end subroutine read_val_next
+
+  subroutine search_line(Iunit,key,line)
+    integer, intent(in) :: Iunit
+    character(len=*), intent(in) :: key
+    character(len=*), intent(out) :: line
+
+    do
+      read(Iunit,'(a)',end=401) line
+      if (index(line,key) > 0 ) exit
+    end do
+    return
+    401 print *, 'ERROR!!: There is no key: "'//key//'"' ; stop
+  end subroutine search_line
+
 end subroutine
 

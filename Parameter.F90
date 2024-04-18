@@ -5,7 +5,7 @@ Module Parameters
 
     ! . . > fs -- > a.u.
 !    Double Precision, Parameter  :: facttime  = 1.d0/0.024d0
-   Double Precision, Parameter  :: facttime  = 1.d0 / 0.024188843d0   ! fstoAU
+    Double Precision, Parameter  :: facttime  = 1.d0 / 0.024188843d0   ! fstoAU
     !! Mass amu -- > A.U.
 !   Double Precision, Parameter  :: factmass  = 1.6605402d-27/9.1093897d-31
     Double Precision, Parameter  :: factmass  = 1.6605402d-27/9.1095d-31  ! 1822.866458
@@ -22,6 +22,7 @@ Module Parameters
     real(8), parameter :: AUtoAng = 0.529177249d0   ! bohr_inv
     real(8), parameter :: AUtoJ   = 4.35974434d-18
     real(8), parameter :: KtoAU   = 8.617333262145d-5/27.211396132 ! Boltzmann constant K to AU (eV/K hartree/eV) from NIST
+    integer, parameter :: LINELEN = 120
 
 
     real(8), allocatable :: r(:,:,:), fr(:,:,:), ur(:,:,:), vur(:,:,:)
@@ -93,13 +94,13 @@ Module Parameters
     integer :: umbrella_atom1 = 0, umbrella_atom2 = 0, umbrella_atom3 = 0
 ! End Kuwahata 2020/10/06
 
-  Integer   :: ista, iend !, nhmod, numeach
-  Integer, Allocatable :: listeach(:),listeachtmp(:),ireqa(:,:),ireqb(:,:)
-  Integer, Allocatable :: recvlist(:),recvlist1(:),recvlist2(:)
-  Integer  ::  laddress,na31,na3,nsendrecv,ireq(9),ireq0,npacksize
-  Integer  ::  nrecv, sendlist,sendlist1,sendlist2
+  integer   :: ista, iend !, nhmod, numeach
+  integer, Allocatable :: listeach(:),listeachtmp(:),ireqa(:,:),ireqb(:,:)
+  integer, Allocatable :: recvlist(:),recvlist1(:),recvlist2(:)
+  integer  ::  laddress,na31,na3,nsendrecv,ireq(9),ireq0,npacksize
+  integer  ::  nrecv, sendlist,sendlist1,sendlist2
   Double Precision, Allocatable ::  work(:), work2(:)
-End Module
+end module
 
 !!YK Set the method for electronic structure calculation
 !    Integer                       :: theory
