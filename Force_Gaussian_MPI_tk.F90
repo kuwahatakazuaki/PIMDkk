@@ -3,14 +3,14 @@ subroutine Force_Gaussian_MPI_tk
   use utility, only: program_abort
   implicit none
 
-  !Character (Len=90) :: key1, key2, key3, key4, key5, key6
   character(len=:), allocatable :: key1, key2, key3, key4, key5, key6
   character(len=120) :: line
-  integer            :: iline, imode2, iatom2
-  integer            :: index1
+  integer            :: iline, imode, iatom2
+  !integer            :: index1
   Double Precision   :: enetemp
-  Integer :: i,j,k
-  integer :: igauss = 20
+  integer :: i,j,k, igauss
+  !integer :: igauss = 20
+  character :: dummyC(10)
 
   key1  = ('SCF Done')
   key6  = ('EUMP2')
@@ -29,16 +29,16 @@ subroutine Force_Gaussian_MPI_tk
 
 !  Call Start_Recv_Send_MPI_tk  ! Gather r (Coordinate)
 
-  do imode2=ista,iend
-    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode2,'/'
+  do imode=ista,iend
+    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
 
     call system('cat '//trim(addresstmp)//'gauss.tmp1 > '//trim(addresstmp)//'gauss.com')
 
 
 !    open(igauss,file=trim(addresstmp)//'gauss.xyz',status='unknown')
-    open(igauss,file=trim(addresstmp)//'gauss.com',status='old',position='append')
+    open(newunit=igauss,file=trim(addresstmp)//'gauss.com',status='old',position='append')
       do iatom2=1,natom
-        write(igauss,*) alabel(iatom2),r(:,iatom2,imode2)*AUtoAng
+        write(igauss,*) alabel(iatom2),r(:,iatom2,imode)*AUtoAng
       enddo
       write(igauss,*)
     close(igauss)
@@ -50,11 +50,11 @@ subroutine Force_Gaussian_MPI_tk
 
 ! Udagawa Start 2021.05.24 --->
     !If(istepsv == 0 .OR. (nRestart ==1 .AND. istepsv == nrstep+1)) then
-    If(istepsv == 0 .OR. ( (Lrestart .eqv. .True. ) .AND. istepsv == nrstep+1)) then
+    if(istepsv == 0 .OR. ( (Lrestart .eqv. .True. ) .AND. istepsv == nrstep+1)) then
       call system ('sed -e "s/[Gg][Uu][Ee][Ss][Ss]=[Rr][Ee][Aa][Dd]//g" '//trim(addresstmp)//'gauss.com  &
         & > '//trim(addresstmp)//'gauss.com1')
       call system ('mv '//trim(addresstmp)//'gauss.com1 '//trim(addresstmp)//'gauss.com')
-    Endif
+    end if
 ! <--- Udagawa End 2021.05.24
 
 ! kuwahata 2021/06/06 for ITO
@@ -62,98 +62,104 @@ subroutine Force_Gaussian_MPI_tk
     !call system(trim(addresstmp)//'g0xrun_p '//trim(addresstmp)//'gauss.com '//trim(addresstmp)//'gauss.log '//trim(addresstmp))
 ! End kuwahata 2021/06/06 for ITO
 
-    open(igauss,file=trim(addresstmp)//'gauss.log')
+    open(newunit=igauss,file=trim(addresstmp)//'gauss.log')
 
 !  +++ Reading "SCF Done" or "EUMP2" +++
 !  +++ Automatically read EUMP2 with MP2 method +++
-!  +++ We don't need to change 'theory' option  +++
-     !do
-     !  read(igauss,'(a)',end=401) line
-     !  iline=index(line,trim(key1))  ! Reading "SCE Done"
-     !  if(iline > 0) exit
-     !end do
-     !index1 = index(line,'=')
-     !read(line(index1+2:index1+17),*) enetemp ! For DFT
-     call search_line(igauss,key1,line)
-     call read_val_next(line,'=',enetemp)
+    call search_line(igauss,key1,line)
+    call read_val_next(line,'=',enetemp)
 
-     do
-       read(igauss,'(a)',end=101) line
-       iline=index(line,trim(key6))  ! Reading "SCE Done"
-       if(iline > 0) exit
-     end do
-     read(line(38:60),*) enetemp ! For MP2
+    do
+      read(igauss,'(a)',end=101) line
+      iline=index(line,trim(key6))  ! Reading "SCE Done"
+      if(iline > 0) exit
+    end do
+    read(line(38:60),*) enetemp ! For MP2
 101 continue
 
-     Eenergy(imode2)=enetemp
-     rewind(igauss)
+    Eenergy(imode)=enetemp
+    rewind(igauss)
 !  +++ End Reading "SCF Done" +++
 
 !  +++ Reading "Mulliken charge" +++
-     if( Lsave_charge .eqv. .True.) then
-       do
-         read(igauss,'(a)',end=404) line
-         iline=index(trim(line),trim(key4))  ! Reading "Mulliken charge"
-         if(iline > 0) exit
-       end do
-       read(igauss,*)
-       do iatom2=1,natom
-          Read(igauss,'(a)') line
-          Read(line(11:21),*) charge(iatom2,imode2)
-       enddo
-     endif
+    if( Lsave_charge .eqv. .True.) then
+      call search_line(igauss,key4,line)
+      read(igauss,'()')
+      do i = 1, Natom
+        read(igauss,*) dummyC(1:2), charge(i,imode)
+      end do
+     ! do
+     !   read(igauss,'(a)',end=404) line
+     !   iline=index(trim(line),trim(key4))  ! Reading "Mulliken charge"
+     !   if(iline > 0) exit
+     ! end do
+     ! read(igauss,*)
+     ! do iatom2=1,natom
+     !    Read(igauss,'(a)') line
+     !    Read(line(11:21),*) charge(iatom2,imode)
+     ! enddo
+    endif
 !  +++ End Reading "Mulliken charge" +++
 
 !  +++ Reading "Dipole moment" +++
-     if( Lsave_dipole .eqv. .True. ) then
-       do
-         read(igauss,'(a)',end=403) line
-         iline=index(trim(line),trim(key3))  ! Reading "Dipole moment"
-         if(iline > 0) exit
-       end do
-       Read(igauss,'(a)') line
-       Read(line(20:26),*) dipoler(1,imode2)
-       Read(line(46:52),*) dipoler(2,imode2)
-       Read(line(72:78),*) dipoler(3,imode2)
-     endif
+    if( Lsave_dipole .eqv. .True. ) then
+      call search_line(igauss,key3,line)
+      read(igauss,*) dummyC(1), dipoler(1,imode), &
+                     dummyC(2), dipoler(2,imode), &
+                     dummyC(3), dipoler(3,imode)
+      !do
+      !  read(igauss,'(a)',end=403) line
+      !  iline=index(trim(line),trim(key3))  ! Reading "Dipole moment"
+      !  if(iline > 0) exit
+      !end do
+      !Read(igauss,'(a)') line
+      !Read(line(20:26),*) dipoler(1,imode)
+      !Read(line(46:52),*) dipoler(2,imode)
+      !Read(line(72:78),*) dipoler(3,imode)
+    endif
 !  +++ End Reading "Dipole moment" +++
 
 !  +++ Reading "Isotropic Fermi" +++
-     if( Lsave_hfcc .eqv. .True. ) then
-       do
-         Read(igauss,'(a)',end=405) line
-         iline=index(trim(line),trim(key5))
-         if(iline > 0) exit
-       end do
-       read(igauss,'()')
-       do iatom2=1,natom
-         Read(igauss,'(a)') line
-         Read(line(36:49),*) hfcc(iatom2,imode2)
-       enddo
-     endif
+    if( Lsave_hfcc .eqv. .True. ) then
+      do
+        Read(igauss,'(a)',end=405) line
+        iline=index(trim(line),trim(key5))
+        if(iline > 0) exit
+      end do
+      read(igauss,'()')
+      do iatom2=1,natom
+        Read(igauss,'(a)') line
+        Read(line(36:49),*) hfcc(iatom2,imode)
+      enddo
+    endif
 !  +++ End Reading "Isotropic Fermi" +++
 
 !  +++ Reading "Atomic Force" +++
-     do
-       read(igauss,'(a)',end=402) line  ! Reading "Force"
-       iline=index(line,trim(key2))
-       if(iline > 0) exit
-     end do
-     read(igauss,*)
-     do iatom2=1,natom
-       read(igauss,'(a)') line
-       read(line(24:38),*) fr(1,iatom2,imode2)
-       read(line(39:53),*) fr(2,iatom2,imode2)
-       read(line(54:68),*) fr(3,iatom2,imode2)
-     enddo
+    call search_line(igauss,key2,line)
+    read(igauss,'()')
+    do i = 1, Natom
+      read(igauss,*) dummyC(1:2), fr(:,i,imode)
+    end do
+    !do
+    !  read(igauss,'(a)',end=402) line  ! Reading "Force"
+    !  iline=index(line,trim(key2))
+    !  if(iline > 0) exit
+    !end do
+    !read(igauss,*)
+    !do iatom2=1,natom
+    !  read(igauss,'(a)') line
+    !  read(line(24:38),*) fr(1,iatom2,imode)
+    !  read(line(39:53),*) fr(2,iatom2,imode)
+    !  read(line(54:68),*) fr(3,iatom2,imode)
+    !enddo
 !  +++ End Reading "Atomic Force" +++
 
-     close(igauss)
+    close(igauss)
 
-     call system('rm -rf '//trim(addresstmp)//'Gau*')
+    call system('rm -rf '//trim(addresstmp)//'Gau*')
 
-     fr(:,:,imode2) = fr(:,:,imode2) * dp_inv
-   enddo
+    !fr(:,:,imode) = fr(:,:,imode) * dp_inv
+  enddo
   fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv
 
 

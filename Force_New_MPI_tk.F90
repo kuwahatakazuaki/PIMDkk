@@ -3,6 +3,7 @@ Subroutine Force_New_MPI_tk
   use utility, only: program_abort
   use mpi_module
   implicit none
+  integer :: i
 
 #ifdef _mpi_
   !call MyMPI_bcast_r
@@ -39,13 +40,13 @@ Subroutine Force_New_MPI_tk
       stop 'ERROR!!! Wrong "Iforce" option'
   end select
 
+
 #ifdef _mpi_
   call MyMPI_gather_fr
 #endif
 ! +++ Start Writting output +++
   call print_result_qm
 ! +++ End Writting output +++
-
 
   if (umbrella_sampling > 0) call calc_umbrella
 

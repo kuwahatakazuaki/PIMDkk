@@ -110,9 +110,10 @@ $(PROG): $(OBJS) $(OBJSF77)
 	$(FC) $(fcopt) $(OBJS) $(OBJSF77) -o $(PROG)
 
 
-install: $(OBJS)
-	$(FC) $(fcopt) $(OBJS)  -o $(PROG)
-	cp $(PROG) ../bin/pimd
+# install: $(OBJS)
+install: $(PROG)
+#	$(FC) $(fcopt) $(OBJS)  -o $(PROG)
+	cp $(PROG) ../bin/pimd.exe
 #	cp $(PROG) ../bin/pimd_muon
 #	cp $(PROG) ../bin/$(PROG)
 
