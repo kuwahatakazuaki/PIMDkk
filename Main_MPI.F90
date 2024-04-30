@@ -13,7 +13,7 @@ Program Path_Integral_MPI
   call MPI_COMM_RANK(MPI_COMM_WORLD,MyRank,IERR)
 #else
   MyRank = 0
-  NProcs = 1
+  NProc  = 1
 #endif
 
   call print_start

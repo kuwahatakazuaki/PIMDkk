@@ -2,7 +2,7 @@ PROG = pimd.exe
 SHELL   = /bin/bash
 OBJS    = $(SRCS:%.F90=%.o)
 OBJSF77 = $(SRCSF77:%.f=%.o)
-MPI  = True
+#MPI  = True
 
 #ifeq ($(HOSTNAME),wisteria)
 #FC = mpifrtpx
@@ -22,8 +22,8 @@ FC = mpif90
 fcopt = -O2 -pipe -D_mpi_
 else
 FC = gfortran
-#fcopt = -O2 -pipe
-fcopt = -g -O0 -pipe
+fcopt = -O2 -pipe
+#fcopt = -g -O0 -pipe
 endif
 
 #fcopt = -O2 -cpp -pipe -Dmpi
