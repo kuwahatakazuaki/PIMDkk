@@ -67,7 +67,6 @@ subroutine Force_VASP_MPI
       read(igauss+id,'()')
       do iatom2=1,natom
         read(igauss+id,*) dummy, dummy, dummy, fr(:,iatom2,imode2)
-        !read(igauss+id,*) dummy, dummy, dummy, fx(iatom2,imode2), fy(iatom2,imode2), fz(iatom2,imode2)
       enddo
 ! +++ End Reading "TOTAL-FORCE" +++
 

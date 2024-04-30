@@ -41,7 +41,6 @@ Subroutine Force_Gaussian_classical
      open(igauss+id,file=trim(addresstmp)//'gauss.com',status='old',position='append')
        do iatom2=1,natom
          write(igauss+id,9999) alabel(iatom2), r(:,iatom2,imode2)*AUtoAng
-         !write(igauss+id,9999) alabel(iatom2),x(iatom2,imode2)*bohr_inv, y(iatom2,imode2)*bohr_inv,z(iatom2,imode2)*bohr_inv
        enddo
        write(igauss+id,*)
      close(igauss+id)
@@ -80,15 +79,6 @@ Subroutine Force_Gaussian_classical
      read(line(38:60),*) enetemp ! For MP2
 101 continue
 
-
-     !if (theory == 0) then
-     !  chl = index(line, '=')
-     !  chr = index(line(chl+1:len(line)-chl), '.') + chl
-     !  chr = index(line(chr+1:len(line)-chr), ' ') + chr
-     !  read(line(chl+1:chr-1),*) enetemp  ! For DFT
-     !else if (theory == 1) then
-     !  read(line(38:60),*) enetemp  ! For MP2
-     !end if
 
      Eenergy(imode2)=enetemp
      rewind(igauss+id)

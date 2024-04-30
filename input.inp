@@ -1,0 +1,75 @@
+$The Number of Proccesors
+1
+$temperature
+300.0
+$Nbead
+16
+$Nstep
+1000
+$dt
+0.1
+$Isimulation      # 0:PIMD, 1:RPMD, 2:CMD (For classical, just set Nbead=1)
+0
+$Nref             # time deconposition for reversible RESPA
+5
+$Nys              # read as "nys", deconposition of thermostat. chose 1 or 3 or 5
+5
+$Nnhc
+4
+$gamma
+1.0
+$Ncent            # Method of Centroid NHC, 0: NVE
+3
+$Lrestart
+.F.
+$Iforce           # 1:MOPAC, 6:Gaussian, 8:VASP, 9:SIESTA, 11:Morse, 31:Water(SPC/F2)
+31
+$address_result   # Result directory
+./Result
+$address_scr      # Scretch directory
+/dev/shm/Kuwahata/Harmonic
+$seed
+1
+3
+5
+7
+$Langstrom        # Coordinate in Angstrom (True of False)
+.T.
+$Lrandom_coor     # Random intial coordinate (True of False)
+.T.
+$Lsave_charge     # Save charge (True of False)
+.F.
+$Lsave_hfcc       # Save HFCC (True of False)
+.F.
+$Lsave_dipole     # Save dipole moment (True of False)
+.F.
+$Lsave_force      # Save force (True of False)
+.F.
+$version
+g16
+$Lexit            # Exit the program (True of False)
+.F.
+$end parameter
+
+$Coords
+O        0.784141   -1.747496   -0.420830
+H        1.051988   -2.602871   -0.743663
+H        1.604494   -1.235467   -0.289941
+O       -0.738016    0.419202   -1.609733
+H       -1.622060    0.282588   -1.220930
+H       -0.281313   -0.417500   -1.434722
+O       -0.733283   -0.372878    1.650060
+H       -0.276961    0.444397    1.408825
+H       -0.282459   -1.040539    1.111785
+O        0.690005    1.777616    0.209828
+H        0.161313    1.376688   -0.528054
+H        0.687856    2.715513    0.045304
+O        2.870006    0.008016    0.077667
+H        2.223183    0.736459    0.096838
+H        3.285597    0.023124    0.937808
+O       -2.957497   -0.140358    0.028240
+H       -3.583174    0.466477    0.411941
+H       -2.291315   -0.301693    0.722959
+$end Coords
+
+

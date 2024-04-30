@@ -24,7 +24,6 @@ contains
 !  end if
 !  call MPI_Barrier(MPI_COMM_WORLD,Ierr)
 !end do
-
     MyNbead = Iend - Ista + 1
     if ( MyRank == 0 ) then
       call MPI_Gather(MPI_IN_PLACE,3*Natom*MyNbead,MPI_DOUBLE_PRECISION, &
@@ -51,9 +50,38 @@ contains
 !call program_abort("HERE_MPI")
   end subroutine MyMPI_gather_fr
 
-  subroutine MyMPI_bcast_r
-    call MPI_Bcast(r(1,1,1),3*Natom*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,Ierr)
-  end subroutine MyMPI_bcast_r
+  subroutine MyMPI_gather_others
+    integer :: i, j, k, MyNbead
+    integer :: Irank
+    MyNbead = Iend - Ista + 1
+    if ( Lsave_charge .eqv. .True. ) then
+      if ( MyRank == 0 ) then
+        call MPI_Gather(MPI_IN_PLACE,   Natom*MyNbead,MPI_DOUBLE_PRECISION,&
+                        charges(1,Ista),Natom*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+      end if
+        call MPI_Gather(charges(1,Ista),Natom*MyNbead,MPI_DOUBLE_PRECISION,&
+                        charges(1,Ista),Natom*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+    end if
+
+    if ( Lsave_dipole .eqv. .True. ) then
+      if ( MyRank == 0 ) then
+        call MPI_Gather(MPI_IN_PLACE,   3*MyNbead,MPI_DOUBLE_PRECISION,&
+                        dipoler(1,Ista),3*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+      end if
+        call MPI_Gather(dipoler(1,Ista),3*MyNbead,MPI_DOUBLE_PRECISION,&
+                        dipoler(1,Ista),3*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+    end if
+
+    if ( Lsave_hfcc .eqv. .True. ) then
+      if ( MyRank == 0 ) then
+        call MPI_Gather(MPI_IN_PLACE,Natom*MyNbead,MPI_DOUBLE_PRECISION,&
+                        hfcc(1,Ista),Natom*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+      end if
+        call MPI_Gather(hfcc(1,Ista),Natom*MyNbead,MPI_DOUBLE_PRECISION,&
+                        hfcc(1,Ista),Natom*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+    end if
+
+  end subroutine MyMPI_gather_others
 
   subroutine MyMPI_scatter_r
     integer :: i, j, k, MyNbead
@@ -68,6 +96,10 @@ contains
                        0,MPI_COMM_WORLD,ierr)
     end if
   end subroutine MyMPI_scatter_r
+
+  subroutine MyMPI_bcast_r
+    call MPI_Bcast(r(1,1,1),3*Natom*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,Ierr)
+  end subroutine MyMPI_bcast_r
 
   !subroutine MyMPI_gather_r
   !  integer :: i, j, k, MyNbead

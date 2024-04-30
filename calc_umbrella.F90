@@ -18,15 +18,6 @@ real(8) :: cons
 cons = umbrella_constant * AUtoAng * AUtoAng
 ! cons = umbrella_constant
 
-! r(xyz,atom,bead)
-!r(1,:,:) =  x(:,:)
-!r(2,:,:) =  y(:,:)
-!r(3,:,:) =  z(:,:)
-
-!f(1,:,:) = fx(:,:)
-!f(2,:,:) = fy(:,:)
-!f(3,:,:) = fz(:,:)
-
 ! +++ Calculating Force +++
 !! +++ Specific in Double well potential +++ 
 !if (Iforce == 12) then
@@ -59,12 +50,6 @@ if ( umbrella_sampling == 1 ) then
     fr(:,atom2,imode) = fr(:,atom2,imode) - f12(:)
   end do
 end if
-
-!fx(:,:) = f(1,:,:)
-!fy(:,:) = f(2,:,:)
-!fz(:,:) = f(3,:,:)
-
-!Call Start_Send_Recv_MPI_tk
 
 
 return
