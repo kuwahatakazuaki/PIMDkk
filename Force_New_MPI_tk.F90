@@ -1,7 +1,7 @@
 Subroutine Force_New_MPI_tk
   use Parameters
   use utility, only: program_abort
-  use mpi_module
+  use mpi_module, only: MyMPI_gather_fr, MyMPI_gather_others, MyMPI_scatter_r
   implicit none
   integer :: i
 
@@ -40,10 +40,11 @@ Subroutine Force_New_MPI_tk
       stop 'ERROR!!! Wrong "Iforce" option'
   end select
 
-
 #ifdef _mpi_
   call MyMPI_gather_fr
+!print *, MyRank, "MyMPI_gather_fr"
   call MyMPI_gather_others
+print *, MyRank, "MyMPI_gather_others"
 #endif
 ! +++ Start Writting output +++
   call print_result_qm
@@ -51,5 +52,6 @@ Subroutine Force_New_MPI_tk
 
   if (umbrella_sampling > 0) call calc_umbrella
 
+stop 'HERE3'
   Return
 End Subroutine

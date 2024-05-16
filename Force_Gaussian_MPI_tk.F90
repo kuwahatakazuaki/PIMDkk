@@ -80,6 +80,7 @@ subroutine Force_Gaussian_MPI_tk
     rewind(igauss)
 !  +++ End Reading "SCF Done" +++
 
+!print *, imode, enetemp
 !  +++ Reading "Mulliken charge" +++
     if ( Lsave_charge .eqv. .True.) then
       call search_line(igauss,key4,line)
@@ -95,6 +96,7 @@ subroutine Force_Gaussian_MPI_tk
     end if
 !  +++ End Reading "Mulliken charge" +++
 
+!print *, imode, charge(1,1)
 !  +++ Reading "Dipole moment" +++
     if ( Lsave_dipole .eqv. .True. ) then
       call search_line(igauss,key3,line)

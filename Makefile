@@ -2,7 +2,7 @@ PROG = pimd.exe
 SHELL   = /bin/bash
 OBJS    = $(SRCS:%.F90=%.o)
 OBJSF77 = $(SRCSF77:%.f=%.o)
-#MPI  = True
+MPI  = True
 
 #ifeq ($(HOSTNAME),wisteria)
 #FC = mpifrtpx

@@ -4,7 +4,6 @@ subroutine print_result_qm
   implicit none
   integer :: i,j,k, imode, iatom
   integer :: Upre, Udip, Uchar, Uhfc, Ucoor, Ufor, Uene
-
 if(MyRank==0) Then
 
   if( Lsave_dipole .eqv. .True. ) then
@@ -61,6 +60,7 @@ if(MyRank==0) Then
     do imode=1,nbead
       do iatom=1,natom
         write(Ucoor,9999) alabel(iatom),r(:,iatom,imode)*AUtoAng
+print *, alabel(iatom)
       end do
     end do
   close(Ucoor)
