@@ -1,5 +1,5 @@
-Subroutine Init_Mass
-  Use Parameters
+subroutine Init_Mass
+  use Parameters
   implicit none
   integer :: imode, iatom
   real(8) :: dp, di, twopi
@@ -53,5 +53,5 @@ Subroutine Init_Mass
   end if
 !  dnmmass(:,:) = dnmmass(:,:) * dp
 
-  Return
-End Subroutine
+  return
+end subroutine Init_Mass

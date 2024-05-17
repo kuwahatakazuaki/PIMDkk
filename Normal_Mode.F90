@@ -1,7 +1,7 @@
-Subroutine Normal_Mode
-  Use Parameters
+subroutine Normal_Mode
+  use Parameters
   use utility, only: program_abort
-  Implicit None
+  implicit none
   Double Precision     :: sqp, sqpinv, dnorm, dum
   Double Precision     :: di, dj
   integer :: i, j, jmode, imode
@@ -45,5 +45,5 @@ Subroutine Normal_Mode
      enddo
   enddo
 
-Return
-End Subroutine
+  return
+end subroutine Normal_Mode

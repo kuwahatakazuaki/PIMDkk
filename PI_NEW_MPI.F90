@@ -4,7 +4,6 @@ subroutine PI_NEW_MPI
   implicit none
   integer :: istep, iref, Uout
 
-  !call Setup_MPI
   call Setup_time_mass
   !call Set_etc_MPI_tk
   call set_pallarel

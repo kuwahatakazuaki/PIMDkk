@@ -60,7 +60,6 @@ if(MyRank==0) Then
     do imode=1,nbead
       do iatom=1,natom
         write(Ucoor,9999) alabel(iatom),r(:,iatom,imode)*AUtoAng
-print *, alabel(iatom)
       end do
     end do
   close(Ucoor)

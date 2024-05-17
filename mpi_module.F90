@@ -54,26 +54,35 @@ contains
     integer :: i, j, k, MyNbead
     integer :: Irank
     MyNbead = Iend - Ista + 1
-print *, MyRank, "Before"
+
     if ( Lsave_charge .eqv. .True. ) then
       if ( MyRank == 0 ) then
         call MPI_Gather(MPI_IN_PLACE,  Natom*MyNbead,MPI_DOUBLE_PRECISION,&
                         charge(1,Ista),Natom*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-      end if
+      else
         call MPI_Gather(charge(1,Ista),Natom*MyNbead,MPI_DOUBLE_PRECISION,&
                         charge(1,Ista),Natom*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+      end if
     end if
-print *, MyRank, "charge"
 
     if ( Lsave_dipole .eqv. .True. ) then
       if ( MyRank == 0 ) then
+!print *, "Before"
+!do i = 1, Nbead
+!  print *, i, dipoler(:,i)
+!end do
         call MPI_Gather(MPI_IN_PLACE,   3*MyNbead,MPI_DOUBLE_PRECISION,&
                         dipoler(1,Ista),3*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-      end if
+!print *, "After"
+!do i = 1, Nbead
+!  print *, i, dipoler(:,i)
+!end do
+      else
         call MPI_Gather(dipoler(1,Ista),3*MyNbead,MPI_DOUBLE_PRECISION,&
                         dipoler(1,Ista),3*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+      end if
     end if
-print *, MyRank, "dipoler"
+!print *, MyRank, "dipoler"
 
     if ( Lsave_hfcc .eqv. .True. ) then
       if ( MyRank == 0 ) then
