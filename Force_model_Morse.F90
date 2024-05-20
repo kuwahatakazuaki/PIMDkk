@@ -1,78 +1,80 @@
 ! Obtaining force(fx) from position(x)
 
-! +++++++++++++++++++++++++
-! +++ Force_model_Morse +++
-! +++++++++++++++++++++++++
-subroutine Force_model_Morse
+! Model potential of double morse
+! Atoms must be order of "O", "O", "H"
+subroutine Force_Double_Morse
   Use Parameters, & 
     only: r, fr, Natom, Nbead, Eenergy, potential, &
-          alabel, dp_inv, address, istepsv, &
-          Lsave_force, beta, &
-          AUtoAng, AngtoAU
+          alabel, dp_inv, address, istepsv, MyRank, &
+          Lsave_force, physmass, dipoler, &
+          AUtoAng, AngtoAU, Ista, Iend
+  use utility, only: program_abort
   implicit none
-  integer :: i, j
-  integer :: Udis, Ucoor, Ufor, Uene, imode
-  real(8) :: f_two(3), power, dis !, Epoten
-  real(8) :: rij(3), temp
+  real(8), parameter :: fcons = 1.0d-1
+  real(8), parameter :: eps = 1.0d-10
+! Parameters in Atomic unit
+  ! === Hydrogen molecule ===
+  !real(8), parameter :: r_e   = 1.41014d0
+  !real(8), parameter :: De    = 0.1745d0
+  !real(8), parameter :: width = 1.0213d0
+  ! === Hydrogen molecule ===
+  real(8), parameter :: r_e   = 1.41014d0
+  real(8), parameter :: De    = 3.0d-3
+  real(8), parameter :: width = 2.0d0
 
-  !! +++ Constants for conversion +++
-  !real(8), parameter :: eVtoAU    = 1.0d0/27.21162
-  !real(8), parameter :: AngtoAU = 1/0.529177249d0
-  !real(8), parameter :: AUtoAng = 0.529177249d0
-  !
-  !! +++ Parameters for Morse Potential +++
-  !real(8), parameter :: De    = 4.519d0  * eVtoAU   ! eV
-  !real(8), parameter :: r0    = 0.74d0   * AngtoAU  ! angstrom
-  !real(8), parameter :: curvat = 1.981d0 * AUtoAng  ! 1/Angstrom
+  integer :: i, j, imode, xyz
+  real(8) :: f31(3), f32(3)
 
-  ! Parameters in Atomic unit
-  ! Hydrogen molecule
-    real(8), parameter :: r0    = 1.41014d0
-    real(8), parameter :: De    = 0.1745d0
-    real(8), parameter :: curvat = 1.0213d0
-
-  ! +++ Calculating Forcde which atom (i) feels from atom (j) +++
   fr(:,:,:) = 0.0d0
-  do imode = 1, Nbead
-    do i = 1, Natom
-      do j = i+1, Natom
-        rij(:) = r(:,i,imode)-r(:,j,imode)
-        dis = dsqrt( dot_product( rij(:),rij(:) ) )
-        power = -curvat * (dis-r0)
-        f_two(:) = 2 * curvat * De * exp(power) * (exp(power) - 1) * (rij(:))/dis
-        fr(:,i,imode) = fr(:,i,imode) + f_two(:)
-        fr(:,j,imode) = fr(:,j,imode) - f_two(:)
-      end do
-    end do
+  Eenergy(:) = 0.0d0
+  do imode = Ista, Iend
   end do
-  fr(:,:,:) = fr(:,:,:) * dp_inv
-  ! +++ End Calculating Forcde which atom (i) feels from atom (j) +++
+  !f31(:) = Fmorse(r(:,3),r(:,1))
+  !f32(:) = Fmorse(r(:,3),r(:,2))
+  !f(:,1) = Fharmo(r(:,1),rO1(:)) - f31(:)
+  !f(:,2) = Fharmo(r(:,2),rO2(:)) - f32(:)
+  !f(:,3) = f31(:) + f32(:)
 
-  ! +++ Calculating enetemp +++
-  open(newunit=Udis,file=trim(address)//'/distance.dat',status='unknown',position='append')
-    Eenergy(:) = 0.0d0
-    write(Udis,*) "# ", istepsv
-    do imode = 1, Nbead
-      do i = 1, Natom
-        do j = i+1, Natom
-          rij(:) = r(:,i,imode)-r(:,j,imode)
-          dis = dsqrt( dot_product( rij(:),rij(:) ) )
-          temp = 1 - exp(-curvat * (dis-r0))
-          Eenergy(imode) = Eenergy(imode) + De * temp * temp
-          write(Udis,*) dis * AUtoAng
-        end do
-      end do
-    end do
-  close(Udis)
-  ! +++ End Calculating enetemp +++
+contains
+  real(8) function harmonic(r1,r0)
+    real(8), intent(in) :: r1(3), r0(3)
+    real(8) :: rij(3)
+    rij(:) = r1(:)-r0(:)
+    harmonic = fcons * dot_product(rij,rij)
+  end function harmonic
 
-  9998 format(3E23.15)
-  9999 format(a2,1x,E15.9,1x,E15.9,1x,E15.9)
-  return
-end subroutine Force_model_Morse
-! +++++++++++++++++++++++++++++
-! +++ End Force_model_Morse +++
-! +++++++++++++++++++++++++++++
+  function Fharmo(r1,r0) result(Fr)
+    real(8), intent(in) :: r1(3), r0(3)
+    real(8) :: Fr(3)
+    real(8) :: rij(3)
+    rij(:) = r1(:)-r0(:)
+    Fr(:)  = -2.0d0 * fcons * rij(:)
+  end function Fharmo
+
+  real(8) function morse(r1,r0)
+    real(8), intent(in) :: r1(3), r0(3)
+    real(8) :: dis, temp
+
+    dis = norm2(r1(:)-r0(:))
+    temp = 1.0d0 - exp(-width*dis)
+    morse = De*temp**2
+  end function morse
+
+  function Fmorse(r1,r0) result(Fr)
+    real(8), intent(in) :: r1(3), r0(3)
+    real(8) :: Fr(3)
+    real(8) :: dis, power, e(3)
+    dis = norm2(r1(:)-r0(:))
+    if (dis < eps) then
+      Fr(:) = 0.0d0
+    else
+      power = exp(-width*dis)
+      e(:)  = (r1(:)-r0(:))/dis
+      Fr(:) = -2.0d0*De*width*power*(1.0d0-power)*e(:)
+    end if
+  end function Fmorse
+end subroutine Force_Double_Morse
+
 
 ! ++++++++++++++++++++++
 ! +++ Force_Harmonic +++
@@ -81,9 +83,9 @@ subroutine Force_Harmonic
   Use Parameters, & 
     only: r, fr, Natom, Nbead, Eenergy, potential, &
           alabel, dp_inv, address, istepsv, MyRank, &
-          Lsave_force, beta, physmass, dipoler, &
+          Lsave_force, physmass, dipoler, &
           AUtoAng, AngtoAU, &
-          ista, iend
+          Ista, Iend
   use utility, only: program_abort
   implicit none
   integer :: i, j, imode, xyz
@@ -164,4 +166,68 @@ end subroutine Force_Harmonic
 ! +++ End Force_Harmonic +++
 ! ++++++++++++++++++++++++++
 
+
+! +++++++++++++++++++++++++
+! +++ Force_model_Morse +++
+! +++++++++++++++++++++++++
+subroutine Force_model_Morse
+  Use Parameters, & 
+    only: r, fr, Natom, Nbead, Eenergy, potential, &
+          alabel, dp_inv, address, istepsv, &
+          Lsave_force, AUtoAng, AngtoAU
+  implicit none
+  integer :: i, j
+  integer :: Udis, Ucoor, Ufor, Uene, imode
+  real(8) :: f_two(3), power, dis !, Epoten
+  real(8) :: rij(3), temp
+
+  ! Parameters in Atomic unit
+  ! Hydrogen molecule
+    real(8), parameter :: r0    = 1.41014d0
+    real(8), parameter :: De    = 0.1745d0
+    real(8), parameter :: curvat = 1.0213d0
+
+  ! +++ Calculating Forcde which atom (i) feels from atom (j) +++
+  fr(:,:,:) = 0.0d0
+  do imode = 1, Nbead
+    do i = 1, Natom
+      do j = i+1, Natom
+        rij(:) = r(:,i,imode)-r(:,j,imode)
+        dis = dsqrt( dot_product( rij(:),rij(:) ) )
+        power = -curvat * (dis-r0)
+        f_two(:) = 2 * curvat * De * exp(power) * (exp(power) - 1) * (rij(:))/dis
+        fr(:,i,imode) = fr(:,i,imode) + f_two(:)
+        fr(:,j,imode) = fr(:,j,imode) - f_two(:)
+      end do
+    end do
+  end do
+  fr(:,:,:) = fr(:,:,:) * dp_inv
+  ! +++ End Calculating Forcde which atom (i) feels from atom (j) +++
+
+  ! +++ Calculating enetemp +++
+  open(newunit=Udis,file=trim(address)//'/distance.dat',status='unknown',position='append')
+    Eenergy(:) = 0.0d0
+    write(Udis,*) "# ", istepsv
+    do imode = 1, Nbead
+      do i = 1, Natom
+        do j = i+1, Natom
+          rij(:) = r(:,i,imode)-r(:,j,imode)
+          !dis = dsqrt( dot_product( rij(:),rij(:) ) )
+          dis = norm2(rij(:))
+          temp = 1 - exp(-curvat * (dis-r0))
+          Eenergy(imode) = Eenergy(imode) + De * temp * temp
+          write(Udis,*) dis * AUtoAng
+        end do
+      end do
+    end do
+  close(Udis)
+  ! +++ End Calculating enetemp +++
+
+  9998 format(3E23.15)
+  9999 format(a2,1x,E15.9,1x,E15.9,1x,E15.9)
+  return
+end subroutine Force_model_Morse
+! +++++++++++++++++++++++++++++
+! +++ End Force_model_Morse +++
+! +++++++++++++++++++++++++++++
 

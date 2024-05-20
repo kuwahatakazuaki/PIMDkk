@@ -2,7 +2,7 @@ PROG = pimd.exe
 SHELL   = /bin/bash
 OBJS    = $(SRCS:%.F90=%.o)
 OBJSF77 = $(SRCSF77:%.f=%.o)
-MPI  = True
+# MPI  = True
 
 #ifeq ($(HOSTNAME),wisteria)
 #FC = mpifrtpx
@@ -77,7 +77,6 @@ Set_Gaussian_MPI_tk.F90            \
 Force_Gaussian_MPI_tk.F90          \
 Print_Ham_tk2.F90                  \
 Force_model_Morse.F90              \
-Force_model_DoubleWell.F90         \
 Set_siesta.F90                     \
 Force_VASP_MPI.F90                 \
 print_result_qm.F90                \
@@ -89,6 +88,7 @@ neural_network.F90                 \
 force_water.F90                    \
 exit.F90                           \
 
+#Force_model_DoubleWell.F90         \
 #Init_Send_Recv_MPI_tk.F90          \
 #Init_Recv_Send_MPI_tk.F90          \
 #Start_Recv_Send_MPI_tk.F90         \
