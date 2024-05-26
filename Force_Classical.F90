@@ -8,15 +8,15 @@ Subroutine Force_Classical
   select case(Iforce)
     case(1)
       call Force_MOPAC
-    !case(2)
-    !  print *, 'We no longer use "Nforce = 2"'
-    !  call program_abort('Please use "Nforce = 6"')
     case(6)
       call Force_Gaussian_classical
     case(8)
       call Force_VASP_cl
     case(15)
       call Force_Harmonic
+    case(16)
+      call Force_Double_Morse
+
     case(21)
       call force_nnp_araidai
     case(31)
@@ -88,9 +88,6 @@ contains
        if ( index(line,trim(key2)) > 0 ) exit
     end do
     do i = 1, natom
-      !read(imopac+id,*) Idummy, Idummy, Cdummy(1:3), Ddummy, fx(i,imode)
-      !read(imopac+id,*) Idummy, Idummy, Cdummy(1:3), Ddummy, fy(i,imode)
-      !read(imopac+id,*) Idummy, Idummy, Cdummy(1:3), Ddummy, fz(i,imode)
       read(imopac+id,*) Idummy, Idummy, Cdummy(1:3), Ddummy, fr(1,i,imode)
       read(imopac+id,*) Idummy, Idummy, Cdummy(1:3), Ddummy, fr(2,i,imode)
       read(imopac+id,*) Idummy, Idummy, Cdummy(1:3), Ddummy, fr(3,i,imode)

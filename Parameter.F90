@@ -1,8 +1,5 @@
 Module Parameters
    Double Precision, Parameter  :: pi        = 3.14159265358979d0
-!   !! Mass amu -- > A.U.
-!   ! . . > Boltzmann constant
-
     ! . . > fs -- > a.u.
 !    Double Precision, Parameter  :: facttime  = 1.d0/0.024d0
     Double Precision, Parameter  :: facttime  = 1.d0 / 0.024188843d0   ! fstoAU
@@ -29,9 +26,7 @@ Module Parameters
     real(8), allocatable :: fur(:,:,:), fur_ref(:,:,:)
     real(8), allocatable :: rbath(:,:,:,:), vrbath(:,:,:,:), frbath(:,:,:,:)
     Double Precision, Allocatable :: rbc11(:),vbc11(:),fbc11(:)
-    !Double Precision, Allocatable :: rbc1(:,:),vbc1(:,:),fbc1(:,:)
     real(8), allocatable :: rbc31(:,:,:), vrbc31(:,:,:), frbc31(:,:,:)
-    !real(8), allocatable :: rbc3(:,:,:,:), vrbc3(:,:,:,:), frbc3(:,:,:,:)
     Double Precision, Allocatable :: tnm(:,:), tnminv(:,:)
     Double Precision, Allocatable :: u(:,:), uinv(:,:)
     Double Precision, Allocatable :: pot(:), physmass(:)
@@ -54,7 +49,6 @@ Module Parameters
     Integer                       :: Ncent
 !YK Switch for Restarting from previous MD, Number of the previous MD step
     integer                       :: Nrstep = 0
-!YK Added for MPI
     Integer                       :: Nproc,MyRank
 !YK Added to Specify How to Calculate Force
     Integer                       :: Iforce
@@ -68,8 +62,8 @@ Module Parameters
     character(len=7) :: Fout = "std.out"
 
 !YK Read Labels from the Input
-    character (Len=80)            :: address
-    character (Len=80)            :: address2
+    character(Len=80)            :: address
+    character(Len=80)            :: address2
     Character(len=81)  :: address0
     Character(len=87)  :: addresstmp
     Double Precision :: E_Virial
@@ -94,14 +88,14 @@ Module Parameters
     integer :: umbrella_atom1 = 0, umbrella_atom2 = 0, umbrella_atom3 = 0
 ! End Kuwahata 2020/10/06
 
-  integer   :: ista, iend !, nhmod, numeach
-  integer, Allocatable :: listeach(:),listeachtmp(:),ireqa(:,:),ireqb(:,:)
-  integer, Allocatable :: recvlist(:),recvlist1(:),recvlist2(:)
-  integer  ::  laddress,na31,na3,nsendrecv,ireq(9),ireq0,npacksize
-  integer  ::  nrecv, sendlist,sendlist1,sendlist2
+  integer   :: Ista, Iend, laddress
   Double Precision, Allocatable ::  work(:), work2(:)
 end module
 
+!  integer  ::  laddress,na31,na3,nsendrecv,ireq(9),ireq0,npacksize
+!  integer  ::  nrecv, sendlist,sendlist1,sendlist2
+!  integer, Allocatable :: listeach(:),listeachtmp(:),ireqa(:,:),ireqb(:,:)
+!  integer, Allocatable :: recvlist(:),recvlist1(:),recvlist2(:)
 !!YK Set the method for electronic structure calculation
 !    Integer                       :: theory
 !!YK If additional basis sets for g03 or g09 calculations are necessary

@@ -34,6 +34,7 @@ endif
 SRCS  = \
 Parameter.F90                      \
 utility.F90                        \
+mod_model_force.F90                \
 mpi_module.F90                     \
 Main_MPI.F90                       \
 Broad.F90                          \
