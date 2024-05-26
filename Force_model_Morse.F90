@@ -21,6 +21,9 @@ subroutine Force_Double_Morse
   real(8), parameter :: r_e   = 1.41014d0
   real(8), parameter :: De    = 3.0d-3
   real(8), parameter :: width = 2.0d0
+  real(8), parameter :: lx = 0.5d0                     ! Angstrom
+  real(8), parameter :: rO1(3) = [ lx, 0.0d0, 0.0d0]  * AngtoAU ! AU
+  real(8), parameter :: rO2(3) = [-lx, 0.0d0, 0.0d0]  * AngtoAU ! AU
 
   integer :: i, j, imode, xyz
   real(8) :: f31(3), f32(3)
@@ -28,12 +31,18 @@ subroutine Force_Double_Morse
   fr(:,:,:) = 0.0d0
   Eenergy(:) = 0.0d0
   do imode = Ista, Iend
+    f31(:)  = Fmorse(r(:,3,imode),r(:,1,imode))
+    f32(:)  = Fmorse(r(:,3,imode),r(:,2,imode))
+    fr(:,1,imode) = Fharmo(r(:,1,imode),rO1(:)) - f31(:)
+    fr(:,2,imode) = Fharmo(r(:,2,imode),rO2(:)) - f32(:)
+    fr(:,3,imode) = f31(:) + f32(:)
+
+    Eenergy(imode) &
+          = harmonic(r(:,1,imode),rO1(:)) + &
+            harmonic(r(:,2,imode),rO2(:)) + &
+            morse(r(:,3,imode),r(:,1,imode)) + morse(r(:,3,imode),r(:,2,imode))
   end do
-  !f31(:) = Fmorse(r(:,3),r(:,1))
-  !f32(:) = Fmorse(r(:,3),r(:,2))
-  !f(:,1) = Fharmo(r(:,1),rO1(:)) - f31(:)
-  !f(:,2) = Fharmo(r(:,2),rO2(:)) - f32(:)
-  !f(:,3) = f31(:) + f32(:)
+  fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv
 
 contains
   real(8) function harmonic(r1,r0)
@@ -84,8 +93,7 @@ subroutine Force_Harmonic
     only: r, fr, Natom, Nbead, Eenergy, potential, &
           alabel, dp_inv, address, istepsv, MyRank, &
           Lsave_force, physmass, dipoler, &
-          AUtoAng, AngtoAU, &
-          Ista, Iend
+          AUtoAng, AngtoAU, Ista, Iend
   use utility, only: program_abort
   implicit none
   integer :: i, j, imode, xyz

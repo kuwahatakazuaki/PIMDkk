@@ -22,7 +22,7 @@ $Ncent            # Method of Centroid NHC, 0: NVE
 3
 $Lrestart
 .F.
-$Iforce           # 1:MOPAC, 6:Gaussian, 8:VASP, 9:SIESTA, 11:Morse, 31:Water(SPC/F2)
+$Iforce           # 1:MOPAC, 6:Gaussian, 8:VASP, 9:SIESTA, 15:Harmonic, 16:Double Morse 31:Water(SPC/F2)
 31
 $address_result   # Result directory
 ./Result
