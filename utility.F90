@@ -167,13 +167,14 @@ contains
   subroutine program_abort(message)
 #ifdef _mpi_
     use mpi
-#endif
     character(*) :: message
     integer :: ierr
     print *, message
-#ifdef _mpi_
     call mpi_abort(MPI_COMM_WORLD, -1, ierr)
+    stop
 #else
+    character(*) :: message
+    print *, message
     stop
 #endif
   end subroutine program_abort
@@ -194,6 +195,20 @@ contains
   !end subroutine get_inv_mat
 
 end module utility
+
+!  subroutine program_abort(message)
+!#ifdef _mpi_
+!    use mpi
+!#endif
+!    character(*) :: message
+!    integer :: ierr
+!    print *, message
+!#ifdef _mpi_
+!    call mpi_abort(MPI_COMM_WORLD, -1, ierr)
+!#else
+!    stop
+!#endif
+!  end subroutine program_abort
 
   !character(len=2) function itoc(i)
   !  integer :: i

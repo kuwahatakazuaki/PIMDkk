@@ -3,7 +3,7 @@ subroutine Set_Allocate
   implicit none
   integer    :: th
 
-  allocate (  atom_num(natom))
+  allocate(  atom_num(natom))
   allocate( r(3,Natom,Nbead) )
   allocate( ur(3,Natom,Nbead) )
   allocate( vur(3,Natom,Nbead) )

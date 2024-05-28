@@ -1,4 +1,4 @@
-Program Path_Integral_MPI
+program Path_Integral
   use Parameters
 #ifdef _mpi_
   use MPI
@@ -84,4 +84,4 @@ contains
     end if
   end subroutine print_end
 
-End Program
+end program Path_Integral

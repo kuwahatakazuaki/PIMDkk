@@ -8,9 +8,8 @@ module mod_model_force
   !real(8), parameter :: De    = 0.1745d0
   !real(8), parameter :: width = 1.0213d0
   ! === Hydrogen molecule ===
-  real(8), parameter :: r_e   = 1.41014d0
-  real(8), parameter :: De    = 3.0d-3
-  real(8), parameter :: width = 2.0d0
+  real(8), parameter :: De    = 1.0d-2
+  real(8), parameter :: width = 1.7d0
 
 contains
   real(8) function harmonic(r1,r0)
