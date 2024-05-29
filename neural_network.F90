@@ -4,7 +4,7 @@ subroutine set_nnp_araidai
   Integer   :: i,j,k
   integer :: imode
 
-do imode=ista,iend
+do imode = Ista, Iend
    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
    call system('mkdir -p '//trim(addresstmp))
    call system('cp -r nnp_files '//trim(addresstmp))
@@ -18,19 +18,18 @@ end subroutine set_nnp_araidai
 
 subroutine force_nnp_araidai
   use Parameters, &
-    only: Eenergy, r, fr, Natom, AUtoAng, dp_inv, alabel, &
-          addresstmp, ista, iend, laddress
+    only: Eenergy, r, fr, Natom, AUtoAng, eVtoAU, dp_inv, alabel, &
+          addresstmp, Ista, Iend, laddress
   implicit none
 
   character(Len=130) :: line
   integer :: imode, i, Uout, Uinp
   character :: dummyC
-  real(8), parameter :: ev_to_hartree  = 1.0 / 27.21138505
-  real(8), parameter :: eVAng_HartBohr = 0.5291772108 / 27.21138505
+  !real(8), parameter :: eVtoAU  = 1.0d0 / 27.21138505
+  real(8), parameter :: eVAng_HartBohr = 0.5291772108d0 / 27.21138505d0
 
-  !Call Start_Recv_Send_MPI_tk
-  do imode=ista,iend
-    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/' 
+  do imode = Ista, Iend
+    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
 
     open(newunit=Uout,file=trim(addresstmp)//'training.data_1',status='replace',position='append')
       write(Uout,*) "begin"
@@ -48,7 +47,6 @@ subroutine force_nnp_araidai
     close(Uout)
 
     call system('cd '//trim(addresstmp)//' ; mpiexec.hydra -n 1 ./n2training ; cd ../.. ')
-    !call execute_command_line( './do_nnp.sh '//trim(addresstmp)  )
 
     open(newunit=Uinp,file=trim(addresstmp)//'foce_npp.out',status='old')
       read(Uinp,*) Eenergy(imode)
@@ -59,14 +57,16 @@ subroutine force_nnp_araidai
     close(Uinp)
 
     fr(:,:,imode)=fr(:,:,imode)*eVAng_HartBohr*dp_inv
-    Eenergy(imode) = Eenergy(imode) * ev_to_hartree
+    Eenergy(imode) = Eenergy(imode) * eVtoAU
   end do
 
-  !call Start_Send_Recv_MPI_tk
 
 return
 9999 format(3F24.16)
 9998 format(A, 3E17.9, x, A, 6E12.4)
-
 end subroutine force_nnp_araidai
+
+subroutine force_nnp_aenet
+end subroutine force_nnp_aenet
+
 

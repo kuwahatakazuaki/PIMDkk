@@ -60,10 +60,8 @@ subroutine Force_model_DoubleWell3D
   integer :: Udis, Ucoor, Ufor, Uene
 
   real(8), parameter :: xwid = 1.0 * AngtoAU
-!   real(8), parameter :: height = 1000 * KtoAU
   real(8), parameter :: height = 0.003
 
-! open(newunit=Udis,file=trim(address)//'/dis.dat',position='append')
   ! +++ Calculating Forcde which atom (i) feels from atom (j) +++
   fr(:,:,:) = 0.0d0
   Eenergy(:) = 0.0d0
@@ -84,7 +82,6 @@ subroutine Force_model_DoubleWell3D
       end do
     end do
   end do
-!close(Udis)
   fr(:,:,:) = fr(:,:,:) * dp_inv
   ! +++ End Calculating Forcde which atom (i) feels from atom (j) +++
 

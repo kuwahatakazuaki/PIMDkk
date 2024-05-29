@@ -1,4 +1,4 @@
-Subroutine Force_New_MPI_tk
+subroutine Force_New_MPI_tk
   use Parameters
   use utility, only: program_abort
 #ifdef _mpi_
@@ -10,6 +10,7 @@ Subroutine Force_New_MPI_tk
 #ifdef _mpi_
   call MyMPI_scatter_r
 #endif
+
   select case(Iforce)
 
 ! === Start Ab initio calculation ===
@@ -41,11 +42,15 @@ Subroutine Force_New_MPI_tk
 
     case(21)
       call force_nnp_araidai
+    !case(22)
+    !  call force_nnp_aenet
     case(31)
       call force_spcf
     case default
       stop 'ERROR!!! Wrong "Iforce" option'
   end select
+
+  if (Iumbrella > 0) call calc_umbrella
 
 #ifdef _mpi_
   call MyMPI_gather_fr
@@ -55,7 +60,5 @@ Subroutine Force_New_MPI_tk
   call print_result_qm
 ! +++ End Writting output +++
 
-  if (umbrella_sampling > 0) call calc_umbrella
-
-  Return
-End Subroutine
+  return
+end subroutine Force_New_MPI_tk

@@ -4,20 +4,14 @@ subroutine calc_umbrella
     only: r, fr, Natom, Nbead,  Eenergy, potential, myrank, &
           alabel, dp_inv, address, istepsv, Iforce, &
           AUtoAng, KtoAU, AngtoAU, &
-          atom1 => umbrella_atom1, atom2  => umbrella_atom2, &
-          umbrella_width, umbrella_height, ista, iend, &
-          umbrella_constant, umbrella_sampling
-          ! cons => umbrella_constant, umbrella_sampling
+          atom1 => umbrella_atom1, atom2  => umbrella_atom2, atom3 => umbrella_atom3, &
+          Ista, Iend, Iumbrella, cons => umbrella_constant
 implicit none
-integer :: i, j, imode, iatom
+integer :: i, j, Imode, Iatom
 real(8) :: r12(3), f12(3), d12
-real(8) :: cons
+!real(8) :: cons
 
-! cons = cons / AngtoAU
-! cons = umbrella_constant / (AngtoAU*AngtoAU)
-cons = umbrella_constant * AUtoAng * AUtoAng
-! cons = umbrella_constant
-
+! cons = umbrella_constant * AUtoAng * AUtoAng
 ! +++ Calculating Force +++
 !! +++ Specific in Double well potential +++ 
 !if (Iforce == 12) then
@@ -41,8 +35,8 @@ cons = umbrella_constant * AUtoAng * AUtoAng
 !  end block
 !end if
 
-if ( umbrella_sampling == 1 ) then
-  do imode = ista, iend
+if ( Iumbrella == 1 ) then
+  do imode = Ista, Iend
     r12(:) = r(:,atom1,imode) - r(:,atom2,imode)
     f12(:) = (-2) * cons * r12(:) * dp_inv
 
