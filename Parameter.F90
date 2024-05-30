@@ -87,11 +87,11 @@ Module Parameters
 ! End Kuwahata 2020/10/06
 
     integer   :: Ista, Iend, laddress
+    integer, Allocatable :: listeach(:),listeachtmp(:),ireqa(:,:),ireqb(:,:)
 end module
 
 !  integer  ::  laddress,na31,na3,nsendrecv,ireq(9),ireq0,npacksize
 !  integer  ::  nrecv, sendlist,sendlist1,sendlist2
-!  integer, Allocatable :: listeach(:),listeachtmp(:),ireqa(:,:),ireqb(:,:)
 !  integer, Allocatable :: recvlist(:),recvlist1(:),recvlist2(:)
 !!YK Set the method for electronic structure calculation
 !    Integer                       :: theory
