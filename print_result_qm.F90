@@ -75,12 +75,14 @@ if(MyRank==0) Then
     close(Ufor)
   end if
 
-!  open(newunit=Uene,file=trim(address)//'/ene.dat',status='unknown',form='formatted',position='append')
-!    write(Uene,'("#",I10)') istepsv
-!    do imode=1,nbead
-!      write(Uene,8006) Eenergy(imode)
-!    end do
-!  close(Uene)
+  if (Lsave_energy.eqv. .True.) then
+    open(newunit=Uene,file=trim(address)//'/ene.dat',status='unknown',form='formatted',position='append')
+      write(Uene,'("#",I10)') istepsv
+      do imode=1,nbead
+        write(Uene,8006) Eenergy(imode)
+      end do
+    close(Uene)
+  end if
 
   potential = sum(Eenergy(:)) * dp_inv
 EndIf

@@ -45,6 +45,8 @@ $Lsave_dipole     # Save dipole moment (True of False)
 .F.
 $Lsave_force      # Save force (True of False)
 .F.
+$Lsave_energy     # Save force (True of False)
+.F.
 $version
 g16
 $Lexit            # Exit the program (True of False)

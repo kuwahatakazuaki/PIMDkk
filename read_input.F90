@@ -37,6 +37,7 @@ subroutine read_parameter
       elseif (index(line,"$Lsave_charge")   == 1) then; read(Uin,*) Lsave_charge
       elseif (index(line,"$Lsave_dipole")   == 1) then; read(Uin,*) Lsave_dipole
       elseif (index(line,"$Lsave_hfcc")     == 1) then; read(Uin,*) Lsave_hfcc
+      elseif (index(line,"$Lsave_energy")   == 1) then; read(Uin,*) Lsave_energy
       elseif (index(line,"$Langstrom")      == 1) then; read(Uin,*) Langstrom
       elseif (index(line,"$Lrestart")       == 1) then; read(Uin,*) Lrestart
       elseif (index(line,"$Lrandom_coor")   == 1) then; read(Uin,*) Lrandom_coor

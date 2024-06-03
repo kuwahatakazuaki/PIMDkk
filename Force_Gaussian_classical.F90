@@ -144,9 +144,6 @@ Subroutine Force_Gaussian_classical
 
      do iatom2=1,natom
         read(igauss+id,'(a)') line
-        !read(line(24:38),*) fx(iatom2,imode2)
-        !read(line(39:53),*) fy(iatom2,imode2)
-        !read(line(54:68),*) fz(iatom2,imode2)
         read(line(24:38),*) fr(1,iatom2,imode2)
         read(line(39:53),*) fr(2,iatom2,imode2)
         read(line(54:68),*) fr(3,iatom2,imode2)
@@ -157,8 +154,6 @@ Subroutine Force_Gaussian_classical
 
      call system('rm -rf '//trim(addresstmp)//'Gau*')
     enddo
-
-! call print_result_cl
 
 9999 format(a2,1x,E15.9,1x,E15.9,1x,E15.9)
 9998 format(3E23.15)

@@ -72,6 +72,7 @@ Module Parameters
     logical :: Lsave_charge = .False.
     logical :: Lsave_dipole = .False.
     logical :: Lsave_hfcc   = .False.
+    logical :: Lsave_energy = .False.
     logical :: Langstrom    = .True.
     logical :: Lrestart     = .False.
     logical :: Lrandom_coor = .False.
