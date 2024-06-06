@@ -57,10 +57,10 @@ Module Parameters
     Double Precision              :: potential, hamiltonian, temp
 
     Integer                       :: Natom, Nbead, Nstep, Isimulation
-    character(len=9) :: Finp = "input.inp"
-    character(len=7) :: Fout = "std.out"
-    character(Len=80)            :: address
-    character(Len=80)            :: address2
+    character(len=9)   :: Finp = "input.inp"
+    character(len=7)   :: Fout = "std.out"
+    character(Len=80)  :: address
+    character(Len=80)  :: address2
     Character(len=81)  :: address0
     Character(len=87)  :: addresstmp
     Double Precision :: E_Virial
@@ -81,15 +81,14 @@ Module Parameters
     character (Len=80) :: version = "g16"
     real(8), allocatable :: pressure(:)
     real(8) :: virial, PV
-    integer :: Iumbrella = 0
-    !real(8) :: umbrella_width, umbrella_height
-    real(8) ::  umbrella_constant
-    integer :: umbrella_atom1 = 0, umbrella_atom2 = 0, umbrella_atom3 = 0
+    integer :: Iumb = 0
+    real(8) :: umb_cons, umb_pot
+    integer :: umb_atom1 = 0, umb_atom2 = 0, umb_atom3 = 0
 ! End Kuwahata 2020/10/06
 
     integer   :: Ista, Iend, laddress
     integer, Allocatable :: listeach(:),listeachtmp(:),ireqa(:,:),ireqb(:,:)
-end module
+end module Parameters
 
 !  integer  ::  laddress,na31,na3,nsendrecv,ireq(9),ireq0,npacksize
 !  integer  ::  nrecv, sendlist,sendlist1,sendlist2

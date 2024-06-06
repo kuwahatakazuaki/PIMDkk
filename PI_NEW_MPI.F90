@@ -5,7 +5,6 @@ subroutine PI_NEW_MPI
   integer :: istep, iref, Uout
 
   call Setup_time_mass
-  !call Set_etc_MPI_tk
   call set_pallarel
   call Normal_Mode
   call Init_Mass
@@ -111,6 +110,9 @@ subroutine PI_NEW_MPI
       EndIf
     Enddo
 
+    if (mod(istep,100) == 0) then
+      call exit_program
+    end if
   else
     Do istep=nrstep+1, nstep
       istepsv=istep

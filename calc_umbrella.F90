@@ -4,22 +4,36 @@ subroutine calc_umbrella
     only: r, fr, Natom, Nbead,  Eenergy, potential, myrank, &
           alabel, dp_inv, address, istepsv, Iforce, &
           AUtoAng, KtoAU, AngtoAU, &
-          atom1 => umbrella_atom1, atom2  => umbrella_atom2, atom3 => umbrella_atom3, &
-          Ista, Iend, Iumbrella, cons => umbrella_constant
+          atom1 => umb_atom1, atom2  => umb_atom2, atom3 => umb_atom3, &
+          Ista, Iend, Iumb, umb_cons, umb_pot
   implicit none
   integer :: i, j, Imode, Iatom
   real(8) :: rij(3), fij(3), dij
+  real(8) :: r1(3), r2(3), r3(3), r_mid(3)
 
-  select case(Iumbrella)
+  select case(Iumb)
     case(1)
-      do imode = Ista, Iend
-        rij(:) = r(:,atom1,imode) - r(:,atom2,imode)
-        fij(:) = (-2) * cons * rij(:) * dp_inv
+      do Imode = Ista, Iend
+        rij(:) = r(:,atom1,Imode) - r(:,atom2,Imode)
+        fij(:) = (-2) * umb_cons * rij(:) * dp_inv
 
-        fr(:,atom1,imode) = fr(:,atom1,imode) + fij(:)
-        fr(:,atom2,imode) = fr(:,atom2,imode) - fij(:)
+        fr(:,atom1,Imode) = fr(:,atom1,Imode) + fij(:)
+        fr(:,atom2,Imode) = fr(:,atom2,Imode) - fij(:)
       end do
     case(2)
+      do Imode = Ista, Iend
+        r1(:) = r(:,atom1,Imode)
+        r2(:) = r(:,atom2,Imode)
+        r3(:) = r(:,atom3,Imode)
+
+        r_mid(:) = 0.5d0*(r1(:)+r2(:))
+        rij(:)  = r3(:) -  r_mid(:)
+        umb_pot = umb_cons * dot_product(rij(:),rij(:))
+        Eenergy(Imode) = Eenergy(Imode) + umb_pot
+
+        fij(:) = -2.0d0 * umb_cons * rij(:)
+        fr(:,atom3,Imode) = fr(:,atom3,Imode) + fij(:)
+      end do
   end select
 
 return
