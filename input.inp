@@ -49,6 +49,18 @@ $Lsave_energy     # Save force (True of False)
 .F.
 $version
 g16
+
+$Iumb             # Umbrella sampling
+0
+$umb_atom1
+1
+$umb_atom2
+2
+$umb_atom2
+3
+$umb_cons
+1d-5
+
 $Lexit            # Exit the program (True of False)
 .F.
 $end parameter

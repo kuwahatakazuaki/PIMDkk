@@ -82,8 +82,8 @@ Module Parameters
     real(8), allocatable :: pressure(:)
     real(8) :: virial, PV
     integer :: Iumb = 0
-    real(8) :: umb_cons, umb_pot
     integer :: umb_atom1 = 0, umb_atom2 = 0, umb_atom3 = 0
+    real(8) :: umb_cons, umb_pot
 ! End Kuwahata 2020/10/06
 
     integer   :: Ista, Iend, laddress

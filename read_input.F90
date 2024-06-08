@@ -47,6 +47,13 @@ subroutine read_parameter
         end do
       elseif (index(line,"$address_result") == 1) then; read(Uin,'(a)') address
       elseif (index(line,"$address_scr")    == 1) then; read(Uin,'(a)') address2
+
+      elseif (index(line,"$Iumb")           == 1) then; read(Uin,'(a)') Iumb
+      elseif (index(line,"$umb_cons")       == 1) then; read(Uin,'(a)') umb_cons
+      elseif (index(line,"$umb_atom1")      == 1) then; read(Uin,'(a)') umb_atom1
+      elseif (index(line,"$umb_atom2")      == 1) then; read(Uin,'(a)') umb_atom2
+      elseif (index(line,"$umb_atom3")      == 1) then; read(Uin,'(a)') umb_atom3
+
       elseif (index(line,"$end parameter")  == 1) then; exit
       end if
     end do InputFile
@@ -76,6 +83,11 @@ subroutine read_parameter
     end if
 
   close(Uin)
+contains
+  !subroutine sub_read_umbrella
+  !  do
+  !  end do
+  !end subroutine sub_read_umbrella
 
 end subroutine read_parameter
 
