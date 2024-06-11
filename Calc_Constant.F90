@@ -26,8 +26,6 @@ Subroutine Calc_Constant
 !
     dp = dble(Nbead)
     dp_inv = 1.0d0/dp
-    !omega_p = dsqrt(dp)/beta
-    !omega_p2 = omega_p*omega_p
     omega_p2 = dp/(beta*beta)
 !    omega2 = omega_system*omega_system/dp
     omega2 = omega_system*omega_system

@@ -3,6 +3,31 @@ module utility
 
 contains
 
+! +++ Module for IO +++
+  subroutine read_val_next(line,key,val)
+    character(len=*), intent(in) :: key, line
+    real(8), intent(out) :: val
+    integer :: pos
+    pos = index(line,key)
+    read( line(pos+1:),* ) val
+  end subroutine read_val_next
+
+  subroutine search_line(Iunit,key,line)
+    integer, intent(in) :: Iunit
+    character(len=*), intent(in) :: key
+    character(len=*), intent(out) :: line
+
+    do
+      read(Iunit,'(a)',end=401) line
+      if (index(line,key) > 0 ) exit
+    end do
+    return
+    401 print *, 'ERROR!!: There is no key: "'//key//'"' ; stop
+  end subroutine search_line
+
+! +++ Module for IO +++
+
+! +++ Calculation of Matrix +++
   function calc_inv_mat33(mat) result(inv)
     real(8), intent(in) :: mat(3,3)
     real(8) :: inv(3,3), det
@@ -41,6 +66,7 @@ contains
     vec(2) = a(3) * b(1) - a(1) * b(3)
     vec(3) = a(1) * b(2) - a(2) * b(1)
   end function outer_product
+! +++ Calculation of Matrix +++
 
   real(8) function norm_seq(x)
     implicit none

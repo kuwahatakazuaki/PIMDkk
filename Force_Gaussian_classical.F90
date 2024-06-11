@@ -1,7 +1,7 @@
 Subroutine Force_Gaussian_classical
-  Use Parameters
+  use Parameters
   use utility, only: program_abort
-  Implicit None
+  implicit none
 
   Character (Len=90) :: key1, key2, key3, key4, key5, key6
   character(len=120) :: line

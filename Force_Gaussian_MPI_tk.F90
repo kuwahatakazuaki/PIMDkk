@@ -1,6 +1,6 @@
 subroutine Force_Gaussian_MPI_tk
   use Parameters
-  use utility, only: program_abort
+  use utility, only: program_abort, read_val_next, search_line
   implicit none
 
   character(len=:), allocatable :: key1, key2, key3, key4, key5, key6
@@ -80,7 +80,6 @@ subroutine Force_Gaussian_MPI_tk
     rewind(igauss)
 !  +++ End Reading "SCF Done" +++
 
-!print *, imode, enetemp
 !  +++ Reading "Mulliken charge" +++
     if ( Lsave_charge .eqv. .True.) then
       call search_line(igauss,key4,line)
@@ -88,11 +87,6 @@ subroutine Force_Gaussian_MPI_tk
       do i = 1, Natom
         read(igauss,*) dummyC(1:2), charge(i,imode)
       end do
-     ! read(igauss,*)
-     ! do iatom=1,natom
-     !    Read(igauss,'(a)') line
-     !    Read(line(11:21),*) charge(iatom,imode)
-     ! enddo
     end if
 !  +++ End Reading "Mulliken charge" +++
 
@@ -109,11 +103,6 @@ subroutine Force_Gaussian_MPI_tk
 !  +++ Reading "Isotropic Fermi" +++
     if( Lsave_hfcc .eqv. .True. ) then
       call search_line(igauss,key5,line)
-      !do
-      !  Read(igauss,'(a)',end=405) line
-      !  iline=index(trim(line),trim(key5))
-      !  if(iline > 0) exit
-      !end do
       read(igauss,'()')
       do iatom=1,natom
         Read(igauss,'(a)') line
@@ -128,19 +117,11 @@ subroutine Force_Gaussian_MPI_tk
     do i = 1, Natom
       read(igauss,*) dummyC(1:2), fr(:,i,imode)
     end do
-    !read(igauss,*)
-    !do iatom=1,natom
-    !  read(igauss,'(a)') line
-    !  read(line(24:38),*) fr(1,iatom,imode)
-    !  read(line(39:53),*) fr(2,iatom,imode)
-    !  read(line(54:68),*) fr(3,iatom,imode)
-    !enddo
 !  +++ End Reading "Atomic Force" +++
 
     close(igauss)
     call system('rm -rf '//trim(addresstmp)//'Gau*')
 
-    !fr(:,:,imode) = fr(:,:,imode) * dp_inv
   enddo
   fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv
 
@@ -152,28 +133,7 @@ return
 404 print *, 'ERROR!!: We can not find "Mulliken charges" in Gaussian output'; stop
 405 print *, 'ERROR!!: We can not find "Fermi Contact" in Gaussian output'; stop
 
-contains
-
-  subroutine read_val_next(line,key,val)
-    character(len=*), intent(in) :: key, line
-    real(8), intent(out) :: val
-    integer :: pos
-    pos = index(line,key)
-    read( line(pos+1:),* ) val
-  end subroutine read_val_next
-
-  subroutine search_line(Iunit,key,line)
-    integer, intent(in) :: Iunit
-    character(len=*), intent(in) :: key
-    character(len=*), intent(out) :: line
-
-    do
-      read(Iunit,'(a)',end=401) line
-      if (index(line,key) > 0 ) exit
-    end do
-    return
-    401 print *, 'ERROR!!: There is no key: "'//key//'"' ; stop
-  end subroutine search_line
+!contains
 
 end subroutine
 
