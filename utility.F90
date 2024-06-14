@@ -105,18 +105,67 @@ contains
       mass = 18.99840316273d0
     elseif ( trim(cha) == 'ne' ) then
       mass = 19.9924401762d0
+
     elseif ( trim(cha) == 'na' ) then
       mass = 22.9897692820d0
     elseif ( trim(cha) == 'mg' ) then
       mass = 24.3055d0
+    elseif ( trim(cha) == 'al' ) then
+      mass = 26.9815386d0
     elseif ( trim(cha) == 'si' ) then
-      mass = 27.97692653465d0
+      mass = 28.0855d0
     elseif ( trim(cha) == 'p' ) then
       mass = 30.97376199842d0
     elseif ( trim(cha) == 's' ) then
-      mass = 31.9720711744d0
+      mass = 32.065d0
     elseif ( trim(cha) == 'cl' ) then
-      mass = 35.4515d0
+      mass = 35.453d0
+    elseif ( trim(cha) == 'ar' ) then
+      mass = 39.948d0
+
+    elseif ( trim(cha) == 'k' ) then
+      mass = 39.0983d0
+    elseif ( trim(cha) == 'ca' ) then
+      mass = 40.078d0
+    elseif ( trim(cha) == 'sc' ) then
+      mass = 44.955912d0
+    elseif ( trim(cha) == 'ti' ) then
+      mass = 47.867d0
+    elseif ( trim(cha) == 'v' ) then
+      mass = 50.9415d0
+    elseif ( trim(cha) == 'cr' ) then
+      mass = 51.9961d0
+    elseif ( trim(cha) == 'mn' ) then
+      mass = 54.938045d0
+    elseif ( trim(cha) == 'fe' ) then
+      mass = 55.845d0
+    elseif ( trim(cha) == 'co' ) then
+      mass = 58.933195d0
+    elseif ( trim(cha) == 'ni' ) then
+      mass = 58.6934d0
+    elseif ( trim(cha) == 'cu' ) then
+      mass = 63.546d0
+    elseif ( trim(cha) == 'zn' ) then
+      mass = 65.38d0
+    elseif ( trim(cha) == 'ga' ) then
+      mass = 69.723d0
+    elseif ( trim(cha) == 'ge' ) then
+      mass = 72.64d0
+    elseif ( trim(cha) == 'as' ) then
+      mass = 74.92160d0
+    elseif ( trim(cha) == 'se' ) then
+      mass = 78.96d0
+    elseif ( trim(cha) == 'br' ) then
+      mass = 79.904d0
+    elseif ( trim(cha) == 'kr' ) then
+      mass = 83.798d0
+
+
+    elseif ( trim(cha) == 'sn' ) then
+      mass = 118.710d0
+    elseif ( trim(cha) == 'ba' ) then
+      mass = 137.327d0
+
     else
       call program_abort('ERROR!! "'//cha_in//'" is not exist in atom2mass')
     end if

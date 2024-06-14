@@ -27,7 +27,8 @@ Subroutine Force_Classical
 
   fur(:,:,1)=fr(:,:,1)
 
-  !call print_result_cl
+  if (Iumb > 0) call calc_umbrella
+
   call print_result_qm
 
   Return

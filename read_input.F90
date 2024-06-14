@@ -48,11 +48,11 @@ subroutine read_parameter
       elseif (index(line,"$address_result") == 1) then; read(Uin,'(a)') address
       elseif (index(line,"$address_scr")    == 1) then; read(Uin,'(a)') address2
 
-      elseif (index(line,"$Iumb")           == 1) then; read(Uin,'(a)') Iumb
-      elseif (index(line,"$umb_cons")       == 1) then; read(Uin,'(a)') umb_cons
-      elseif (index(line,"$umb_atom1")      == 1) then; read(Uin,'(a)') umb_atom1
-      elseif (index(line,"$umb_atom2")      == 1) then; read(Uin,'(a)') umb_atom2
-      elseif (index(line,"$umb_atom3")      == 1) then; read(Uin,'(a)') umb_atom3
+      elseif (index(line,"$Iumb")           == 1) then; read(Uin,*) Iumb
+      elseif (index(line,"$umb_cons")       == 1) then; read(Uin,*) umb_cons
+      elseif (index(line,"$umb_atom1")      == 1) then; read(Uin,*) umb_atom1
+      elseif (index(line,"$umb_atom2")      == 1) then; read(Uin,*) umb_atom2
+      elseif (index(line,"$umb_atom3")      == 1) then; read(Uin,*) umb_atom3
 
       elseif (index(line,"$end parameter")  == 1) then; exit
       end if
