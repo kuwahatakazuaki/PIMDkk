@@ -50,13 +50,7 @@ subroutine force_nnp_araidai
   do imode = Ista, Iend
     write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
 
-    !open(newunit=Uout,file=trim(addresstmp)//'training.data_1',status='replace',position='append')
     open(newunit=Uout,file=trim(addresstmp)//'training.data_1',status='replace')
-      !write(Uout,*) "begin"
-      !write(Uout,*) "comment   LiNiO2_633"
-      !write(Uout,*) "lattice   5.7560070000E+00  0.0000000000E+00  0.0000000000E+00"
-      !write(Uout,*) "lattice   0.0000000000E+00  4.9848490000E+00  0.0000000000E+00"
-      !write(Uout,*) "lattice   0.0000000000E+00  0.0000000000E+00  1.4190003000E+01"
       do i = 1, 5
         write(Uout,'(a)') trim(inp_train(i))
       end do
@@ -67,9 +61,6 @@ subroutine force_nnp_araidai
       do i = 6, 8
         write(Uout,'(a)') trim(inp_train(i))
       end do
-      !write(Uout,*) "energy   -2.0683566596E+02"
-      !write(Uout,*) "charge    0.0000000000E+00"
-      !write(Uout,*) "end"
     close(Uout)
 
     call system('cd '//trim(addresstmp)//' ; ./n2training > /dev/null ; cd ../.. ')
