@@ -7,6 +7,7 @@ subroutine Check_Inp
     open(newunit=Uout,file=Fout,status='old',position='append')
       write(Uout,'(a)')' +++++ Input Check +++++   '
       write(Uout,9999) ' +++++ Isimulation         ', Isimulation
+      write(Uout,9997) ' +++++ Simulation type     ', name_simulation
       write(Uout,9999) ' +++++ Number of Atoms     ', Natom
       write(Uout,9999) ' +++++ Number of Beads     ', Nbead
       write(Uout,9999) ' +++++ Number of Steps     ', Nstep
@@ -28,6 +29,16 @@ subroutine Check_Inp
       write(Uout,9997) ' +++++ Address of Scratch  ', trim(address2)
       write(Uout,*)
 
+      if ( Iumb > 0 ) then
+        write(Uout,'(a)')' +++++ Umbrella sampling +++++   '
+        write(Uout,9999) ' +++++ Iumb                      ', Iumb
+        write(Uout,9994) ' +++++ umb_cons                  ', umb_cons
+        write(Uout,9999) ' +++++ umb_atom1                 ', umb_atom1
+        write(Uout,9999) ' +++++ umb_atom2                 ', umb_atom2
+        write(Uout,9999) ' +++++ umb_atom3                 ', umb_atom3
+        write(Uout,*)
+      end if
+
       !if ( Lrestart .eqv. .False. ) then
         write(Uout,*) ' +++++ Atomic Label, Mass, and Coords +++++'
         if ( Langstrom .eqv. .True. ) then
@@ -45,13 +56,14 @@ subroutine Check_Inp
     close(Uout)
   end if
 
-  Return
+  return
 9999 Format(A26,I12)
 9998 Format(A26,F12.4)
 9997 Format(A26,6X,A)
 !9997 Format(A26,A80)
 9996 Format(A4,1X,4F12.6)
 9995 Format(A26,L12)
-End Subroutine
+9994 Format(A26,ES12.4)
+end subroutine Check_Inp
 
 

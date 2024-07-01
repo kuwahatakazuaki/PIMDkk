@@ -59,6 +59,7 @@ subroutine Force_New_MPI_tk
 ! +++ Start Writting output +++
   call print_result_qm
 ! +++ End Writting output +++
+  potential = sum(Eenergy(:)) * dp_inv
 
   return
 end subroutine Force_New_MPI_tk

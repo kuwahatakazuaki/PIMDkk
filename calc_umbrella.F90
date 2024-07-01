@@ -11,12 +11,6 @@ subroutine calc_umbrella
   real(8) :: rij(3), fij(3), dij
   real(8) :: r1(3), r2(3), r3(3), r_mid(3)
 
-!print *, "Before"
-!do i = Ista, Iend
-!  print *, fr(:,atom3,i)
-!end do
-!print *, ""
-
   select case(Iumb)
     case(1)
       do Imode = Ista, Iend
@@ -41,11 +35,11 @@ subroutine calc_umbrella
         fr(:,atom3,Imode) = fr(:,atom3,Imode) + fij(:)
       end do
   end select
+
 !print *, "After"
 !do i = Ista, Iend
 !  print *, fr(:,atom3,i)
 !end do
-!stop "HERE"
 
 return
 end subroutine calc_umbrella

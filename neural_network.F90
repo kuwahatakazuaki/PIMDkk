@@ -43,10 +43,6 @@ subroutine force_nnp_araidai
     end do
   close(Uinp)
 
-!do i = 1, 8
-!  print *, inp_train(i)
-!end do
-
   do imode = Ista, Iend
     write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
 

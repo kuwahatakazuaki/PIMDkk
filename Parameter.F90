@@ -35,7 +35,8 @@ Module Parameters
     real(8), allocatable :: dipoler(:,:), atom_num(:)
     Double Precision, Allocatable :: charge(:,:),nbo(:,:),Eenergy(:),homo(:),lumo(:), hfcc(:,:)
     character (Len=2),Allocatable :: alabel(:)
-    character(len=8) :: simulation
+    !character(len=8) :: simulation
+    character(len=8) :: name_simulation
 
     Double Precision              :: gamma, gamma2, omega_system
     Double Precision              :: omega_p2, omega2

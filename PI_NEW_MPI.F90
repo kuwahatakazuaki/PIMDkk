@@ -30,18 +30,18 @@ subroutine PI_NEW_MPI
   end select
 
   if ( Lrestart .eqv. .True. ) then
-    If(MyRank==0) Then
+    if (MyRank == 0) Then
        call restart_read
-    EndIf
+    end if
     call Broad3
     !call print_ini_restart
-  Else
+  else
     call print_ini
     call NM_Position
-    If(MyRank==0) Then
+    if (MyRank == 0) Then
       call Init_Velocity
       call Init_Bath
-    EndIf
+    end if
     call Broad3
     call Temp_ctr
     call nmtrans_ur2r ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
@@ -54,14 +54,14 @@ subroutine PI_NEW_MPI
     if ( MyRank == 0 ) then
       call Ham_Temp
       call Print_Ham_tk(nrstep)
-    EndIf
-  EndIf
+    end if
+  end if
 
   call Getforce_Ref
   if ( MyRank == 0 ) then
 
-    Do istep=nrstep+1, nstep
-      istepsv=istep
+    do istep = nrstep+1, nstep
+      istepsv = istep
       select case(Ncent)
         case(0)
           continue
@@ -95,6 +95,7 @@ subroutine PI_NEW_MPI
       call Force_New_MPI_tk   ! Obtaining fx
       call nmtrans_fr2fur     ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i) !call Getfnm
       call Vupdate
+
       select case(Ncent)
         case(0)
           continue
@@ -104,24 +105,23 @@ subroutine PI_NEW_MPI
          call Nhc_Integrate_Cent3
       end select
       call Ham_Temp
-      If(MyRank==0) Then
+
+      if (MyRank == 0) Then
         call Print_Ham_tk(istep)
         call Restart_Write(istep)
-      EndIf
-    Enddo
+      end if
+    end do
 
     if (mod(istep,100) == 0) then
       call exit_program
     end if
 
   else
-    Do istep=nrstep+1, nstep
-      istepsv=istep
+    do istep = nrstep+1, nstep
+      istepsv = istep
       call Force_New_MPI_tk
-    Enddo
-  endif
-
-  !call Unset_etc_MPI_tk
+    end do
+  end if
 
   if (MyRank == 0) then
     open(newunit=Uout,file=Fout,status='old',position='append')

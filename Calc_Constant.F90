@@ -30,16 +30,16 @@ Subroutine Calc_Constant
 !    omega2 = omega_system*omega_system/dp
     omega2 = omega_system*omega_system
 
-  select case(Isimulation)
-    case(0)
-      simulation = "PIMD"
-    case(1)
-      simulation = "RPMD"
-    case(2)
-      simulation = "CMD"
-    case(10)
-      simulation = "MD"
-  end select
+  !select case(Isimulation)
+  !  case(0)
+  !    simulation = "PIMD"
+  !  case(1)
+  !    simulation = "RPMD"
+  !  case(2)
+  !    simulation = "CMD"
+  !  case(10)
+  !    simulation = "MD"
+  !end select
 
   Return
 End Subroutine

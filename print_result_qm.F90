@@ -67,7 +67,7 @@ if(MyRank==0) Then
   if (Lsave_force .eqv. .True.) then
     open(newunit=Ufor,file=trim(address)//'/force.dat',status='unknown',form='formatted',position='append')
       write(Ufor,'("#",I10)') istepsv
-      do imode=1,nbead
+      do imode=1,Nbead
         do iatom=1,natom
           write(Ufor,8005) fr(:,iatom,imode)
         end do
@@ -78,14 +78,13 @@ if(MyRank==0) Then
   if (Lsave_energy.eqv. .True.) then
     open(newunit=Uene,file=trim(address)//'/ene.dat',status='unknown',form='formatted',position='append')
       write(Uene,'("#",I10)') istepsv
-      do imode=1,nbead
+      do imode=1,Nbead
         write(Uene,8006) Eenergy(imode)
       end do
     close(Uene)
   end if
 
-  potential = sum(Eenergy(:)) * dp_inv
-EndIf
+end if
 
 
 !9999 format(a2,1x,E15.9,1x,E15.9,1x,E15.9)

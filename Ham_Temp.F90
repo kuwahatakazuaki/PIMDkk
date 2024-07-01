@@ -1,4 +1,4 @@
-Subroutine Ham_Temp
+subroutine Ham_Temp
   use Parameters
   use utility, only: norm_seq
   Implicit None
@@ -86,4 +86,4 @@ Subroutine Ham_Temp
   Call Virial_Estimator
 
   return
-End Subroutine
+end subroutine Ham_Temp

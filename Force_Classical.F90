@@ -25,11 +25,14 @@ Subroutine Force_Classical
       call program_abort('ERROR!!! Wrong "Iforce" option')
   end select
 
-  fur(:,:,1)=fr(:,:,1)
-
   if (Iumb > 0) call calc_umbrella
 
+  fur(:,:,1)=fr(:,:,1)
+
   call print_result_qm
+
+  !potential = sum(Eenergy(:)) * dp_inv
+  potential = Eenergy(1)
 
   Return
 contains
@@ -93,9 +96,6 @@ contains
       read(imopac+id,*) Idummy, Idummy, Cdummy(1:3), Ddummy, fr(2,i,imode)
       read(imopac+id,*) Idummy, Idummy, Cdummy(1:3), Ddummy, fr(3,i,imode)
     end do
-    !fx(:,imode) = -fx(:,imode)*0.00159362D0 * AUtoAng * dp_inv
-    !fy(:,imode) = -fy(:,imode)*0.00159362D0 * AUtoAng * dp_inv
-    !fz(:,imode) = -fz(:,imode)*0.00159362D0 * AUtoAng * dp_inv
     fr(:,:,imode) = -fr(:,:,imode)*0.00159362D0 * AUtoAng * dp_inv
 !  +++ End Reading "Atomic Force" +++
 
@@ -112,7 +112,6 @@ contains
         read(imopac+id,*) line
       end do
       read(imopac+id,*) line, dipoler(:,imode)
-      !read(imopac+id,*) line, dipolex(imode), dipoley(imode), dipolez(imode),dipole(imode)
 ! <--- Udagawa End 2021.05.24
     end if
 !  +++ End Reading "Dipole moment" +++
@@ -155,7 +154,7 @@ contains
 
   do imode2=ista,iend
 
-    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode2,'/' 
+    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode2,'/'
 
 !need file -> INCAR, POTCAR, KPOINTS, LATTICE-------------------
 ! +++ Calculation VASP +++
@@ -209,12 +208,10 @@ contains
 ! +++ End Reading "energy  without entropy" +++
 
     close(igauss+id)
-
     fr(:,:,imode2)=fr(:,:,imode2)*eVAng_HartBohr*dp_inv
 
   enddo
 
-!  call print_result_cl
 
   9999 format(3F24.16)
   9998 format(3E23.15)

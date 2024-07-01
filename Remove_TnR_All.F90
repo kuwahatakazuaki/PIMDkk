@@ -22,7 +22,6 @@ Subroutine Remove_TnR_All
     do i = 1, natom
       sumvr(:) = sumvr(:)  + vur(:,i,j)*fictmass(i,j)
       comr(:)  = comr(:)   + ur(:,i,j)*fictmass(i,j)
-      !totmas = totmas + fictmass(i,j)
     enddo
     totmas = sum(fictmass(:,j))
     sumvr(:) = sumvr(:) / totmas

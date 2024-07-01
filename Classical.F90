@@ -16,7 +16,6 @@ subroutine Classical
     case(8)
       call Set_VASP
     case(11:16)
-!      print *, "Do I need something prepare??"
     case(21)
       call set_nnp_araidai
   end select

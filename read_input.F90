@@ -78,17 +78,22 @@ subroutine read_parameter
       Isimulation = 10
     end if
 
+    select case(Isimulation)
+      case(0)
+        name_simulation = "PIMD"
+      case(1)
+        name_simulation = "RPMD"
+      case(2)
+        name_simulation = "CMD"
+      case(10)
+        name_simulation = "CLMD"
+    end select
+
     if ( Isimulation == 1 .and. Ncent > 0 ) then
       call program_abort("You should be NVE for RPMD")
     end if
 
   close(Uin)
-contains
-  !subroutine sub_read_umbrella
-  !  do
-  !  end do
-  !end subroutine sub_read_umbrella
-
 end subroutine read_parameter
 
 subroutine read_structure

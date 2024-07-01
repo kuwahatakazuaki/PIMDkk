@@ -1,4 +1,4 @@
-Subroutine Temp_ctr
+subroutine Temp_ctr
   use Parameters
   implicit none
   Double Precision :: temp_scale, tempi
@@ -11,11 +11,6 @@ Subroutine Temp_ctr
 
   temp_scale = dsqrt(temperature/tempi)
   vur(:,:,:) = vur(:,:,:) * temp_scale
-  !do imode = 1, nbead
-  !  do iatom = 1, natom
-  !    vur(:,iatom,imode) = vur(:,iatom,imode)*temp_scale
-  !  enddo
-  !enddo
 
-Return
-End Subroutine
+return
+end subroutine Temp_ctr
