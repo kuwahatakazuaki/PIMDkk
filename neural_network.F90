@@ -1,16 +1,53 @@
+subroutine force_nnp_matlantis
+  use Parameters, &
+    only: Eenergy, r, fr, Natom, AUtoAng, eVtoAU, dp_inv, alabel, &
+          addresstmp, Ista, Iend, laddress
+  use utility, only: program_abort
+  implicit none
+  integer :: Nfile, Imode, i
+  integer :: Uinp, Uout, ios
+  character(len=12), allocatable :: Fout(:)
+  character(len=12) :: char_num
+  character(len=:), allocatable :: command
+
+  Nfile = Iend - Ista + 1
+  allocate(Fout(Nfile))
+  do Imode = Ista, Iend
+    write(Fout(Imode),'("str",I5.5,".xyz")') Imode
+  end do
+
+  do Imode = Ista, Iend
+    open(newunit=Uout,file=trim(addresstmp)//Fout(Imode))
+      write(Uout,*) Natom
+      write(Uout,*)
+      do i = 1, Natom
+        write(Uout,*) alabel(i), r(:,i,Imode)
+      end do
+    close(Uout)
+  end do
+
+  write(char_num,'(" ",I0, " ", I0)') Ista, Iend
+  command = ' run_matlantis.py '//trim(addresstmp)//trim(char_num)
+  !call system(' run_matlantis.py '//trim(addresstmp))
+print *, command
+stop 'HERE'
+
+end subroutine force_nnp_matlantis
+
+
 subroutine set_nnp_araidai
   use Parameters
   implicit none
   Integer   :: i,j,k
-  integer :: imode
+  integer :: Imode
 
-do imode = Ista, Iend
-   write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
-   call system('mkdir -p '//trim(addresstmp))
-   call system('cp -r nnp_files '//trim(addresstmp))
-   call system('cp training.data_1 '//trim(addresstmp))
-   call system('cp n2training '//trim(addresstmp))
-enddo
+  do Imode = Ista, Iend
+    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') Imode,'/'
+    call system('mkdir -p '//trim(addresstmp))
+    call system('cp -r nnp_files '//trim(addresstmp))
+    call system('cp training.data_1 '//trim(addresstmp))
+    call system('cp n2training '//trim(addresstmp))
+  enddo
 
 return
 end subroutine set_nnp_araidai
@@ -24,7 +61,7 @@ subroutine force_nnp_araidai
 
   implicit none
   character(Len=130) :: line, inp_train(8)
-  integer :: imode, i, Uout, Uinp, ios
+  integer :: Imode, i, Uout, Uinp, ios
   character :: dummyC
   real(8), parameter :: eVAng_HartBohr = 0.5291772108d0 / 27.21138505d0
 
@@ -43,8 +80,8 @@ subroutine force_nnp_araidai
     end do
   close(Uinp)
 
-  do imode = Ista, Iend
-    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
+  do Imode = Ista, Iend
+    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') Imode,'/'
 
     open(newunit=Uout,file=trim(addresstmp)//'training.data_1',status='replace')
       do i = 1, 5
@@ -52,7 +89,7 @@ subroutine force_nnp_araidai
       end do
       do i=1,Natom
         write(Uout,9998) &
-         "atom", r(:,i,imode)*AUtoAng, alabel(i), 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0
+         "atom", r(:,i,Imode)*AUtoAng, alabel(i), 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0
       enddo
       do i = 6, 8
         write(Uout,'(a)') trim(inp_train(i))
@@ -63,14 +100,14 @@ subroutine force_nnp_araidai
     !call system('cd '//trim(addresstmp)//' ; mpiexec.hydra -n 1 ./n2training ; cd ../.. ')
 
     open(newunit=Uinp,file=trim(addresstmp)//'foce_npp.out',status='old')
-      read(Uinp,*) Eenergy(imode)
+      read(Uinp,*) Eenergy(Imode)
       do i = 1, Natom
-        read(Uinp,*) dummyC, fr(:,i,imode)
+        read(Uinp,*) dummyC, fr(:,i,Imode)
       end do
     close(Uinp)
 
-    fr(:,:,imode)=fr(:,:,imode)*eVAng_HartBohr*dp_inv
-    Eenergy(imode) = Eenergy(imode) * eVtoAU
+    fr(:,:,Imode)=fr(:,:,Imode)*eVAng_HartBohr*dp_inv
+    Eenergy(Imode) = Eenergy(Imode) * eVtoAU
   end do
 
 return

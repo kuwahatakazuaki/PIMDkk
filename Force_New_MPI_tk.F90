@@ -42,7 +42,9 @@ subroutine Force_New_MPI_tk
 
     case(21)
       call force_nnp_araidai
-    !case(22)
+    case(22)
+      call force_nnp_matlantis
+    !case(23)
     !  call force_nnp_aenet
     case(31)
       call force_spcf
