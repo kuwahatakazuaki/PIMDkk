@@ -1,14 +1,19 @@
 subroutine force_nnp_matlantis
+!!! === Nproc much be 1 at current verion === !!!
   use Parameters, &
     only: Eenergy, r, fr, Natom, AUtoAng, eVtoAU, dp_inv, alabel, &
-          addresstmp, Ista, Iend, laddress
+          addresstmp, Ista, Iend, laddress, MyRank, Nbead, eVAng2AU
   use utility, only: program_abort
   implicit none
-  integer :: Nfile, Imode, i
+  integer :: Nfile, Imode, i, j
   integer :: Uinp, Uout, ios
   character(len=12), allocatable :: Fout(:)
   character(len=12) :: char_num
-  character(len=:), allocatable :: command
+  character(len=:), allocatable :: command, Fforce, Fenergy
+  integer :: access, Iaccess
+
+  Fforce  = 'forces.out'
+  Fenergy = 'energy.out'
 
   Nfile = Iend - Ista + 1
   allocate(Fout(Nfile))
@@ -27,10 +32,32 @@ subroutine force_nnp_matlantis
   end do
 
   write(char_num,'(" ",I0, " ", I0)') Ista, Iend
-  command = ' run_matlantis.py '//trim(addresstmp)//trim(char_num)
-  !call system(' run_matlantis.py '//trim(addresstmp))
-print *, command
-stop 'HERE'
+  command = ' ./run_matlantis.py '//trim(addresstmp)//trim(char_num)
+  !call system(command)
+
+  !if ( MyRank == 0 ) then
+  open(newunit=Uinp,file=Fforce,status='old',iostat=ios)
+    if ( ios /= 0 ) then
+      call program_abort('There is no "'//Fforce//'"')
+    end if
+    do j = 1, Nbead
+      do i = 1, Natom
+        read(Uinp,*) fr(:,i,j)
+      end do
+    end do
+  close(Uinp)
+  open(newunit=Uinp,file=Fenergy,status='old',iostat=ios)
+    if ( ios /= 0 ) then
+      call program_abort('There is no "'//Fenergy//'"')
+    end if
+    do j = 1, Nbead
+      read(Uinp,*) Eenergy(j)
+    end do
+  close(Uinp)
+
+  fr(:,:,:)  = fr(:,:,:) * eVAng2AU * dp_inv
+  Eenergy(:) = Eenergy(:) * eVtoAU
+  !end if
 
 end subroutine force_nnp_matlantis
 
@@ -56,18 +83,18 @@ end subroutine set_nnp_araidai
 subroutine force_nnp_araidai
   use Parameters, &
     only: Eenergy, r, fr, Natom, AUtoAng, eVtoAU, dp_inv, alabel, &
-          addresstmp, Ista, Iend, laddress
+          addresstmp, Ista, Iend, laddress, eVAng2AU
   use utility, only: program_abort
 
   implicit none
   character(Len=130) :: line, inp_train(8)
   integer :: Imode, i, Uout, Uinp, ios
   character :: dummyC
-  real(8), parameter :: eVAng_HartBohr = 0.5291772108d0 / 27.21138505d0
+  !real(8), parameter :: eVAng_HartBohr = 0.5291772108d0 / 27.21138505d0
 
   open(newunit=Uinp,file='training.data_1',status='old',iostat=ios)
     if ( ios /= 0) then
-      call program_abort('ERROR!!: There is no file of "training.data_1"')
+      call program_abort('ERROR!!: There is no "training.data_1"')
     end if
     do i = 1, 5
       read(Uinp,'(a)') inp_train(i)
@@ -106,7 +133,7 @@ subroutine force_nnp_araidai
       end do
     close(Uinp)
 
-    fr(:,:,Imode)=fr(:,:,Imode)*eVAng_HartBohr*dp_inv
+    fr(:,:,Imode)=fr(:,:,Imode)*eVAng2AU*dp_inv
     Eenergy(Imode) = Eenergy(Imode) * eVtoAU
   end do
 

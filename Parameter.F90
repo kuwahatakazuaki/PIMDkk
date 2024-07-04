@@ -1,4 +1,4 @@
-Module Parameters
+module Parameters
    Double Precision, Parameter  :: pi        = 3.14159265358979d0
     ! . . > fs -- > a.u.
 !    Double Precision, Parameter  :: facttime  = 1.d0/0.024d0
@@ -18,6 +18,7 @@ Module Parameters
     real(8), parameter :: AUtoAng = 0.529177249d0   ! bohr_inv
     real(8), parameter :: AUtoJ   = 4.35974434d-18
     real(8), parameter :: KtoAU   = 8.617333262145d-5/27.211396132d0 ! Boltzmann constant K to AU (eV/K hartree/eV) from NIST
+    real(8), parameter :: eVAng2AU= eVtoAU * AUtoAng
     integer, parameter :: LINELEN = 120
 
 
@@ -35,7 +36,6 @@ Module Parameters
     real(8), allocatable :: dipoler(:,:), atom_num(:)
     Double Precision, Allocatable :: charge(:,:),nbo(:,:),Eenergy(:),homo(:),lumo(:), hfcc(:,:)
     character (Len=2),Allocatable :: alabel(:)
-    !character(len=8) :: simulation
     character(len=8) :: name_simulation
 
     Double Precision              :: gamma, gamma2, omega_system
@@ -98,7 +98,6 @@ end module Parameters
 !    Integer                       :: theory
 !!YK If additional basis sets for g03 or g09 calculations are necessary
 !    Integer                       :: NGenGau
-!    Integer                       :: Order
 !!YK Switch for QM/MM calculation
 !    Integer                       :: NQMMM
 

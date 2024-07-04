@@ -8,8 +8,8 @@ subroutine Force_VASP_MPI
   Integer :: i,j,k
   Integer :: iline, id,imode2,iatom2, igauss = 20
   real(8) :: enetemp, dummy
-  real(8), parameter :: ev_to_hartree  = 1.0 / 27.21138505
-  real(8), parameter :: eVAng_HartBohr = 0.5291772108 / 27.21138505
+  !real(8), parameter :: ev_to_hartree  = 1.0 / 27.21138505
+  !real(8), parameter :: eVAng_HartBohr = 0.5291772108 / 27.21138505
   key1  = ('energy  without entropy')
   key2  = ('TOTAL-FORCE')
   key3  = ('external pressure')
@@ -77,16 +77,16 @@ subroutine Force_VASP_MPI
         if(iline > 0) exit
       enddo
       read(line(32:45),*) enetemp
-      enetemp = enetemp * ev_to_hartree
-      Eenergy(imode2)=enetemp
+      !enetemp = enetemp * ev_to_hartree
+      Eenergy(imode2) = enetemp * eVtoAU
 ! +++ End Reading "energy  without entropy" +++
 
     close(igauss+id)
 
-    fr(:,:,imode2)=fr(:,:,imode2)*eVAng_HartBohr*dp_inv
+    !fr(:,:,imode2)=fr(:,:,imode2)*eVAng_HartBohr*dp_inv
+    fr(:,:,imode2)=fr(:,:,imode2)*eVAng2AU*dp_inv
   enddo
 
-  !call Start_Send_Recv_MPI_tk
 
 9999 format(3F24.16)
 9998 format(3E23.15)
