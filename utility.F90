@@ -4,6 +4,13 @@ module utility
 contains
 
 ! +++ Module for IO +++
+  !subroutine exist_file(name_file)
+  !end subroutine exist_file
+  function exist_file(name_file) result(bool)
+    character(len=*), intent(in) :: name_file
+    logical :: bool
+  end function exist_file
+
   subroutine read_val_next(line,key,val)
     character(len=*), intent(in) :: key, line
     real(8), intent(out) :: val
@@ -24,7 +31,6 @@ contains
     return
     401 print *, 'ERROR!!: There is no key: "'//key//'"' ; stop
   end subroutine search_line
-
 ! +++ Module for IO +++
 
 ! +++ Calculation of Matrix +++

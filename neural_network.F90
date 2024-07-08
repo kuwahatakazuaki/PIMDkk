@@ -26,19 +26,22 @@ subroutine force_nnp_matlantis
       write(Uout,*) Natom
       write(Uout,*)
       do i = 1, Natom
-        write(Uout,*) alabel(i), r(:,i,Imode)
+        write(Uout,*) alabel(i), r(:,i,Imode)*AUtoAng
       end do
     close(Uout)
   end do
 
+  if (access(Fforce, ' ') == 0) call system('rm -f '//Fforce)
+  if (access(Fenergy, ' ') == 0) call system('rm -f '//Fenergy)
+
   write(char_num,'(" ",I0, " ", I0)') Ista, Iend
   command = ' ./run_matlantis.py '//trim(addresstmp)//trim(char_num)
-  !call system(command)
+  call system(command)
 
   !if ( MyRank == 0 ) then
   open(newunit=Uinp,file=Fforce,status='old',iostat=ios)
     if ( ios /= 0 ) then
-      call program_abort('There is no "'//Fforce//'"')
+      call program_abort('ERROR!!! There is no "'//Fforce//'"')
     end if
     do j = 1, Nbead
       do i = 1, Natom
@@ -61,6 +64,17 @@ subroutine force_nnp_matlantis
 
 end subroutine force_nnp_matlantis
 
+subroutine set_nnp_matlantis
+  use utility, only: program_abort
+  implicit none
+  character(len=:), allocatable :: name_file
+  integer :: access
+  name_file = 'run_matlantis.py'
+  if ( access(name_file,' ') /= 0 ) then
+    call program_abort('ERROR!!! There is no "'//name_file//'"')
+  end if
+end subroutine set_nnp_matlantis
+
 
 subroutine set_nnp_araidai
   use Parameters
@@ -75,7 +89,6 @@ subroutine set_nnp_araidai
     call system('cp training.data_1 '//trim(addresstmp))
     call system('cp n2training '//trim(addresstmp))
   enddo
-
 return
 end subroutine set_nnp_araidai
 

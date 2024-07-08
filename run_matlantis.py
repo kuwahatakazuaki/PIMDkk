@@ -36,7 +36,6 @@ for i in range(Ista,Iend+1):
     path_inp=''
     Fname = 'str{0:05}.xyz'.format(i)
     path_inp = path_dir + Fname
-    print(path_inp)
 
     atoms = read(path_inp)
     atoms.calc = calculator
