@@ -75,6 +75,7 @@ module Parameters
     logical :: Lsave_hfcc   = .False.
     logical :: Lsave_energy = .False.
     logical :: Langstrom    = .True.
+    logical :: Lperiodic    = .False.
     logical :: Lrestart     = .False.
     logical :: Lrandom_coor = .False.
 

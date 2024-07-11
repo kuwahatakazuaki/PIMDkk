@@ -72,5 +72,5 @@ subroutine Set_Allocate
     ysweight (1:nys) = 0.d0
 
   return
-end subroutine
+end subroutine Set_Allocate
 

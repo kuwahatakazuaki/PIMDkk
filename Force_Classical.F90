@@ -19,6 +19,9 @@ Subroutine Force_Classical
 
     case(21)
       call force_nnp_araidai
+    case(22)
+      call force_nnp_matlantis
+
     case(31)
       call force_spcf
     case default

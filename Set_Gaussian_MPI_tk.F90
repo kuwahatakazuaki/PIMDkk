@@ -1,21 +1,15 @@
-Subroutine Set_Gaussian_MPI_tk
+subroutine Set_Gaussian_MPI_tk
   use Parameters
   use utility, only: program_abort
   implicit none
-  integer   :: i,j,k,id, imode
+  integer :: i,j,k,imode, Uout
   integer :: access
-  integer :: igauss = 20
 
   if ( MyRank == 0 ) then
-    if      ( access("./gauss.tmp", " ") .ne. 0) then
-      call err_set_tmp
-    else if ( access("./g0xrun_p", " ") .ne. 0) then
-      call err_set_g0xrun
-    end if
+    if ( access("./gauss.tmp", " ") /= 0) call err_set_tmp
+    if ( access("./g0xrun_p", " ")  /= 0) call err_set_g0xrun
   end if
 
-
-  id=0
   do imode=ista,iend
      write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
      call system('mkdir -p '//trim(addresstmp))
@@ -27,12 +21,12 @@ Subroutine Set_Gaussian_MPI_tk
      !If(NGenGau==1) Then
      !   call system('cp gauss.bss '//trim(addresstmp))
      !EndIf
-     open(igauss+id,file=trim(addresstmp)//'gauss.tmp1',status='unknown')
-       write(igauss+id,'(a)') '%Chk='//trim(addresstmp)//'gauss.chk'
-       write(igauss+id,'(a)') '%RWF='//trim(addresstmp)
-       write(igauss+id,'(a)') '%Int='//trim(addresstmp)
-       write(igauss+id,'(a)') '%D2E='//trim(addresstmp)
-     close(igauss+id)
+     open(newunit=Uout,file=trim(addresstmp)//'gauss.tmp1',status='unknown')
+       write(Uout,'(a)') '%Chk='//trim(addresstmp)//'gauss.chk'
+       write(Uout,'(a)') '%RWF='//trim(addresstmp)
+       write(Uout,'(a)') '%Int='//trim(addresstmp)
+       write(Uout,'(a)') '%D2E='//trim(addresstmp)
+     close(Uout)
      call system('cat '//trim(addresstmp)//'gauss.tmp >> '//trim(addresstmp)//'gauss.tmp1')
 
   !! Udagawa Start 2021.05.24 --->
@@ -73,5 +67,5 @@ contains
     call program_abort('')
   end subroutine err_set_g0xrun
 
-End Subroutine Set_Gaussian_MPI_tk
+end subroutine Set_Gaussian_MPI_tk
 

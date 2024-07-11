@@ -9,11 +9,11 @@ subroutine PI_NEW_MPI
   call Normal_Mode
   call Init_Mass
 
+  !call set_each_exe
+
   select case(Iforce)
     case(1)
       call Set_mopac
-!    case(5)
-!      call Set_Gamess_MPI_tk
     case(6)
       call Set_Gaussian_MPI_tk  ! Set for chk, rwf, etc.
     case(8)
@@ -22,11 +22,10 @@ subroutine PI_NEW_MPI
       call Set_siesta
     !case(10)
     !  call Set_Molcas_MPI
-    case(11:16)
     case(21)
       call set_nnp_araidai
-    !case default
-    !  call program_abort('ERROR!!! Wrong "Iforce" option')
+    case(22)
+      call set_nnp_matlantis
   end select
 
   if ( Lrestart .eqv. .True. ) then

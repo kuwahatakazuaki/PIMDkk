@@ -32,15 +32,16 @@ subroutine read_parameter
       elseif (index(line,"$Iforce")         == 1) then; read(Uin,*) Iforce
       elseif (index(line,"$freq1")          == 1) then; read(Uin,*) freq1
       elseif (index(line,"$version")        == 1) then; read(Uin,*) version
+      elseif (index(line,"$Langstrom")      == 1) then; read(Uin,*) Langstrom
+      elseif (index(line,"$Lperiodic")      == 1) then; read(Uin,*) Lperiodic
+      elseif (index(line,"$Lrandom_coor")   == 1) then; read(Uin,*) Lrandom_coor
       elseif (index(line,"$Lsave_force")    == 1) then; read(Uin,*) Lsave_force
       elseif (index(line,"$Lsave_npa")      == 1) then; read(Uin,*) Lsave_npa
       elseif (index(line,"$Lsave_charge")   == 1) then; read(Uin,*) Lsave_charge
       elseif (index(line,"$Lsave_dipole")   == 1) then; read(Uin,*) Lsave_dipole
       elseif (index(line,"$Lsave_hfcc")     == 1) then; read(Uin,*) Lsave_hfcc
       elseif (index(line,"$Lsave_energy")   == 1) then; read(Uin,*) Lsave_energy
-      elseif (index(line,"$Langstrom")      == 1) then; read(Uin,*) Langstrom
       elseif (index(line,"$Lrestart")       == 1) then; read(Uin,*) Lrestart
-      elseif (index(line,"$Lrandom_coor")   == 1) then; read(Uin,*) Lrandom_coor
       elseif (index(line,"$seed")           == 1) then
         do i = 1, 4
           read(Uin,*) Iseeds(i)

@@ -1,25 +1,17 @@
-Subroutine Set_VASP
+subroutine Set_VASP
 !$  use omp_lib
-  Use Parameters
+  use Parameters
   use utility, only: program_abort
-  Implicit None
-  Integer   :: i,j,k,id, imode
+  implicit none
+  integer   :: i,j,k,imode
   integer :: access
 
 if ( MyRank == 0 ) then
-  if      ( access("./LATTICE", " ") .ne. 0) then
-    call err_LATTICE
-  else if ( access("./vasp_run.sh", " ") .ne. 0) then
-    call err_set_g0xrun
-  end if
+  if ( access("./LATTICE", " ")     /= 0)  call err_LATTICE
+  if ( access("./vasp_run.sh", " ") /= 0)  call err_exefile
 end if
 
-
-  id=0
-!$omp parallel private(addresstmp,line,iatom2,id,iline,enetemp)
-!$omp do
 do imode=ista,iend
-!$  id=omp_get_thread_num()
    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
 
    call system('mkdir -p '//trim(addresstmp))  ! need ??
@@ -30,12 +22,9 @@ do imode=ista,iend
    call system('ls ML_AB ML_FF 2>/dev/null && cp ML_AB ML_FF '//trim(addresstmp))
 ! Machine learning version
 !   call system('cp vasp_run.sh '//trim(addresstmp))
-
 enddo
-!$omp end do
-!$omp end parallel
 
-Return
+return
 contains
 
   subroutine err_LATTICE
@@ -54,7 +43,7 @@ contains
     call program_abort('')
   end subroutine err_LATTICE
 
-  subroutine err_set_g0xrun
+  subroutine err_exefile
     integer :: Nunit
     open(newunit=Nunit,file='vasp_run.sh',status='new')
       write(Nunit,'(a)') '#!/bin/bash'
@@ -65,7 +54,6 @@ contains
     print *, 'ERROR!! "vasp_run.sh" is NOT exist!'
     print *, 'Please use "vasp_run.sh" template'
     call program_abort('')
-  end subroutine err_set_g0xrun
+  end subroutine err_exefile
 
-End Subroutine Set_VASP
-
+end subroutine Set_VASP

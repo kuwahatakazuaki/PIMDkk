@@ -6,18 +6,20 @@ import os
 import numpy as np
 import sys
 
-# === For Matlantis === 
-# import pfp_api_client
-# from pfp_api_client.pfp.calculators.ase_calculator import ASECalculator
-# from pfp_api_client.pfp.estimator import Estimator, EstimatorCalcMode
+# === For Matlantis ===
+import pfp_api_client
+from pfp_api_client.pfp.calculators.ase_calculator import ASECalculator
+from pfp_api_client.pfp.estimator import Estimator, EstimatorCalcMode
 
 # estimator = Estimator()
-# calculator = ASECalculator(estimator)
-# === For Matlantis === 
+# === Choose the EstimatorCalcMode from CRYSTAL, CRYSTAL_U0, CRYSTAL_PLUS_D3, MOLECULE ===
+estimator = Estimator(calc_mode=EstimatorCalcMode.MOLECULE, model_version="v3.0.0")
+calculator = ASECalculator(estimator)
+# === For Matlantis ===
 
-# === For Effective Medium Theory === 
-calculator = EMT()
-# === For Effective Medium Theory === 
+# # === For Effective Medium Theory ===
+# calculator = EMT()
+# # === For Effective Medium Theory ===
 
 Fforce = 'forces.out'
 Fenergy = 'energy.out'

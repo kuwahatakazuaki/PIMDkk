@@ -32,6 +32,7 @@ subroutine Broad1
   call MPI_Bcast(Lsave_hfcc,1,MPI_LOGICAL,0,MPI_COMM_WORLD,IERR)
   call MPI_Bcast(Lsave_energy,1,MPI_LOGICAL,0,MPI_COMM_WORLD,IERR)
   call MPI_Bcast(Langstrom,1,MPI_LOGICAL,0,MPI_COMM_WORLD,IERR)
+  call MPI_Bcast(Lperiodic,1,MPI_LOGICAL,0,MPI_COMM_WORLD,IERR)
   call MPI_Bcast(Lrestart,1,MPI_LOGICAL,0,MPI_COMM_WORLD,IERR)
   call MPI_Bcast(Lrandom_coor,1,MPI_LOGICAL,0,MPI_COMM_WORLD,IERR)
 

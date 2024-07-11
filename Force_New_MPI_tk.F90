@@ -49,7 +49,7 @@ subroutine Force_New_MPI_tk
     case(31)
       call force_spcf
     case default
-      stop 'ERROR!!! Wrong "Iforce" option'
+      call program_abort('ERROR!!! Wrong "Iforce" option')
   end select
 
   if (Iumb > 0) call calc_umbrella

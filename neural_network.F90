@@ -24,7 +24,7 @@ subroutine force_nnp_matlantis
   do Imode = Ista, Iend
     open(newunit=Uout,file=trim(addresstmp)//Fout(Imode))
       write(Uout,*) Natom
-      write(Uout,*)
+      write(Uout,*) 'Properties=species:S:1:pos:R:3 pbc="F F F"'
       do i = 1, Natom
         write(Uout,*) alabel(i), r(:,i,Imode)*AUtoAng
       end do
@@ -65,6 +65,7 @@ subroutine force_nnp_matlantis
 end subroutine force_nnp_matlantis
 
 subroutine set_nnp_matlantis
+  use Parameters, only: Lperiodic
   use utility, only: program_abort
   implicit none
   character(len=:), allocatable :: name_file
@@ -73,6 +74,28 @@ subroutine set_nnp_matlantis
   if ( access(name_file,' ') /= 0 ) then
     call program_abort('ERROR!!! There is no "'//name_file//'"')
   end if
+
+  if ( Lperiodic .eqv. .True. ) then
+    if ( access("./LATTICE", " ")     /= 0)  call err_LATTICE
+  end if
+
+contains
+
+  subroutine err_LATTICE
+    integer :: Nunit
+    open(newunit=Nunit,file='LATTICE',status='new')
+      write(Nunit,'(a)') "H2O molecule                                                  "
+      write(Nunit,'(a)') "1.0                                                           "
+      write(Nunit,'(a)') "        7.9376997948         0.0000000000         0.0000000000"
+      write(Nunit,'(a)') "        0.0000000000         7.9376997948         0.0000000000"
+      write(Nunit,'(a)') "        0.0000000000         0.0000000000         7.9376997948"
+      write(Nunit,'(a)') "    O    H                                                    "
+      write(Nunit,'(a)') "    1    2                                                    "
+    close(Nunit)
+    print *, 'ERROR!! "LATTICE" is NOT exist!'
+    print *, 'Please use "LATTICE" template'
+    call program_abort('')
+  end subroutine err_LATTICE
 end subroutine set_nnp_matlantis
 
 

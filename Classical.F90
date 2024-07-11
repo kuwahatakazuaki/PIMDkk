@@ -4,7 +4,6 @@ subroutine Classical
   implicit none
   integer :: istep, iref, Uout
 
-  !call Setup_Classical
   call Setup_time_mass
   call Init_Mass
 
@@ -15,9 +14,10 @@ subroutine Classical
       call Set_Gaussian_MPI_tk
     case(8)
       call Set_VASP
-    case(11:16)
     case(21)
       call set_nnp_araidai
+    case(22)
+      call set_nnp_matlantis
   end select
 
 

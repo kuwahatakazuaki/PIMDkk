@@ -6,13 +6,10 @@ subroutine Set_mopac
   integer :: access
 
 if (MyRank == 0) then
-  if      ( access("./mopac.mop", " ") .ne. 0 ) then
-    call err_set_mopac_mop
-  else if ( access("./g0xrun_p",  " ") .ne. 0 ) then
-    call err_set_mopac_g0x
-  else
-    print *, '"mopac.mop" and "g0xrun_p" are exist -> OK!!'
-  end if
+  if ( access("./mopac.mop", " ") .ne. 0 ) call err_set_mopac_mop
+  if ( access("./g0xrun_p",  " ") .ne. 0 ) call err_set_mopac_g0x
+  !else
+  !  print *, '"mopac.mop" and "g0xrun_p" are exist -> OK!!'
 end if
 
 
@@ -22,7 +19,6 @@ do imode=ista,iend
    call system('cp mopac.mop '//trim(addresstmp))
 !   call system('cp g0xrun_p  '//trim(addresstmp))
 enddo
-!  call program_abort("HELLO")
 
 return
 
@@ -52,7 +48,5 @@ contains
   end subroutine err_set_mopac_g0x
 
 end subroutine Set_mopac
-
-
 
 
