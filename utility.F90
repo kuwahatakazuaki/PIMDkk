@@ -166,11 +166,58 @@ contains
     elseif ( trim(cha) == 'kr' ) then
       mass = 83.798d0
 
-
+    elseif ( trim(cha) == 'rb' ) then
+      mass = 85.4678d0
+    elseif ( trim(cha) == 'sr' ) then
+      mass = 87.62d0
+    elseif ( trim(cha) == 'y'  ) then
+      mass = 88.90585d0
+    elseif ( trim(cha) == 'zr' ) then
+      mass = 91.224d0
+    elseif ( trim(cha) == 'nb' ) then
+      mass = 92.90638d0
+    elseif ( trim(cha) == 'mo' ) then
+      mass = 95.96d0
+    elseif ( trim(cha) == 'tc' ) then
+      mass = 98d0
+    elseif ( trim(cha) == 'ru' ) then
+      mass = 101.07d0
+    elseif ( trim(cha) == 'rh' ) then
+      mass = 102.90550d0
+    elseif ( trim(cha) == 'pd' ) then
+      mass = 106.42d0
+    elseif ( trim(cha) == 'ag' ) then
+      mass = 107.8682d0
+    elseif ( trim(cha) == 'cd' ) then
+      mass = 112.411d0
+    elseif ( trim(cha) == 'in' ) then
+      mass = 114.818d0
     elseif ( trim(cha) == 'sn' ) then
       mass = 118.710d0
+    elseif ( trim(cha) == 'sb' ) then
+      mass = 121.760d0
+    elseif ( trim(cha) == 'te' ) then
+      mass = 127.60d0
+    elseif ( trim(cha) == 'i' ) then
+      mass = 126.90447d0
+    elseif ( trim(cha) == 'xe' ) then
+      mass = 131.294d0
+
+    elseif ( trim(cha) == 'cs' ) then
+      mass = 132.9054519d0
     elseif ( trim(cha) == 'ba' ) then
       mass = 137.327d0
+    elseif ( trim(cha) == 'la' ) then
+      mass = 138.90547d0
+    elseif ( trim(cha) == 'ce' ) then
+      mass = 140.116d0
+
+    elseif ( trim(cha) == 'pt' ) then
+      mass = 195.084d0
+    elseif ( trim(cha) == 'au' ) then
+      mass = 196.966569d0
+    elseif ( trim(cha) == 'hg' ) then
+      mass = 200.59d0
 
     else
       call program_abort('ERROR!! "'//cha_in//'" is not exist in atom2mass')
