@@ -24,19 +24,29 @@ calculator = ASECalculator(estimator)
 Fforce = 'forces.out'
 Fenergy = 'energy.out'
 
-(path_dir, Ista, Iend) = sys.argv[1:]
+# (path_dir, Ista, Iend) = sys.argv[1:]
+(path_dir, Ista, Iend, Lperi) = sys.argv[1:]
 Ista = int(Ista)
 Iend = int(Iend)
 
-if os.path.isfile(Fforce):
-    os.remove(Fforce)
+if Lperi == "T":
+    extension = "vasp"
+elif Lperi == "F":
+    extension = "xyz"
+else:
+    print("ERROR!!! Bad statement for periodic condition in run_matlantis.py")
+    sys.exit()
+
+# if os.path.isfile(Fforce):
+#     os.remove(Fforce)
 
 all_forces = np.array([])
 all_energy = np.array([])
 
 for i in range(Ista,Iend+1):
     path_inp=''
-    Fname = 'str{0:05}.xyz'.format(i)
+    # Fname = 'str{0:05}.xyz'.format(i)
+    Fname = 'str{0:05}.'.format(i) + extension
     path_inp = path_dir + Fname
 
     atoms = read(path_inp)
@@ -55,6 +65,5 @@ for i in range(Ista,Iend+1):
 
 np.savetxt(Fforce,all_forces)
 np.savetxt(Fenergy,all_energy)
-# print(all_energy)
 
 

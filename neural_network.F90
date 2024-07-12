@@ -2,12 +2,13 @@ subroutine force_nnp_matlantis
 !!! === Nproc much be 1 at current verion === !!!
   use Parameters, &
     only: Eenergy, r, fr, Natom, AUtoAng, eVtoAU, dp_inv, alabel, &
-          addresstmp, Ista, Iend, laddress, MyRank, Nbead, eVAng2AU
+          addresstmp, Ista, Iend, laddress, MyRank, Nbead, eVAng2AU, &
+          Lperiodic
   use utility, only: program_abort
   implicit none
   integer :: Nfile, Imode, i, j
   integer :: Uinp, Uout, ios
-  character(len=12), allocatable :: Fout(:)
+  character(len=13), allocatable :: Fout(:)
   character(len=12) :: char_num
   character(len=:), allocatable :: command, Fforce, Fenergy
   integer :: access, Iaccess
@@ -17,26 +18,20 @@ subroutine force_nnp_matlantis
 
   Nfile = Iend - Ista + 1
   allocate(Fout(Nfile))
-  do Imode = Ista, Iend
-    write(Fout(Imode),'("str",I5.5,".xyz")') Imode
-  end do
-
-  do Imode = Ista, Iend
-    open(newunit=Uout,file=trim(addresstmp)//Fout(Imode))
-      write(Uout,*) Natom
-      write(Uout,*) 'Properties=species:S:1:pos:R:3 pbc="F F F"'
-      do i = 1, Natom
-        write(Uout,*) alabel(i), r(:,i,Imode)*AUtoAng
-      end do
-    close(Uout)
-  end do
+  if ( Lperiodic .eqv. .True. ) then
+    call input_periodic
+  else
+    call input_nonperio
+  end if
 
   if (access(Fforce, ' ') == 0) call system('rm -f '//Fforce)
   if (access(Fenergy, ' ') == 0) call system('rm -f '//Fenergy)
 
-  write(char_num,'(" ",I0, " ", I0)') Ista, Iend
+! +++ Execution Matlantis +++
+  write(char_num,'(" ",I0, " ",I0, L2)') Ista, Iend, Lperiodic
   command = ' ./run_matlantis.py '//trim(addresstmp)//trim(char_num)
   call system(command)
+! +++ Execution Matlantis +++
 
   !if ( MyRank == 0 ) then
   open(newunit=Uinp,file=Fforce,status='old',iostat=ios)
@@ -62,14 +57,51 @@ subroutine force_nnp_matlantis
   Eenergy(:) = Eenergy(:) * eVtoAU
   !end if
 
+contains
+
+  subroutine input_periodic
+    do Imode = Ista, Iend
+      write(Fout(Imode),'("str",I5.5,".vasp")') Imode
+    end do
+    do Imode = Ista, Iend
+      call system( 'cp LATTICE '//trim(addresstmp)//trim(Fout(Imode)) )
+      open(newunit=Uout,file=trim(addresstmp)//trim(Fout(Imode)),status='old',position='append')
+        do i = 1, Natom
+          write(Uout,*) r(:,i,Imode) * AUtoAng
+        end do
+        write(Uout,*)
+      close(Uout)
+    end do
+  end subroutine input_periodic
+
+  subroutine input_nonperio
+    do Imode = Ista, Iend
+      write(Fout(Imode),'("str",I5.5,".xyz")') Imode
+    end do
+    do Imode = Ista, Iend
+      open( newunit=Uout,file=trim(addresstmp)//trim(Fout(Imode)) )
+        write(Uout,*) Natom
+        write(Uout,*) 'Properties=species:S:1:pos:R:3 pbc="F F F"'
+        do i = 1, Natom
+          write(Uout,*) alabel(i), r(:,i,Imode)*AUtoAng
+        end do
+      close(Uout)
+    end do
+  end subroutine input_nonperio
+
 end subroutine force_nnp_matlantis
 
 subroutine set_nnp_matlantis
-  use Parameters, only: Lperiodic
+  use Parameters, only: Lperiodic, Nproc
   use utility, only: program_abort
   implicit none
   character(len=:), allocatable :: name_file
   integer :: access
+
+  if ( Nproc /= 1 ) then
+    call program_abort('ERROR!!! current version only for Nproc == 1')
+  end if
+
   name_file = 'run_matlantis.py'
   if ( access(name_file,' ') /= 0 ) then
     call program_abort('ERROR!!! There is no "'//name_file//'"')
@@ -84,13 +116,14 @@ contains
   subroutine err_LATTICE
     integer :: Nunit
     open(newunit=Nunit,file='LATTICE',status='new')
-      write(Nunit,'(a)') "H2O molecule                                                  "
-      write(Nunit,'(a)') "1.0                                                           "
-      write(Nunit,'(a)') "        7.9376997948         0.0000000000         0.0000000000"
-      write(Nunit,'(a)') "        0.0000000000         7.9376997948         0.0000000000"
-      write(Nunit,'(a)') "        0.0000000000         0.0000000000         7.9376997948"
-      write(Nunit,'(a)') "    O    H                                                    "
-      write(Nunit,'(a)') "    1    2                                                    "
+      write(Nunit,'(a)') trim("H2O molecule                                                  ")
+      write(Nunit,'(a)') trim("1.0                                                           ")
+      write(Nunit,'(a)') trim("        7.9376997948         0.0000000000         0.0000000000")
+      write(Nunit,'(a)') trim("        0.0000000000         7.9376997948         0.0000000000")
+      write(Nunit,'(a)') trim("        0.0000000000         0.0000000000         7.9376997948")
+      write(Nunit,'(a)') trim("    O    H                                                    ")
+      write(Nunit,'(a)') trim("    1    2                                                    ")
+      write(Nunit,'(a)') trim("Cartesian                                                     ")
     close(Nunit)
     print *, 'ERROR!! "LATTICE" is NOT exist!'
     print *, 'Please use "LATTICE" template'

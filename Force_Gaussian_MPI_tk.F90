@@ -8,7 +8,6 @@ subroutine Force_Gaussian_MPI_tk
   integer            :: iline, imode, iatom
   Double Precision   :: enetemp
   integer :: i,j,k, igauss
-  !integer :: igauss = 20
   character :: dummyC(10)
 
   key1  = ('SCF Done')
@@ -32,7 +31,6 @@ subroutine Force_Gaussian_MPI_tk
     write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
 
     call system('cat '//trim(addresstmp)//'gauss.tmp1 > '//trim(addresstmp)//'gauss.com')
-
 
 !    open(igauss,file=trim(addresstmp)//'gauss.xyz',status='unknown')
     open(newunit=igauss,file=trim(addresstmp)//'gauss.com',status='old',position='append')
@@ -90,7 +88,6 @@ subroutine Force_Gaussian_MPI_tk
     end if
 !  +++ End Reading "Mulliken charge" +++
 
-!print *, imode, charge(1,1)
 !  +++ Reading "Dipole moment" +++
     if ( Lsave_dipole .eqv. .True. ) then
       call search_line(igauss,key3,line)

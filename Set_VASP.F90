@@ -1,5 +1,4 @@
 subroutine Set_VASP
-!$  use omp_lib
   use Parameters
   use utility, only: program_abort
   implicit none
@@ -8,6 +7,7 @@ subroutine Set_VASP
 
 if ( MyRank == 0 ) then
   if ( access("./LATTICE", " ")     /= 0)  call err_LATTICE
+  if ( access("./KPOINTS", " ")     /= 0)  call err_KPOINTS
   if ( access("./vasp_run.sh", " ") /= 0)  call err_exefile
 end if
 
@@ -27,16 +27,26 @@ enddo
 return
 contains
 
+  subroutine err_KPOINTS
+    integer :: Nunit
+    open(newunit=Nunit,file='KPOINTS',status='new')
+    close(Nunit)
+    print *, 'ERROR!! "KPOINTS" is NOT exist!'
+    print *, 'Please use "KPOINTS" template'
+    call program_abort('')
+  end subroutine err_KPOINTS
+
   subroutine err_LATTICE
     integer :: Nunit
     open(newunit=Nunit,file='LATTICE',status='new')
-      write(Nunit,'(a)') "H2O molecule                                                  "
-      write(Nunit,'(a)') "1.0                                                           "
-      write(Nunit,'(a)') "        7.9376997948         0.0000000000         0.0000000000"
-      write(Nunit,'(a)') "        0.0000000000         7.9376997948         0.0000000000"
-      write(Nunit,'(a)') "        0.0000000000         0.0000000000         7.9376997948"
-      write(Nunit,'(a)') "    O    H                                                    "
-      write(Nunit,'(a)') "    1    2                                                    "
+      write(Nunit,'(a)') trim("H2O molecule                                                  ")
+      write(Nunit,'(a)') trim("1.0                                                           ")
+      write(Nunit,'(a)') trim("        7.9376997948         0.0000000000         0.0000000000")
+      write(Nunit,'(a)') trim("        0.0000000000         7.9376997948         0.0000000000")
+      write(Nunit,'(a)') trim("        0.0000000000         0.0000000000         7.9376997948")
+      write(Nunit,'(a)') trim("    O    H                                                    ")
+      write(Nunit,'(a)') trim("    1    2                                                    ")
+      write(Nunit,'(a)') trim("Cartesian                                                     ")
     close(Nunit)
     print *, 'ERROR!! "LATTICE" is NOT exist!'
     print *, 'Please use "LATTICE" template'

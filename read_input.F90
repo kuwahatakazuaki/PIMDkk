@@ -33,8 +33,8 @@ subroutine read_parameter
       elseif (index(line,"$freq1")          == 1) then; read(Uin,*) freq1
       elseif (index(line,"$version")        == 1) then; read(Uin,*) version
       elseif (index(line,"$Langstrom")      == 1) then; read(Uin,*) Langstrom
-      elseif (index(line,"$Lperiodic")      == 1) then; read(Uin,*) Lperiodic
       elseif (index(line,"$Lrandom_coor")   == 1) then; read(Uin,*) Lrandom_coor
+      elseif (index(line,"$Lperiodic")      == 1) then; read(Uin,*) Lperiodic
       elseif (index(line,"$Lsave_force")    == 1) then; read(Uin,*) Lsave_force
       elseif (index(line,"$Lsave_npa")      == 1) then; read(Uin,*) Lsave_npa
       elseif (index(line,"$Lsave_charge")   == 1) then; read(Uin,*) Lsave_charge
