@@ -31,15 +31,12 @@ subroutine calc_umbrella
         umb_pot = umb_cons * dot_product(rij(:),rij(:))
         Eenergy(Imode) = Eenergy(Imode) + umb_pot
 
-        fij(:) = -2.0d0 * umb_cons * rij(:)
-        fr(:,atom3,Imode) = fr(:,atom3,Imode) + fij(:)
+        fij(:) = umb_cons * rij(:) * dp_inv
+        fr(:,atom1,Imode) = fr(:,atom1,Imode) + fij(:)
+        fr(:,atom2,Imode) = fr(:,atom2,Imode) + fij(:)
+        fr(:,atom3,Imode) = fr(:,atom3,Imode) + fij(:) * (-2.0d0)
       end do
   end select
-
-!print *, "After"
-!do i = Ista, Iend
-!  print *, fr(:,atom3,i)
-!end do
 
 return
 end subroutine calc_umbrella

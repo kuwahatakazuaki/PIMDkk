@@ -5,14 +5,14 @@ Subroutine Calc_Constant
   real(8) :: omega_p, dp
 
   !! fs  -- > A.U.
-  dt = dt * facttime
+  dt = dt * fs2AU
   !! amu -- > A.U.
   physmass(1:natom) = physmass(1:natom)*factmass
 
 
   beta   = 1.d0/(KtoAU*temperature)
   !! Frequency of the system
-  omega_system = 2.d0*pi/(freq1*facttime)
+  omega_system = 2.d0*pi/(freq1*fs2AU)
 
   gnkt = 3.d0*dble(Natom)/beta
   gkt = 1.d0/beta
