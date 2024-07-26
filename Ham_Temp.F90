@@ -83,7 +83,7 @@ subroutine Ham_Temp
 !YK include new centroid thermostat energies
     hamiltonian = hamiltonian + ebath + ebath_cent
 
-  Call Virial_Estimator
+  call Virial_Estimator
 
   return
 end subroutine Ham_Temp

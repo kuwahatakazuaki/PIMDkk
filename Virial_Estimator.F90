@@ -1,7 +1,7 @@
 ! 2019/11/08 : Adding 3N/2beta, change the sign from Force to Potential
-Subroutine Virial_Estimator
-  Use Parameters
-  Implicit None
+subroutine Virial_Estimator
+  use Parameters
+  implicit none
   integer          :: i, j, k, imode, iatom
   double precision :: e_virial1
 
@@ -23,6 +23,5 @@ Subroutine Virial_Estimator
   E_Virial = e_virial1 - E_Virial
 ! End Kuwahata 2019/11/08
 
-
-  Return
-End Subroutine
+  return
+end subroutine Virial_Estimator

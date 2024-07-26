@@ -31,10 +31,10 @@ subroutine Classical
     istepsv=0
     call Force_Classical
     call Ham_Temp_Classical
-    call Print_Ham_Classical(nrstep)
+    call Print_Ham_Classical(Irestep)
   end if
 
-  do istep = nrstep+1, nstep
+  do istep = Irestep+1, nstep
     istepsv=istep
     select case(Ncent)
       case(0)

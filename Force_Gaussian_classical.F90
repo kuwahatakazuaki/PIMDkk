@@ -51,8 +51,7 @@ Subroutine Force_Gaussian_classical
      !EndIf
 
 ! Udagawa Start 2021.05.24 --->
-     !If(istepsv == 0 .OR. (nRestart ==1 .AND. istepsv == nrstep+1)) then
-     If(istepsv == 0 .OR. ( ( Lrestart .eqv. .True. ) .AND. istepsv == nrstep+1)) then
+     If(istepsv == 0 .OR. ( ( Lrestart .eqv. .True. ) .AND. istepsv == Irestep+1)) then
        call system ('sed -e "s/[Gg][Uu][Ee][Ss][Ss]=[Rr][Ee][Aa][Dd]//g" '//trim(addresstmp)//'gauss.com &
                      & > '//trim(addresstmp)//'gauss.com1')
        call system ('mv '//trim(addresstmp)//'gauss.com1 '//trim(addresstmp)//'gauss.com')

@@ -6,7 +6,7 @@ subroutine restart_read
   real(8) :: pur(3)
 
   open(newunit=Uinp, file=trim(address)//'/restart.dat', status = 'unknown')
-    read(Uinp,*) nrstep
+    read(Uinp,*) Irestep
     do j = 1, Nbead
       do i = 1, Natom
         read(Uinp,*) ur(:,i,j)
@@ -166,7 +166,7 @@ subroutine restart_read_Classical
   integer :: i, j, inhc, icolor
 
   open(newunit=Uinp, file=trim(address)//'/restart.dat', status = 'unknown')
-    read(Uinp,*) nrstep
+    read(Uinp,*) Irestep
     do i = 1, Natom
       read(Uinp,*) ur(:,i,1)
     end do

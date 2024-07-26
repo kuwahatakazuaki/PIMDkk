@@ -12,18 +12,6 @@ contains
   subroutine MyMPI_gather_fr
     integer :: i, j, k, MyNbead
     integer :: Irank
-!if (MyRank == 0) print *, "Before"
-!do Irank = 0, Nprocs
-!  if (MyRank == Irank) then
-!    print *, "MyRank Ista, Iend, MyNbead", MyRank, Ista, Iend, MyNbead
-!    do j = 1, Nbead
-!      do i = 1, Natom
-!        print *, j, fr(:,i,j)
-!      end do
-!    end do
-!  end if
-!  call MPI_Barrier(MPI_COMM_WORLD,Ierr)
-!end do
     MyNbead = Iend - Ista + 1
     if ( MyRank == 0 ) then
       call MPI_Gather(MPI_IN_PLACE,3*Natom*MyNbead,MPI_DOUBLE_PRECISION, &
@@ -39,15 +27,6 @@ contains
       call MPI_Gather(Eenergy(Ista),MyNbead,MPI_DOUBLE_PRECISION, &
                       Eenergy(Ista),MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
     end if
-!if (MyRank == 0) then
-!print *, "After"
-!do j = 1, Nbead
-!  do i = 1, Natom
-!    print *, j, fr(:,i,j)
-!  end do
-!end do
-!end if
-!call program_abort("HERE_MPI")
   end subroutine MyMPI_gather_fr
 
   subroutine MyMPI_gather_others
@@ -67,16 +46,8 @@ contains
 
     if ( Lsave_dipole .eqv. .True. ) then
       if ( MyRank == 0 ) then
-!print *, "Before"
-!do i = 1, Nbead
-!  print *, i, dipoler(:,i)
-!end do
         call MPI_Gather(MPI_IN_PLACE,   3*MyNbead,MPI_DOUBLE_PRECISION,&
                         dipoler(1,Ista),3*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-!print *, "After"
-!do i = 1, Nbead
-!  print *, i, dipoler(:,i)
-!end do
       else
         call MPI_Gather(dipoler(1,Ista),3*MyNbead,MPI_DOUBLE_PRECISION,&
                         dipoler(1,Ista),3*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)

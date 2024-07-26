@@ -2,7 +2,8 @@ subroutine Print_Ham_tk(ij)
   use Parameters
   use utility, only: get_time
   implicit none
-  integer :: ij, Uham,Uout
+  integer, intent(in) :: ij
+  integer :: Uham,Uout
 
   open(newunit=Uham,file=trim(address)//'/ham.dat',status='unknown',form='formatted',position='append')
     write(Uham,9996) ij, hamiltonian, temp, potential,dkinetic,qkinetic,ebath,ebath_cent, E_Virial
@@ -22,6 +23,6 @@ subroutine Print_Ham_tk(ij)
 9997 format(a137)
 9996 format(i7,8e16.8)
 9995 format(i7,7e13.5,a20)
-Return
-End Subroutine
+return
+end subroutine Print_Ham_tk
 

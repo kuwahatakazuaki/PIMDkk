@@ -126,7 +126,6 @@ contains
 401 call program_abort('ERROR!!: We can not find "TOTAL ENERGY" in mopac.out')
 402 call program_abort('ERROR!!: We can not find "Atomic Force" in mopac.out')
 403 call program_abort('ERROR!!: We can not find "DIPOLE" in mopac.out')
-
   end subroutine Force_MOPAC
 ! +++++++++++++++++++++++++++
 ! +++++ End Force_MOPAC +++++
@@ -221,7 +220,7 @@ contains
   9997 format(2E23.15)
   9996 format(E23.15)
   9995 format(4E23.15)
-  
+
   return
   401 print *, 'ERROR!!: We can not find "energy  without entropy" in VASP output'; stop
   402 print *, 'ERROR!!: We can not find "TOTAL-FORCE" in VASP output'; stop
@@ -231,6 +230,4 @@ contains
 ! +++++++++++++++++++++++++
 ! +++++ Force_VASP_cl +++++
 ! +++++++++++++++++++++++++
-
-
-End Subroutine Force_Classical
+end subroutine Force_Classical

@@ -15,7 +15,7 @@ module Parameters
   integer, parameter :: LINELEN = 120
 
   integer              :: Natom, Nbead, Nstep, Isimulation
-  integer              :: Nref, Nys, Nnhc
+  integer              :: Nref, Nys, Nnhc, out_step = 1
   real(8), allocatable :: r(:,:,:), fr(:,:,:), ur(:,:,:), vur(:,:,:)
   real(8), allocatable :: fur(:,:,:), fur_ref(:,:,:)
   real(8), allocatable :: rbath(:,:,:,:), vrbath(:,:,:,:), frbath(:,:,:,:)
@@ -27,32 +27,34 @@ module Parameters
   real(8), allocatable :: dnmmass(:,:),fictmass(:,:),qmass(:),ysweight(:)
   real(8), allocatable :: qmcent11(:), qmcent31(:)
   real(8), allocatable :: dipoler(:,:), atom_num(:)
-  real(8), Allocatable :: charge(:,:),nbo(:,:),Eenergy(:),homo(:),lumo(:), hfcc(:,:)
+  real(8), allocatable :: charge(:,:),nbo(:,:),Eenergy(:),homo(:),lumo(:), hfcc(:,:)
   real(8)              :: gamma, gamma2, omega_system
   real(8)              :: omega_p2, omega2
-  real(8)              :: gkt, gnkt, dp_inv
+  real(8)              :: gkt, gnkt, dp_inv, E_Virial
   real(8)              :: ebath, ebath_cent, dkinetic, qkinetic
   real(8)              :: beta, temperature, dt, dt_ref
   real(8)              :: potential, hamiltonian, temp
+  real(8) :: freq1 = 10.0d0
 
-  character(Len=2), allocatable :: alabel(:)
-  character(len=8)     :: name_simulation
   integer              :: Ncent  ! Type of the thermostat
-  integer              :: Nrstep = 0
+  integer              :: Irestep = 0
+  !integer              :: nrstep = 0
   integer              :: Nproc, MyRank
   integer              :: Iforce ! Type of force
   integer              :: Iseeds(4) ! Random Number Generator Seed
+  integer              :: Ista, Iend, laddress
+  integer, allocatable :: listeach(:),listeachtmp(:) !,ireqa(:,:),ireqb(:,:)
 
-  character(len=9)   :: Finp = "input.inp"
-  character(len=7)   :: Fout = "std.out"
-  character(Len=80)  :: address
-  character(Len=80)  :: address2
-  Character(len=81)  :: address0
-  Character(len=87)  :: addresstmp
-  Double Precision :: E_Virial
-  real(8) :: freq1 = 10.0d0
+  character(Len=2), allocatable :: alabel(:)
+  character(len=8)     :: name_simulation
+  character(len=9)     :: Finp = "input.inp"
+  character(len=7)     :: Fout = "std.out"
+  character(Len=80)    :: address
+  character(Len=80)    :: address2
+  Character(len=81)    :: address0
+  Character(len=87)    :: addresstmp
 
-  integer :: istepsv !, nrandomc
+  integer :: istepsv = 0
   logical :: Lsave_force  = .False.
   logical :: Lsave_npa    = .False.
   logical :: Lsave_charge = .False.
@@ -73,8 +75,6 @@ module Parameters
   real(8) :: umb_cons = 1d-5, umb_pot
 ! End Kuwahata 2020/10/06
 
-  integer   :: Ista, Iend, laddress
-  integer, Allocatable :: listeach(:),listeachtmp(:),ireqa(:,:),ireqb(:,:)
 end module Parameters
 
 !!YK Set the method for electronic structure calculation

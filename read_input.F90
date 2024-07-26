@@ -25,6 +25,7 @@ subroutine read_parameter
       elseif (index(line,"$dt")             == 1) then; read(Uin,*) dt
       elseif (index(line,"$Isimulation")    == 1) then; read(Uin,*) Isimulation
       elseif (index(line,"$Nref")           == 1) then; read(Uin,*) Nref
+      elseif (index(line,"$out_step")       == 1) then; read(Uin,*) out_step
       elseif (index(line,"$Nys")            == 1) then; read(Uin,*) Nys
       elseif (index(line,"$Nnhc")           == 1) then; read(Uin,*) Nnhc
       elseif (index(line,"$Ncent")          == 1) then; read(Uin,*) Ncent
