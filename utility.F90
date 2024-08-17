@@ -224,19 +224,6 @@ contains
     end if
   end function atom2mass
 
-  !function lowerchr(str)
-  !  character(*), intent(in) :: str
-  !  character(len(str)) :: lowerchr
-  !  integer :: i
-  !  do i = 1, len_trim(str)
-  !    if ( str(i:i) >= 'A' .and. str(i:i) <= 'Z' ) then
-  !      lowerchr(i:i) = char(ichar(str(i:i))+32)
-  !    else
-  !      lowerchr(i:i) = str(i:i)
-  !    end if
-  !  end do
-  !end function lowerchr
-
   function lowerchr(str_in) result(str_out)
     character(len=*), intent(in) :: str_in
     character(len=len(str_in))   :: str_out
@@ -324,26 +311,6 @@ contains
 
 end module utility
 
-  !character(len=2) function itoc(i)
-  !  integer :: i
-  !  select case(i)
-  !    case(1)
-  !      itoc = 'H'
-  !    case(3)
-  !      itoc = 'Li'
-  !    case(5)
-  !      itoc = 'B'
-  !    case(6)
-  !      itoc = 'C'
-  !    case(7)
-  !      itoc = 'N'
-  !    case(8)
-  !      itoc = 'O'
-  !    case(9)
-  !      itoc = 'F'
-  !  end select
-  !end function itoc
-
 !  subroutine gasdev(gasd)
 !    real(8), intent(inout) :: gasd
 !    integer, save :: iset = 0
@@ -403,5 +370,18 @@ end module utility
 !    call random_seed(put=seed)
 !  end subroutine random_seed_clock
 
+
+  !function lowerchr(str)
+  !  character(*), intent(in) :: str
+  !  character(len(str)) :: lowerchr
+  !  integer :: i
+  !  do i = 1, len_trim(str)
+  !    if ( str(i:i) >= 'A' .and. str(i:i) <= 'Z' ) then
+  !      lowerchr(i:i) = char(ichar(str(i:i))+32)
+  !    else
+  !      lowerchr(i:i) = str(i:i)
+  !    end if
+  !  end do
+  !end function lowerchr
 
 

@@ -2,7 +2,8 @@ subroutine Classical
   use Parameters
   use utility, only: program_abort
   implicit none
-  integer :: istep, iref, Uout
+  integer :: iref, Uout
+  !integer :: istep, iref, Uout
 
   call Setup_time_mass
   call Init_Mass
@@ -28,14 +29,13 @@ subroutine Classical
     call Init_Velocity
     call Init_Bath_Classical
     call Temp_ctr
-    istepsv=0
     call Force_Classical
     call Ham_Temp_Classical
     call Print_Ham_Classical(Irestep)
   end if
 
-  do istep = Irestep+1, nstep
-    istepsv=istep
+  do istepsv = Irestep + 1, Nstep
+    !istepsv=istep
     select case(Ncent)
       case(0)
         continue
@@ -57,10 +57,10 @@ subroutine Classical
        call Nhc_Integrate_Cent3
     end select
     call Ham_Temp_Classical
-    call Print_Ham_Classical(istep)
-    call Restart_Write_Classical(istep)
+    call Print_Ham_Classical(istepsv)
+    call Restart_Write_Classical(istepsv)
 
-    if (mod(istep,100) == 0) then
+    if (mod(istepsv,100) == 0) then
       call exit_program
     end if
   end do

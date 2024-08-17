@@ -11,9 +11,8 @@ import pfp_api_client
 from pfp_api_client.pfp.calculators.ase_calculator import ASECalculator
 from pfp_api_client.pfp.estimator import Estimator, EstimatorCalcMode
 
-# estimator = Estimator()
-# === Choose the EstimatorCalcMode from CRYSTAL, CRYSTAL_U0, CRYSTAL_PLUS_D3, MOLECULE ===
-estimator = Estimator(calc_mode=EstimatorCalcMode.MOLECULE, model_version="v3.0.0")
+# === EstimatorCalcMode : CRYSTAL, CRYSTAL_U0, CRYSTAL_PLUS_D3, MOLECULE ===
+estimator = Estimator(calc_mode=EstimatorCalcMode.MOLECULE)
 calculator = ASECalculator(estimator)
 # === For Matlantis ===
 
@@ -45,7 +44,6 @@ all_energy = np.array([])
 
 for i in range(Ista,Iend+1):
     path_inp=''
-    # Fname = 'str{0:05}.xyz'.format(i)
     Fname = 'str{0:05}.'.format(i) + extension
     path_inp = path_dir + Fname
 

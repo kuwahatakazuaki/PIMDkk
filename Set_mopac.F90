@@ -5,20 +5,16 @@ subroutine Set_mopac
   integer   :: i,j,k, imode
   integer :: access
 
-if (MyRank == 0) then
-  if ( access("./mopac.mop", " ") .ne. 0 ) call err_set_mopac_mop
-  if ( access("./g0xrun_p",  " ") .ne. 0 ) call err_set_mopac_g0x
-  !else
-  !  print *, '"mopac.mop" and "g0xrun_p" are exist -> OK!!'
-end if
+  if (MyRank == 0) then
+    if ( access("./mopac.mop", " ") .ne. 0 ) call err_set_mopac_mop
+    if ( access("./g0xrun_p",  " ") .ne. 0 ) call err_set_mopac_g0x
+  end if
 
-
-do imode=ista,iend
-   write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
-   call system('mkdir -p '//trim(addresstmp))
-   call system('cp mopac.mop '//trim(addresstmp))
-!   call system('cp g0xrun_p  '//trim(addresstmp))
-enddo
+  do imode=ista,iend
+    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
+    call system('mkdir -p '//trim(addresstmp))
+    call system('cp mopac.mop '//trim(addresstmp))
+  enddo
 
 return
 

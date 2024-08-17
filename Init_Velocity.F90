@@ -1,6 +1,6 @@
-Subroutine Init_Velocity
-  Use Parameters
-  Implicit None
+subroutine Init_Velocity
+  use Parameters
+  implicit none
   Double Precision :: gasd, vsigma
   integer :: imode, iatom
 !
@@ -15,6 +15,6 @@ Subroutine Init_Velocity
     enddo
   enddo
 
-  Call Remove_TnR_All
-  Return
-End Subroutine
+  call Remove_TnR_All
+  return
+end subroutine Init_Velocity
