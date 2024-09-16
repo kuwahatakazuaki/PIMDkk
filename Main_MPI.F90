@@ -30,7 +30,7 @@ program Path_Integral
   call Calc_Constant
   call Check_Inp
 
-! Isimulation = 0:PIMD, 1:RPMD, 2CMD
+! Isimulation = 0:PIMD, 1:RPMD, 2CMD, 10:CL
   select case(Isimulation)
     case(0:2)
       call PI_NEW_MPI

@@ -2,7 +2,6 @@ subroutine PI_NEW_MPI
   use Parameters
   use utility, only: program_abort
   implicit none
-  !integer :: istep, iref, Uout
   integer :: iref, Uout
 
   call Setup_time_mass
@@ -45,14 +44,13 @@ subroutine PI_NEW_MPI
     call Broad3
     call Temp_ctr
     call nmtrans_ur2r ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
-    !istepsv=0
     call Force_New_MPI_tk
     if ( mod(istepsv,out_step) == 0 ) call print_result_qm
     call nmtrans_fr2fur     !call Getfnm  ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i)
 
     if ( MyRank == 0 ) then
       call Ham_Temp
-      call Print_Ham_tk(Irestep)
+      call print_ham(Irestep)
     end if
   end if
 
@@ -61,7 +59,6 @@ subroutine PI_NEW_MPI
 
     main_loop: &
     do istepsv = Irestep+1, nstep
-      !istepsv = istep
       select case(Ncent)
         case(0)
           continue
@@ -108,11 +105,12 @@ subroutine PI_NEW_MPI
       call Ham_Temp
 
       if (MyRank == 0) Then
-        call Print_Ham_tk(istepsv)
+        call print_ham(istepsv)
+        !call Print_Ham_tk(istepsv)
         call Restart_Write(istepsv)
       end if
 
-      if (mod(istepsv,100) == 0) then
+      if (mod(istepsv,10) == 0) then
         call exit_program
       end if
 
@@ -120,7 +118,6 @@ subroutine PI_NEW_MPI
 
   else
     do istepsv = Irestep+1, nstep
-      !istepsv = istep
       call Force_New_MPI_tk
     end do
   end if

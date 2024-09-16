@@ -1,8 +1,8 @@
 subroutine Ham_Temp
   use Parameters
   use utility, only: norm_seq
-  Implicit None
-  Double Precision                   :: qdummy, factqk, dkin
+  implicit none
+  Double Precision :: qdummy, factqk, dkin
   integer :: i, j, k, iatom, imode, inhc, icolor
   real(8) :: get_kinetic_ene!, temp
 
@@ -25,7 +25,7 @@ subroutine Ham_Temp
       virial = virial + dot_product( fr(:,i,j) , r(:,i,j) )
     end do
   end do
-  PV  = (dkin + virial)/3.0d0 * AUtoJ / dble(nbead)
+  PV  = (dkinetic + virial)/3.0d0 * AUtoJ / dble(nbead)
 
 !
 !   /*  quantum kinetic energy (harmonic interaction):  *

@@ -32,7 +32,8 @@ Subroutine Force_Classical
 
   fur(:,:,1)=fr(:,:,1)
 
-  call print_result_qm
+  ! Move to main function
+  !call print_result_qm
 
   !potential = sum(Eenergy(:)) * dp_inv
   potential = Eenergy(1)

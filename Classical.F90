@@ -3,7 +3,6 @@ subroutine Classical
   use utility, only: program_abort
   implicit none
   integer :: iref, Uout
-  !integer :: istep, iref, Uout
 
   call Setup_time_mass
   call Init_Mass
@@ -30,12 +29,13 @@ subroutine Classical
     call Init_Bath_Classical
     call Temp_ctr
     call Force_Classical
+    if ( mod(istepsv,out_step) == 0 ) call print_result_qm
     call Ham_Temp_Classical
-    call Print_Ham_Classical(Irestep)
+    call print_ham(Irestep)
+    !call Print_Ham_Classical(Irestep)
   end if
 
   do istepsv = Irestep + 1, Nstep
-    !istepsv=istep
     select case(Ncent)
       case(0)
         continue
@@ -47,6 +47,7 @@ subroutine Classical
     call Vupdate
     call Uupdate
     call Force_Classical
+    if ( mod(istepsv,out_step) == 0 ) call print_result_qm
     call Vupdate
     select case(Ncent)
       case(0)
@@ -57,7 +58,8 @@ subroutine Classical
        call Nhc_Integrate_Cent3
     end select
     call Ham_Temp_Classical
-    call Print_Ham_Classical(istepsv)
+    !call Print_Ham_Classical(istepsv)
+    call print_ham(istepsv)
     call Restart_Write_Classical(istepsv)
 
     if (mod(istepsv,100) == 0) then

@@ -1,28 +1,82 @@
-subroutine Print_Ham_tk(ij)
+subroutine Print_Ham_tk(Istep)
   use Parameters
   use utility, only: get_time
   implicit none
-  integer, intent(in) :: ij
-  integer :: Uham,Uout
+  integer, intent(in) :: Istep
+  integer :: Uout
 
-  open(newunit=Uham,file=trim(address)//'/ham.dat',status='unknown',form='formatted',position='append')
-    write(Uham,9996) ij, hamiltonian, temp, potential,dkinetic,qkinetic,ebath,ebath_cent, E_Virial
-    !write(Uham,9998) ij,hamiltonian,potential,dkinetic,qkinetic,ebath,ebath_cent,temp,E_Virial
-  close(Uham)
-
-
-  If(mod(ij,100)==0) Then
-    open(newunit=Uout,file=Fout,status='old',position='append')
-    write(Uout,9995) ij, hamiltonian, temp, potential,dkinetic,qkinetic,ebath,ebath_cent, get_time()
-    !Write(*,9999)  ij,hamiltonian,potential,dkinetic,qkinetic,ebath,ebath_cent,temp,E_Virial
+  if ( mod(Istep,out_step) == 0 ) then
+    open(newunit=Uout,file=trim(address)//'/ham.dat',status='unknown',form='formatted',position='append')
+      write(Uout,1001) Istep, hamiltonian, temp, potential,dkinetic,qkinetic,ebath,ebath_cent, E_Virial
     close(Uout)
-  EndIf
+  end if
 
-9999 format(i7,8e17.9)
-9998 format(i7,8e23.15)
-9997 format(a137)
-9996 format(i7,8e16.8)
-9995 format(i7,7e13.5,a20)
+  if (mod(Istep,100)==0) Then
+    open(newunit=Uout,file=Fout,status='old',position='append')
+    write(Uout,1002) Istep, hamiltonian, temp, potential,dkinetic,qkinetic,ebath,ebath_cent, get_time()
+    close(Uout)
+  end if
+
+!9999 format(i7,8e17.9)
+!9998 format(i7,8e23.15)
+!9997 format(a137)
+1001 format(i7,8e16.8)
+1002 format(i7,7e13.5,a20)
 return
 end subroutine Print_Ham_tk
+
+
+subroutine print_ham(Istep)
+  use Parameters
+  use utility, only: get_time
+  implicit none
+  integer, intent(in) :: Istep
+  integer :: Uout
+
+  select case(Isimulation)
+    case(0:2)
+      call print_ham_qm
+    case(10)
+      call print_ham_cl
+  end select
+
+contains
+  subroutine print_ham_qm
+    if ( mod(Istep,out_step) == 0 ) then
+      open(newunit=Uout,file=trim(address)//'/ham.dat',status='unknown',form='formatted',position='append')
+        write(Uout,1001) Istep, hamiltonian, temp, potential,dkinetic,qkinetic,ebath,ebath_cent, E_Virial
+      close(Uout)
+    end if
+
+    if (mod(Istep,100)==0) Then
+      open(newunit=Uout,file=Fout,status='old',position='append')
+      write(Uout,1002) Istep, hamiltonian, temp, potential,dkinetic,qkinetic,ebath,ebath_cent, get_time()
+      close(Uout)
+    end if
+
+    1001 format(i7,8e16.8)
+    1002 format(i7,7e13.5,a20)
+    return
+  end subroutine print_ham_qm
+
+  subroutine print_ham_cl
+    if ( mod(Istep,out_step) == 0 ) then
+      open(newunit=Uout,file=trim(address)//'/ham.dat',status='unknown',form='formatted',position='append')
+        write(Uout,2001) Istep, hamiltonian, temp, potential, dkinetic, ebath_cent
+      close(Uout)
+    end if
+
+    If(mod(Istep,100)==0) Then
+      open(newunit=Uout,file=Fout,status='old',position='append')
+        write(Uout,2002)  Istep, hamiltonian, temp, potential, dkinetic, ebath_cent, get_time()
+      close(Uout)
+    EndIf
+
+    2001 format(i7,5e16.8)
+    2002 format(i7,5e13.5,a20)
+    return
+  end subroutine print_ham_cl
+end subroutine print_ham
+
+
 

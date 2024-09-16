@@ -66,7 +66,6 @@ Force_Classical.F90                \
 GasDev.F90                         \
 PI_NEW_MPI.F90                     \
 Classical.F90                      \
-Print_Ham_Classical.F90            \
 print_ini.F90                      \
 Restart.F90                        \
 Remove_TnR_All.F90                 \
@@ -89,6 +88,7 @@ neural_network.F90                 \
 force_water.F90                    \
 exit.F90                           \
 
+#Print_Ham_Classical.F90            \
 #Force_model_DoubleWell.F90         \
 #Init_Send_Recv_MPI_tk.F90          \
 #Init_Recv_Send_MPI_tk.F90          \
@@ -106,6 +106,7 @@ dlaruv.f   \
 
 
 all: $(PROG)
+	@echo -e '\e[34m Noraml termination!!!\e[m\n'
 
 $(PROG): $(OBJS) $(OBJSF77)
 	$(FC) $(fcopt) $(OBJS) $(OBJSF77) -o $(PROG)

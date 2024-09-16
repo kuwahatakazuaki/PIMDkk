@@ -58,9 +58,6 @@ subroutine Force_New_MPI_tk
   call MyMPI_gather_fr
   call MyMPI_gather_others
 #endif
-!! +++ Start Writting output +++
-!  if ( mod(istepsv,out_step) == 0 ) call print_result_qm
-!! +++ End Writting output +++
   potential = sum(Eenergy(:)) * dp_inv
 
   return

@@ -3,7 +3,7 @@ Subroutine Nhc_Integrate_Cent
   use utility, only: norm_seq
   implicit none
   Double Precision :: skin, scale, dt_ys, vfact, pvfact
-  integer :: i, iys, imode, iatom, inhc, icolor
+  integer :: i, iys, iatom, Inhc, icolor
 
   skin = 0.d0
   do iatom = 1, Natom
@@ -14,11 +14,10 @@ Subroutine Nhc_Integrate_Cent
 
 !   /* update the force */
 
-
   fbc11(1) = (skin - gnkt)/qmcent11(1)
-  do inhc = 2, nnhc
-     fbc11(inhc) = (qmcent11(inhc-1)*vbc11(inhc-1)*vbc11(inhc-1) &
-                 - gkt)/qmcent11(inhc)
+  do Inhc = 2, nnhc
+     fbc11(Inhc) = (qmcent11(Inhc-1)*vbc11(Inhc-1)*vbc11(Inhc-1) &
+                 - gkt)/qmcent11(Inhc)
   enddo
 
 !  /*  start multiple time step integration  */
@@ -29,10 +28,10 @@ Subroutine Nhc_Integrate_Cent
 
 !  /* update the thermostat velocities */
      vbc11(nnhc) = vbc11(nnhc) + 0.25d0*fbc11(nnhc)*dt_ys
-     do inhc = 1, nnhc-1
-        vfact=dexp(-0.125d0*   vbc11(nnhc-inhc+1)*dt_ys)
-        vbc11(nnhc-inhc) = vbc11(nnhc-inhc)*vfact*vfact &
-                         + 0.25d0*fbc11(nnhc-inhc)*vfact*dt_ys
+     do Inhc = 1, nnhc-1
+        vfact=dexp(-0.125d0*   vbc11(nnhc-Inhc+1)*dt_ys)
+        vbc11(nnhc-Inhc) = vbc11(nnhc-Inhc)*vfact*vfact &
+                         + 0.25d0*fbc11(nnhc-Inhc)*vfact*dt_ys
      enddo
 
 !  /* update the particle velocities */
@@ -41,18 +40,18 @@ Subroutine Nhc_Integrate_Cent
 !  /* update the force */
      fbc11(1)=(scale*scale*skin - gnkt)/qmcent11(1)
 !  /* update the thermostat position */
-     do inhc = 1, nnhc
-        rbc11(inhc) = rbc11(inhc) &
-                    + 0.5d0*vbc11(inhc)*dt_ys
+     do Inhc = 1, nnhc
+        rbc11(Inhc) = rbc11(Inhc) &
+                    + 0.5d0*vbc11(Inhc)*dt_ys
      enddo
 
 !  /* update the thermostat velocities */
-     do inhc = 1, nnhc-1
-        vfact = dexp(-0.125d0*vbc11(inhc+1)*dt_ys)
-        vbc11(inhc) = vbc11(inhc)*vfact*vfact &
-                    + 0.25d0*fbc11(inhc)*vfact*dt_ys
-        fbc11(inhc+1) = (qmcent11(inhc)*vbc11(inhc)*vbc11(inhc) &
-                      - gkt)/qmcent11(inhc+1)
+     do Inhc = 1, nnhc-1
+        vfact = dexp(-0.125d0*vbc11(Inhc+1)*dt_ys)
+        vbc11(Inhc) = vbc11(Inhc)*vfact*vfact &
+                    + 0.25d0*fbc11(Inhc)*vfact*dt_ys
+        fbc11(Inhc+1) = (qmcent11(Inhc)*vbc11(Inhc)*vbc11(Inhc) &
+                      - gkt)/qmcent11(Inhc+1)
      enddo
 
      vbc11(nnhc) = vbc11(nnhc) + 0.25d0*fbc11(nnhc)*dt_ys
@@ -74,10 +73,10 @@ Subroutine nhc_integrate_cent3
   Implicit None
   Double Precision  :: skin, scale, dt_ys, vfact, pvfact
   real(8) :: vrfact(3), pvrfact(3), scaler(3), dkinr(3)
-  integer :: i, iys, imode, iatom, inhc, icolor
+  integer :: i, iys, iatom, Inhc, icolor
 
 !  /*  start multiple time step integration  */
-  do iys = 1, NYS
+  do iys = 1, Nys
 !  /*  set time increment at this loop  */
     dt_ys = dt*ysweight(iys)
     do iatom = 1, Natom
@@ -92,19 +91,19 @@ Subroutine nhc_integrate_cent3
 
       frbc31(:,iatom,1) = (dkinr(:) - gkt)/qmcent31(1)
 
-      do inhc = 2, NNHC
-        frbc31(:,iatom,inhc) &
-          = (qmcent31(inhc-1)*vrbc31(:,iatom,inhc-1)*vrbc31(:,iatom,inhc-1) - gkt)/qmcent31(inhc)
+      do Inhc = 2, Nnhc
+        frbc31(:,iatom,Inhc) &
+          = (qmcent31(Inhc-1)*vrbc31(:,iatom,Inhc-1)*vrbc31(:,iatom,Inhc-1) - gkt)/qmcent31(Inhc)
       enddo
 
 !  /* update the thermostat velocities */
 
-      vrbc31(:,iatom,NNHC) = vrbc31(:,iatom,NNHC) + 0.25d0*frbc31(:,iatom,NNHC)*dt_ys
+      vrbc31(:,iatom,Nnhc) = vrbc31(:,iatom,Nnhc) + 0.25d0*frbc31(:,iatom,Nnhc)*dt_ys
 
-      do inhc = 1, NNHC-1
-        vrfact = dexp( -0.125d0*vrbc31(:,iatom,NNHC-inhc+1)*dt_ys )
-        vrbc31(:,iatom,NNHC-inhc) &
-          = vrbc31(:,iatom,NNHC-inhc)*vrfact*vrfact + 0.25d0*frbc31(:,iatom,NNHC-inhc)*vrfact*dt_ys
+      do Inhc = 1, Nnhc-1
+        vrfact = dexp( -0.125d0*vrbc31(:,iatom,Nnhc-Inhc+1)*dt_ys )
+        vrbc31(:,iatom,Nnhc-Inhc) &
+          = vrbc31(:,iatom,Nnhc-Inhc)*vrfact*vrfact + 0.25d0*frbc31(:,iatom,Nnhc-Inhc)*vrfact*dt_ys
       enddo
 
 !  /* update the particle velocities */
@@ -117,22 +116,22 @@ Subroutine nhc_integrate_cent3
       frbc31(:,iatom,1)=(scaler(:)*scaler(:)*dkinr(:) - gkt)/qmcent31(1)
 
 !  /* update the thermostat position */
-      do inhc = 1, NNHC
-        rbc31(:,iatom,inhc) = rbc31(:,iatom,inhc) + 0.5d0*vrbc31(:,iatom,inhc)*dt_ys
+      do Inhc = 1, Nnhc
+        rbc31(:,iatom,Inhc) = rbc31(:,iatom,Inhc) + 0.5d0*vrbc31(:,iatom,Inhc)*dt_ys
       enddo
 
 !  /* update the thermostat velocities */
-      do inhc = 1, NNHC-1
-        vrfact(:) = dexp(-0.125d0*vrbc31(:,iatom,inhc+1)*dt_ys)
+      do Inhc = 1, Nnhc-1
+        vrfact(:) = dexp(-0.125d0*vrbc31(:,iatom,Inhc+1)*dt_ys)
 
-        vrbc31(:,iatom,inhc) &
-          = vrbc31(:,iatom,inhc)*vrfact(:)*vrfact(:) + 0.25d0*frbc31(:,iatom,inhc)*vrfact*dt_ys
+        vrbc31(:,iatom,Inhc) &
+          = vrbc31(:,iatom,Inhc)*vrfact(:)*vrfact(:) + 0.25d0*frbc31(:,iatom,Inhc)*vrfact*dt_ys
 
-        frbc31(:,iatom,inhc+1) &
-          = (qmcent31(inhc)*vrbc31(:,iatom,inhc)*vrbc31(:,iatom,inhc) - gkt)/qmcent31(inhc+1) 
+        frbc31(:,iatom,Inhc+1) &
+          = (qmcent31(Inhc)*vrbc31(:,iatom,Inhc)*vrbc31(:,iatom,Inhc) - gkt)/qmcent31(Inhc+1) 
       enddo
 
-      vrbc31(:,iatom,NNHC) = vrbc31(:,iatom,NNHC) + 0.25d0*frbc31(:,iatom,NNHC)*dt_ys
+      vrbc31(:,iatom,Nnhc) = vrbc31(:,iatom,Nnhc) + 0.25d0*frbc31(:,iatom,Nnhc)*dt_ys
 
 !  /* update the paricle velocities */
       vur(:,iatom,1) = vur(:,iatom,1)*scaler(:)

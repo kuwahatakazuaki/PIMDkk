@@ -2,7 +2,7 @@ Subroutine Ham_Temp_Classical
   use Parameters
   use utility, only: norm_seq, outer_product
   implicit none
-  integer :: iatom, imode, icolor, inhc, i, j
+  integer :: iatom, icolor, Inhc, i, j
   real(8) :: get_kinetic_ene!, temp
 
 
@@ -29,16 +29,14 @@ Subroutine Ham_Temp_Classical
     case(0)
       continue
     case(1)
-      !ebath_cent=0.d0
       ebath_cent=ebath_cent + 0.5d0*qmcent11(1)*vbc11(1)*vbc11(1) + gnkt*rbc11(1)
-      do imode=2,nnhc
-        ebath_cent=ebath_cent + 0.5d0*qmcent11(imode)*vbc11(imode)*vbc11(imode) &
-                              + gkt*rbc11(imode)
+      do Inhc=2,nnhc
+        ebath_cent=ebath_cent + 0.5d0*qmcent11(Inhc)*vbc11(Inhc)*vbc11(Inhc) &
+                              + gkt*rbc11(Inhc)
       enddo
       !hamiltonian = hamiltonian + ebath_cent
     case(3)
-      !ebath_cent=0.d0
-      do inhc=1,nnhc
+      do inhc=1,Nnhc
          do iatom=1,natom
            ebath_cent=ebath_cent + 0.5d0 * qmcent31(inhc) * norm_seq( vrbc31(:,iatom,inhc) ) &
                                  + gkt * sum( rbc31(:,iatom,inhc) )
@@ -54,6 +52,6 @@ Subroutine Ham_Temp_Classical
 !    hamiltonian = hamiltonian + ebath_cent
 !YK
 
-  Return
-End Subroutine
+  return
+end subroutine Ham_Temp_Classical
 

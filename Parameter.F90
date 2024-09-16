@@ -38,7 +38,6 @@ module Parameters
 
   integer              :: Ncent  ! Type of the thermostat
   integer              :: Irestep = 0
-  !integer              :: nrstep = 0
   integer              :: Nproc, MyRank
   integer              :: Iforce ! Type of force
   integer              :: Iseeds(4) ! Random Number Generator Seed
