@@ -75,7 +75,7 @@ Force_New_MPI_tk.F90               \
 set_pallarel.F90                   \
 Set_Gaussian_MPI_tk.F90            \
 Force_Gaussian_MPI_tk.F90          \
-Print_Ham_tk2.F90                  \
+print_ham.F90                  \
 Force_model_Morse.F90              \
 Set_siesta.F90                     \
 Force_VASP_MPI.F90                 \
@@ -88,6 +88,7 @@ neural_network.F90                 \
 force_water.F90                    \
 exit.F90                           \
 
+#Print_Ham_tk2.F90                  \
 #Print_Ham_Classical.F90            \
 #Force_model_DoubleWell.F90         \
 #Init_Send_Recv_MPI_tk.F90          \
