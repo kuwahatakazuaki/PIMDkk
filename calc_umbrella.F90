@@ -2,7 +2,7 @@
 subroutine calc_umbrella
   use Parameters, &
     only: r, fr, Natom, Nbead,  Eenergy, potential, myrank, &
-          alabel, dp_inv, address, istepsv, Iforce, &
+          alabel, dp_inv, dir_result, istepsv, Iforce, &
           AUtoAng, KtoAU, AngtoAU, &
           atom1 => umb_atom1, atom2  => umb_atom2, atom3 => umb_atom3, &
           Ista, Iend, Iumb, umb_cons, umb_pot

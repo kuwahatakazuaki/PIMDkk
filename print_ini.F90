@@ -9,7 +9,7 @@ if(myrank==0) then
 ! +++ Start Nbead == 1 +++
   if (Nbead == 1) then
 
-    open(newunit=Uham,file=trim(address)//'/ham.dat',status='replace',form='formatted',position='append')
+    open(newunit=Uham,file=trim(dir_result)//'/ham.dat',status='replace',form='formatted',position='append')
       write(Uham,'("# ",a)') repeat('*',87)
       write(Uham,'(a)') '#  1Step 2 Hamiltonian   3 Temperature   4 Potential     5 DKinetic      6 EBath_Cent '
       write(Uham,'("# ",a)') repeat('*',87)
@@ -25,7 +25,7 @@ if(myrank==0) then
   else if (Nbead > 1) then
 ! +++ Start Nbead > 1 +++
 
-    open(newunit=Uham,file=trim(address)//'/ham.dat',status='replace',form='formatted',position='append')
+    open(newunit=Uham,file=trim(dir_result)//'/ham.dat',status='replace',form='formatted',position='append')
       write(Uham,'("# ",a)')  repeat('*',132)
       write(Uham,'(a)') &
   &'# 1Step  2 Hamiltonian   3 Temperature   4 Potential     5 DKinetic      6 QKinetic      7 EBath         &
@@ -44,7 +44,7 @@ if(myrank==0) then
 ! +++ End Nbead > 1 +++
 
   if( Lsave_charge .eqv. .True.) then
-    open(newunit=Uchar,file=trim(address)//'/charge.dat',status='replace',form='formatted',position='append')
+    open(newunit=Uchar,file=trim(dir_result)//'/charge.dat',status='replace',form='formatted',position='append')
       write(Uchar,'(a)',advance='no') "#"
       do i = 1, Natom
         write(Uchar,'(a7,I2,1x)',advance='no') alabel(i), i
@@ -53,7 +53,7 @@ if(myrank==0) then
   endif
 
   if( Lsave_hfcc .eqv. .True. ) then
-    open(newunit=Uhfc,file=trim(address)//'/hfcc.dat',status='replace',form='formatted',position='append')
+    open(newunit=Uhfc,file=trim(dir_result)//'/hfcc.dat',status='replace',form='formatted',position='append')
       write(Uhfc,'(a)',advance='no') "#"
       do i = 1, Natom
         write(Uhfc,'(a9,I2,1x)',advance='no') alabel(i), i
@@ -62,7 +62,7 @@ if(myrank==0) then
   end if
 
   if( Lsave_dipole .eqv. .True. ) then
-    open(newunit=Udip,file=trim(address)//'/dipole.dat',status='replace',form='formatted',position='append')
+    open(newunit=Udip,file=trim(dir_result)//'/dipole.dat',status='replace',form='formatted',position='append')
       write(Udip,'("# Nbead = ",I10)') Nbead
     close(Udip)
   endif

@@ -5,12 +5,10 @@ subroutine Virial_Estimator
   integer          :: i, j, k, imode, iatom
   double precision :: e_virial1
 
+  ! fr are dived by Nbead
   E_Virial=0.0D0
   do imode=1,nbead
     do iatom=1,natom
-      !E_Virial = E_Virial + fx(iatom,imode) * (x(iatom,imode)-ux(iatom,1))
-      !E_Virial = E_Virial + fy(iatom,imode) * (y(iatom,imode)-uy(iatom,1))
-      !E_Virial = E_Virial + fz(iatom,imode) * (z(iatom,imode)-uz(iatom,1))
       E_Virial = E_Virial &
                  + dot_product(fr(:,iatom,imode),(r(:,iatom,imode)-ur(:,iatom,1)))
     enddo

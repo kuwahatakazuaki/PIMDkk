@@ -5,7 +5,7 @@ subroutine restart_read
   integer :: i, j, inhc, icolor
   real(8) :: pur(3)
 
-  open(newunit=Uinp, file=trim(address)//'/restart.dat', status = 'unknown')
+  open(newunit=Uinp, file=trim(dir_result)//'/restart.dat', status = 'unknown')
     read(Uinp,*) Irestep
     do j = 1, Nbead
       do i = 1, Natom
@@ -86,9 +86,9 @@ subroutine Restart_Write(istep)
   integer :: Istep, Uout
   integer :: i, j, inhc, icolor
 
-  if (istep > 1) call system('cat '//trim(address)//'/restart.dat >'//trim(address)//'/restart1.dat')
+  if (istep > 1) call system('cat '//trim(dir_result)//'/restart.dat >'//trim(dir_result)//'/restart1.dat')
 
-  open(newunit=Uout, file=trim(address)//'/restart.dat', status = 'unknown')
+  open(newunit=Uout, file=trim(dir_result)//'/restart.dat', status = 'unknown')
     write(Uout,'(i10)') Istep
     do j = 1, Nbead
       do i = 1, Natom
@@ -165,7 +165,7 @@ subroutine restart_read_Classical
   integer :: Uinp
   integer :: i, j, inhc, icolor
 
-  open(newunit=Uinp, file=trim(address)//'/restart.dat', status = 'unknown')
+  open(newunit=Uinp, file=trim(dir_result)//'/restart.dat', status = 'unknown')
     read(Uinp,*) Irestep
     do i = 1, Natom
       read(Uinp,*) ur(:,i,1)
@@ -209,9 +209,9 @@ subroutine Restart_Write_Classical(istep)
   integer :: Istep, Uout
   integer :: i, j, inhc, icolor
 
-  if (istep > 1) call system('cp '//trim(address)//'/restart.dat '//trim(address)//'/restart1.dat')
+  if (istep > 1) call system('cp '//trim(dir_result)//'/restart.dat '//trim(dir_result)//'/restart1.dat')
 
-  open(Uout, file=trim(address)//'/restart.dat', status = 'unknown')
+  open(Uout, file=trim(dir_result)//'/restart.dat', status = 'unknown')
     write(Uout,'(i10)') IStep
     do i = 1, Natom
       write(Uout,*) ur(:,i,1)

@@ -5,7 +5,7 @@
 subroutine Force_Double_Morse
   use Parameters, &
     only: r, fr, Natom, Nbead, Eenergy, potential, &
-          alabel, dp_inv, address, istepsv, MyRank, &
+          alabel, dp_inv, dir_result, istepsv, MyRank, &
           Lsave_force, physmass, dipoler, &
           AUtoAng, AngtoAU, Ista, Iend
   use utility, only: program_abort
@@ -45,7 +45,7 @@ end subroutine Force_Double_Morse
 subroutine Force_Harmonic
   Use Parameters, & 
     only: r, fr, Natom, Nbead, Eenergy, potential, &
-          alabel, dp_inv, address, istepsv, MyRank, &
+          alabel, dp_inv, dir_result, istepsv, MyRank, &
           Lsave_force, physmass, dipoler, &
           AUtoAng, AngtoAU, Ista, Iend
   use utility, only: program_abort
@@ -107,16 +107,13 @@ subroutine Force_Harmonic
   !! +++ Centroid +++
   !! +++ Print distance +++
   if ( MyRank == 0 ) then
-    open(newunit=Udis,file=trim(address)//'/distance.out',status='unknown',position='append')
+    open(newunit=Udis,file=trim(dir_result)//'/distance.out',status='unknown',position='append')
       write(Udis,*) "# ", istepsv
       do imode = 1, Nbead
         write(Udis,*) dis_beads(imode)
       end do
     close(Udis)
 
-  !  open(newunit=Ucent,file=trim(address)//'/cent_dipo.out',position='append')
-  !    write(Ucent,*) istepsv, dis, dipo_cent(:)
-  !  close(Ucent)
   end if
   ! +++ End Print distance +++
 
@@ -135,7 +132,7 @@ end subroutine Force_Harmonic
 subroutine Force_model_Morse
   Use Parameters, & 
     only: r, fr, Natom, Nbead, Eenergy, potential, &
-          alabel, dp_inv, address, istepsv, &
+          alabel, dp_inv, dir_result, istepsv, &
           Lsave_force, AUtoAng, AngtoAU
   implicit none
   integer :: i, j
@@ -167,7 +164,7 @@ subroutine Force_model_Morse
   ! +++ End Calculating Forcde which atom (i) feels from atom (j) +++
 
   ! +++ Calculating enetemp +++
-  open(newunit=Udis,file=trim(address)//'/distance.dat',status='unknown',position='append')
+  open(newunit=Udis,file=trim(dir_result)//'/distance.dat',status='unknown',position='append')
     Eenergy(:) = 0.0d0
     write(Udis,*) "# ", istepsv
     do imode = 1, Nbead

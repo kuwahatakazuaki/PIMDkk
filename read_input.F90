@@ -47,8 +47,10 @@ subroutine read_parameter
         do i = 1, 4
           read(Uin,*) Iseeds(i)
         end do
-      elseif (index(line,"$address_result") == 1) then; read(Uin,'(a)') address
-      elseif (index(line,"$address_scr")    == 1) then; read(Uin,'(a)') address2
+      !elseif (index(line,"$address_result") == 1) then; read(uin,'(a)') address
+      !elseif (index(line,"$address_scr")    == 1) then; read(uin,'(a)') address2
+      elseif (index(line,"$address_result") == 1) then; read(uin,'(a)') dir_result
+      elseif (index(line,"$address_scr")    == 1) then; read(uin,'(a)') dir_scr
 
       elseif (index(line,"$Iumb")           == 1) then; read(Uin,*) Iumb
       elseif (index(line,"$umb_cons")       == 1) then; read(Uin,*) umb_cons

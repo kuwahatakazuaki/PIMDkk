@@ -17,9 +17,12 @@ Subroutine Calc_Constant
   gnkt = 3.d0*dble(Natom)/beta
   gkt = 1.d0/beta
 
-  address0=trim(address2)//'/'
-  laddress=len_trim(address2)+1
-  addresstmp=trim(trim(address2)//'/')
+  address0=trim(dir_scr)//'/'
+  laddress=len_trim(dir_scr)+1
+  addresstmp=trim(trim(dir_scr)//'/')
+  !address0=trim(address2)//'/'
+  !laddress=len_trim(address2)+1
+  !addresstmp=trim(trim(address2)//'/')
 
 !
 !     /*   parameters for path integral simulation   */

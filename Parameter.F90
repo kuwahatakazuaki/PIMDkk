@@ -48,8 +48,8 @@ module Parameters
   character(len=8)     :: name_simulation
   character(len=9)     :: Finp = "input.inp"
   character(len=7)     :: Fout = "std.out"
-  character(Len=80)    :: address
-  character(Len=80)    :: address2
+  character(Len=80)    :: dir_result
+  character(Len=80)    :: dir_scr
   Character(len=81)    :: address0
   Character(len=87)    :: addresstmp
 

@@ -7,7 +7,7 @@ subroutine print_result_qm
 if(MyRank==0) Then
 
   if( Lsave_dipole .eqv. .True. ) then
-    open(newunit=Udip,file=trim(address)//'/dipole.dat',status='unknown',form='formatted',position='append')
+    open(newunit=Udip,file=trim(dir_result)//'/dipole.dat',status='unknown',form='formatted',position='append')
       write(Udip,'("#",I10)') istepsv
       do imode=1,nbead
         write(Udip,8008) dipoler(:,imode)
@@ -16,7 +16,7 @@ if(MyRank==0) Then
   endif
 
   if( Lsave_charge .eqv. .True.) then
-    open(newunit=Uchar,file=trim(address)//'/charge.dat',status='unknown',form='formatted',position='append')
+    open(newunit=Uchar,file=trim(dir_result)//'/charge.dat',status='unknown',form='formatted',position='append')
       write(Uchar,'("#", I10)') istepsv
       do imode=1,nbead
         write(Uchar,8007) charge(:,imode)
@@ -25,7 +25,7 @@ if(MyRank==0) Then
   endif
 
   if( Lsave_hfcc .eqv. .True. ) then
-    open(newunit=Uhfc,file=trim(address)//'/hfcc.dat',status='unknown',form='formatted',position='append')
+    open(newunit=Uhfc,file=trim(dir_result)//'/hfcc.dat',status='unknown',form='formatted',position='append')
     write(Uhfc,'("#", I10)') istepsv
     do imode=1,nbead
       write(Uhfc,8004) hfcc(:,imode)
@@ -34,19 +34,19 @@ if(MyRank==0) Then
   end if
 
   if ( Iforce == 8 ) then
-    open(newunit=Upre,file=trim(address)//'/pressure.dat',status='unknown',form='formatted',position='append')
+    open(newunit=Upre,file=trim(dir_result)//'/pressure.dat',status='unknown',form='formatted',position='append')
       write(Upre,'("#", I10)') istepsv
       do imode=1,nbead
         write(Upre,'(F7.2)') pressure(imode)
       end do
     close(Upre)
 
-    open(newunit=Upre,file=trim(address)//'/PV.dat',status='unknown',form='formatted',position='append')
+    open(newunit=Upre,file=trim(dir_result)//'/PV.dat',status='unknown',form='formatted',position='append')
       write(Upre,*) istepsv, PV
     close(Upre)
   end if
 
-!  open(igetxyz,file=trim(address)//'/cent.xyz',status='unknown',form='formatted',position='append')
+!  open(igetxyz,file=trim(dir_result)//'/cent.xyz',status='unknown',form='formatted',position='append')
 !    write(igetxyz,'(I5)') natom
 !    write(igetxyz,'(I10)') istepsv
 !    do iatom=1,natom
@@ -54,7 +54,7 @@ if(MyRank==0) Then
 !    end do
 !  close(igetxyz)
 
-  open(Ucoor,file=trim(address)//'/coor.xyz',status='unknown',form='formatted',position='append')
+  open(Ucoor,file=trim(dir_result)//'/coor.xyz',status='unknown',form='formatted',position='append')
     write(Ucoor,'(I5)') natom*nbead
     write(Ucoor,'(I10)') istepsv
     do imode=1,nbead
@@ -65,7 +65,7 @@ if(MyRank==0) Then
   close(Ucoor)
 
   if (Lsave_force .eqv. .True.) then
-    open(newunit=Ufor,file=trim(address)//'/force.dat',status='unknown',form='formatted',position='append')
+    open(newunit=Ufor,file=trim(dir_result)//'/force.dat',status='unknown',form='formatted',position='append')
       write(Ufor,'("#",I10)') istepsv
       do imode=1,Nbead
         do iatom=1,natom
@@ -76,7 +76,7 @@ if(MyRank==0) Then
   end if
 
   if (Lsave_energy.eqv. .True.) then
-    open(newunit=Uene,file=trim(address)//'/ene.dat',status='unknown',form='formatted',position='append')
+    open(newunit=Uene,file=trim(dir_result)//'/ene.dat',status='unknown',form='formatted',position='append')
       write(Uene,'("#",I10)') istepsv
       do imode=1,Nbead
         write(Uene,8006) Eenergy(imode)

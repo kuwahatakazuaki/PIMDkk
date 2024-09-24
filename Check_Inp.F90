@@ -25,8 +25,8 @@ subroutine Check_Inp
       write(Uout,9999) ' +++++ Seed for Random No.2', Iseeds(2)
       write(Uout,9999) ' +++++ Seed for Random No.3', Iseeds(3)
       write(Uout,9999) ' +++++ Seed for Random No.4', Iseeds(4)
-      write(Uout,9997) ' +++++ Address of Result   ', trim(address)
-      write(Uout,9997) ' +++++ Address of Scratch  ', trim(address2)
+      write(Uout,9997) ' +++++ Address of Result   ', trim(dir_result)
+      write(Uout,9997) ' +++++ Address of Scratch  ', trim(dir_scr)
       write(Uout,*)
 
       if ( Iumb > 0 ) then
