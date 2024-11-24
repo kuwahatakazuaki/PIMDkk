@@ -1,7 +1,7 @@
 subroutine read_parameter
   use,intrinsic :: iso_fortran_env
   use Parameters
-  use utility, only: program_abort
+  use utility, only: program_abort, makedir
   implicit none
   integer :: i, j, Uin, ios
   character(len=100) :: line
@@ -95,6 +95,17 @@ subroutine read_parameter
 
     if ( Isimulation == 1 .and. Ncent > 0 ) then
       call program_abort("You should be NVE for RPMD")
+    end if
+
+    if ( access(trim(dir_result), ' ') /= 0 ) then
+      print *, 'There is no Result Directory'
+      print *, 'Making ', trim(dir_result)
+      call makedir(trim(dir_result))
+    end if
+    if ( access(trim(dir_scr), ' ') /= 0 ) then
+      print *, 'There is no Scratch Directory'
+      print *, 'Making ', trim(dir_scr)
+      call makedir(trim(dir_scr))
     end if
 
   close(Uin)

@@ -294,6 +294,16 @@ contains
 #endif
   end subroutine program_abort
 
+
+  subroutine makedir(outdir)
+    character(len=*), intent(in) :: outdir
+    character(len=256) command
+    write(command,*) 'mkdir -p ', trim(outdir)
+    write(*,*) trim(command)
+    call system(command)
+  end subroutine makedir
+
+
   !subroutine get_inv_mat(mat,inv,n)
   !  integer :: n
   !  real(8), intent(in)  :: mat(n,n)

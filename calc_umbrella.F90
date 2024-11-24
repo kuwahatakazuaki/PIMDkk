@@ -41,6 +41,9 @@ subroutine calc_umbrella
 return
 end subroutine calc_umbrella
 
+subroutine  add_constrain
+end subroutine add_constrain
+
 
   ! cons = umbrella_constant * AUtoAng * AUtoAng
   ! +++ Calculating Force +++
