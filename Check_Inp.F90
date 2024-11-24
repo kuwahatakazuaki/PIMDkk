@@ -16,6 +16,7 @@ subroutine Check_Inp
 #endif
       write(Uout,9998) ' +++++ Given Temperature   ', Temperature
       write(Uout,9998) ' +++++ Given time step     ', dt / fs2AU
+      write(Uout,9998) ' +++++ Output time step    ', dt / fs2AU * out_step
       write(Uout,9998) ' +++++ Adiabaticity param. ', gamma
       write(Uout,9999) ' +++++ Method of Centr NHC ', ncent
       write(Uout,9999) ' +++++ Length of Centr NHC ', nnhc

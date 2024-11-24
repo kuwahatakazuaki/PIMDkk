@@ -60,7 +60,7 @@ subroutine Classical
     call Ham_Temp_Classical
     !call Print_Ham_Classical(istepsv)
     call print_ham(istepsv)
-    call Restart_Write_Classical(istepsv)
+    if ( mod(istepsv,out_step)==0 ) call Restart_Write_Classical(istepsv)
 
     if (mod(istepsv,100) == 0) then
       call exit_program
