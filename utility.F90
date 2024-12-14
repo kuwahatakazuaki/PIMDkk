@@ -1,4 +1,5 @@
 module utility
+  use Parameters, only : Ferr
   implicit none
 
 contains
@@ -279,21 +280,30 @@ contains
       newtime(1),'/',newtime(2),'/',newtime(3),' ',newtime(5),':',newtime(6),':',newtime(7)
   end function get_time
 
+  subroutine write_err(err_messa)
+    character(*), intent(in) :: err_messa
+    integer :: Uerr
+    open(newunit=Uerr,file=Ferr,position='append')
+      write(Uerr,*) err_messa
+    close(Uerr)
+  end subroutine write_err
+
   subroutine program_abort(message)
 #ifdef _mpi_
     use mpi
-    character(*) :: message
+    character(*), intent(in) :: message
     integer :: ierr
     print *, message
+    write_err(message)
     call mpi_abort(MPI_COMM_WORLD, -1, ierr)
     stop
 #else
     character(*) :: message
     print *, message
+    !write_err(message)
     stop
 #endif
   end subroutine program_abort
-
 
   subroutine makedir(outdir)
     character(len=*), intent(in) :: outdir

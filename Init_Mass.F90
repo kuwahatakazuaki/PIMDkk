@@ -37,13 +37,14 @@ subroutine Init_Mass
 
   if ( Isimulation == 1 .or. Isimulation == 10 ) then
 ! +++ For RPMD or conventional MD simulation +++
-    do iatom = 1, natom
+    do iatom = 1, Natom
       fictmass(iatom,:) = physmass(iatom)
     enddo
 ! +++ For RPMD or conventional MD simulation +++
+  !else if ( Isimulation == 0 .or. Isimulation == 2 ) then
   else
 ! +++ For PIMD or CMD simulation +++
-    do iatom = 1, natom
+    do iatom = 1, Natom
       fictmass(iatom,1) = physmass(iatom)
       do imode = 2, nbead
         fictmass(iatom,imode) = gamma2*dnmmass(iatom,imode)

@@ -16,9 +16,9 @@ program Path_Integral
   NProc  = 1
 #endif
 
-  call print_start
   if ( MyRank == 0 ) then
     call read_parameter
+    call print_start
   end if
   call Broad1
   call Set_Allocate
@@ -54,20 +54,18 @@ contains
   subroutine print_start
     use utility, only: get_time
     integer :: Uout
-    if ( MyRank == 0 ) then
-      !if ( Lrestart .eqv. .False. ) then
-      !  open(newunit=Uout,file=Fout,status='replace')
-      !else
-      !  open(newunit=Uout,file=Fout,status='old',position='append')
-      !end if
+    if ( Lrestart .eqv. .False. ) then
       open(newunit=Uout,file=Fout,status='replace')
-        write(Uout,*) '***********************'
-        write(Uout,*) '   Simulation Start!   '
-        write(Uout,*) '***********************'
-        write(Uout,*) ' Simulation Started at ', get_time()
-        write(Uout,*)
-      close(Uout)
+    else
+      open(newunit=Uout,file=Fout,status='old',position='append')
     end if
+    !open(newunit=Uout,file=Fout,status='replace')
+      write(Uout,*) '***********************'
+      write(Uout,*) '   Simulation Start!   '
+      write(Uout,*) '***********************'
+      write(Uout,*) ' Simulation Started at ', get_time()
+      write(Uout,*)
+    close(Uout)
   end subroutine print_start
 
   subroutine print_end

@@ -28,7 +28,7 @@ module Parameters
   real(8), allocatable :: qmcent11(:), qmcent31(:)
   real(8), allocatable :: dipoler(:,:), atom_num(:)
   real(8), allocatable :: charge(:,:),nbo(:,:),Eenergy(:),homo(:),lumo(:), hfcc(:,:)
-  real(8)              :: gamma, gamma2, omega_system
+  real(8)              :: gamma1 = 1.0d0, gamma2, omega_system
   real(8)              :: omega_p2, omega2
   real(8)              :: gkt, gnkt, dp_inv, E_Virial
   real(8)              :: ebath, ebath_cent, dkinetic, qkinetic
@@ -48,6 +48,7 @@ module Parameters
   character(len=8)     :: name_simulation
   character(len=9)     :: Finp = "input.inp"
   character(len=7)     :: Fout = "std.out"
+  character(len=7)     :: Ferr = "std.err"
   character(Len=80)    :: dir_result
   character(Len=80)    :: dir_scr
   Character(len=81)    :: address0
@@ -73,6 +74,9 @@ module Parameters
   integer :: umb_atom1 = 0, umb_atom2 = 0, umb_atom3 = 0
   real(8) :: umb_cons = 1d-5, umb_pot
 ! End Kuwahata 2020/10/06
+
+  integer :: Icons = 0, cons_atom1, cons_atom2, cons_atom3
+  real(8) :: cons_strenght, cons_val
 
 end module Parameters
 

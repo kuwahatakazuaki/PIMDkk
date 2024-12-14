@@ -53,7 +53,6 @@ subroutine Force_New_MPI_tk
   end select
 
   if (Iumb > 0) call calc_umbrella
-  !if (Icons > 0) call add_constrain
 
 #ifdef _mpi_
   call MyMPI_gather_fr

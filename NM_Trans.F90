@@ -40,7 +40,7 @@ subroutine nmtrans_fr2fur
     Enddo
   Enddo
 
-Return
+return
 end subroutine nmtrans_fr2fur
 
 !Subroutine NM_Trans(NTmp)

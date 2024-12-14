@@ -47,6 +47,7 @@ subroutine PI_NEW_MPI
     call Force_New_MPI_tk
     if ( mod(istepsv,out_step) == 0 ) call print_result_qm
     call nmtrans_fr2fur     !call Getfnm  ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i)
+    !if (Icons > 0 .and. MyRank == 0) call add_constrain
 
     if ( MyRank == 0 ) then
       call Ham_Temp

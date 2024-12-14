@@ -65,6 +65,19 @@ $umb_atom2
 $umb_cons
 1d-5
 
+$Icons            # 1:bond
+0
+$cons_atom1
+1
+$cons_atom2
+2
+$cons_atom3
+3
+$cons_val
+1.0d0
+$cons_strenght
+5.0d0
+
 $Lexit            # Exit the program (True of False)
 .F.
 $end parameter

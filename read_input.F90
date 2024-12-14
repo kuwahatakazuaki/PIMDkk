@@ -29,7 +29,7 @@ subroutine read_parameter
       elseif (index(line,"$Nys")            == 1) then; read(Uin,*) Nys
       elseif (index(line,"$Nnhc")           == 1) then; read(Uin,*) Nnhc
       elseif (index(line,"$Ncent")          == 1) then; read(Uin,*) Ncent
-      elseif (index(line,"$gamma")          == 1) then; read(Uin,*) gamma
+      elseif (index(line,"$gamma")          == 1) then; read(Uin,*) gamma1
       elseif (index(line,"$Iforce")         == 1) then; read(Uin,*) Iforce
       elseif (index(line,"$freq1")          == 1) then; read(Uin,*) freq1
       elseif (index(line,"$version")        == 1) then; read(Uin,*) version

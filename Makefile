@@ -86,6 +86,7 @@ Set_mopac.F90                      \
 Set_VASP.F90                       \
 neural_network.F90                 \
 force_water.F90                    \
+constrain.F90                      \
 exit.F90                           \
 
 #Print_Ham_tk2.F90                  \

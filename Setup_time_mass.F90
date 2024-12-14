@@ -46,7 +46,7 @@ subroutine Setup_time_mass
 !  For centroid MD, qmass should be scaled by gamma2, since
 !  natural frequencies of modes are omega_p**2/gamma**2
 !  adiabaticity parameter for centroid MD
-  gamma2 = gamma*gamma
+  gamma2 = gamma1*gamma1
   If( Isimulation == 2 ) then
     do imode = 2, nbead
       qmass(imode) = gamma2*qmass(imode)
