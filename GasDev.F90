@@ -2,15 +2,20 @@ Subroutine gasdev(gasd)
   implicit none
   Double Precision :: R_Number,v1,v2,rsq,gset,fac,gasd
   Integer          :: iset
+  real(8) :: ranf1
   save iset, gset
   data iset /0/
 
-  If (iset==0)Then
-     Do
+  if (iset==0) Then
+     do
         Call RandomG (1,R_Number)
         v1  = 2.d0 * R_Number - 1.d0
         Call RandomG (1,R_Number)
         v2  = 2.d0 * R_Number - 1.d0
+
+        !v1  = 2.d0 * ranf1() - 1.d0
+        !v2  = 2.d0 * ranf1() - 1.d0
+
         rsq = v1*v1 + v2*v2
         If (rsq < 1.d0 .and. rsq  > 0.d0) Then
            fac  = dsqrt(-2.d0*dlog(rsq)/rsq)
@@ -26,3 +31,24 @@ Subroutine gasdev(gasd)
   End if
   Return
 End Subroutine
+
+real(8) function ranf1()
+  call random_number(ranf1)
+end function ranf1
+
+subroutine set_random_seed(Irand)
+  integer :: Irand, i
+  integer :: Nseeds
+  integer, allocatable :: seeds(:)
+
+  call random_seed(size=Nseeds)
+  if ( .not. allocated(seeds) ) allocate(seeds(Nseeds))
+
+  if ( Irand == 0 ) then
+  do i = 1, Nseeds
+    call system_clock(count=seeds(i))
+  end do
+  end if
+  call random_seed(put=seeds(:))
+end subroutine set_random_seed
+

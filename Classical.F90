@@ -62,7 +62,7 @@ subroutine Classical
     call print_ham(istepsv)
     if ( mod(istepsv,out_step)==0 ) call Restart_Write_Classical(istepsv)
 
-    if (mod(istepsv,100) == 0) then
+    if (mod(istepsv,10) == 0) then
       call exit_program
     end if
   end do
