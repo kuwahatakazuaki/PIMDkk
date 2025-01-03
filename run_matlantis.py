@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 from ase import Atoms
 from ase.io import read
-from ase.calculators.emt import EMT
+# from ase.calculators.emt import EMT
 import os
 import numpy as np
 import sys
+# gRPC のログレベルを設定
+os.environ["GRPC_VERBOSITY"] = "ERROR"
+os.environ["GRPC_TRACE"] = ""  # トレースログも無効化
 
 # === For Matlantis ===
 import pfp_api_client
 from pfp_api_client.pfp.calculators.ase_calculator import ASECalculator
 from pfp_api_client.pfp.estimator import Estimator, EstimatorCalcMode
 
-# === EstimatorCalcMode : CRYSTAL, CRYSTAL_U0, CRYSTAL_PLUS_D3, MOLECULE ===
+# === Choose the EstimatorCalcMode from CRYSTAL, CRYSTAL_U0, CRYSTAL_PLUS_D3, MOLECULE ===
 estimator = Estimator(calc_mode=EstimatorCalcMode.MOLECULE)
 calculator = ASECalculator(estimator)
 # === For Matlantis ===
