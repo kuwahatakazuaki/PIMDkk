@@ -9,13 +9,6 @@ OBJSF77 = $(SRCSF77:%.f=%.o)
 #else
 #FC = mpif90
 #endif
-#ifeq ($(HOSTNAME),ito)
-#FC = mpiifort
-#endif
-
-
-#fcopt = -g -mcmodel=medium -O3 -no-gcc -traceback
-#fcopt = -g -mcmodel=medium -O3 -no-gcc -traceback -cpp
 
 ifeq ($(MPI),True)
 FC = mpif90
@@ -26,7 +19,11 @@ fcopt = -O2 -pipe
 #fcopt = -g -O0 -pipe
 endif
 
+ifeq ($(HOSTNAME),genkai)
+FC = mpiifort
+endif
 #fcopt = -O2 -cpp -pipe -Dmpi
+#fcopt = -g -mcmodel=medium -O3 -no-gcc -traceback -cpp
 
 # Debug
 #fcopt = -g -check all -cpp
