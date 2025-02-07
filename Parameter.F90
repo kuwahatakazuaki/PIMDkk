@@ -6,12 +6,14 @@ module Parameters
   real(8), parameter :: fs2AU  = 1.d0 / 0.024188843d0   ! fs2AU
   ! Mass amu -- > A.U.
   real(8), parameter :: factmass  = 1.6605402d-27/9.1093897d-31 ! mass2AU
-  real(8), parameter :: eVtoAU  = 1.0d0/27.21162d0
-  real(8), parameter :: AngtoAU = 1.0d0/0.529177249d0
-  real(8), parameter :: AUtoAng = 0.529177249d0   ! bohr_inv
-  real(8), parameter :: AUtoJ   = 4.35974434d-18
-  real(8), parameter :: KtoAU   = 8.617333262145d-5/27.211396132d0 ! Boltzmann constant K to AU (eV/K hartree/eV) from NIST
-  real(8), parameter :: eVAng2AU= eVtoAU * AUtoAng
+  real(8), parameter :: eVtoAU    = 1.0d0/27.21162d0
+  real(8), parameter :: AngtoAU   = 1.0d0/0.529177249d0
+  real(8), parameter :: AUtoAng   = 0.529177249d0   ! bohr_inv
+  real(8), parameter :: AUtoJ     = 4.35974434d-18
+  real(8), parameter :: KtoAU     = 8.617333262145d-5/27.211396132d0 ! Boltzmann constant K to AU (eV/K hartree/eV) from NIST
+  real(8), parameter :: eVAng2AU  = eVtoAU * AUtoAng
+  real(8), parameter :: AU2kcalPmol = 627.509469d0 ! 1 Hartree = 627.509469 kcal/mol
+  real(8), parameter :: kcalPmol2AU = 1.0d0/AU2kcalPmol
   integer, parameter :: LINELEN = 120
 
   integer              :: Natom, Nbead, Nstep, Isimulation
@@ -77,8 +79,23 @@ module Parameters
 
   integer :: Icons = 0, cons_atom1, cons_atom2, cons_atom3
   real(8) :: cons_strenght, cons_val
-
 end module Parameters
+
+module Struct_
+  implicit none
+  TYPE xyz_
+     REAL(8) :: x, y, z
+  END TYPE xyz_
+
+  TYPE abc_
+     REAL(8) :: a, b, c
+  END TYPE abc_
+
+  TYPE force_
+     REAL(8) :: x, y, z
+     REAL(8) :: norm
+  END TYPE force_
+end module Struct_
 
 !!YK Set the method for electronic structure calculation
 !    Integer                       :: theory
@@ -86,11 +103,4 @@ end module Parameters
 !    Integer                       :: NGenGau
 !!YK Switch for QM/MM calculation
 !    Integer                       :: NQMMM
-  !Double Precision, Parameter  :: factmass  = 1.6605402d-27/9.1095d-31  ! 1822.866458
-  ! . . > Boltzmann constant
-!  Double Precision, Parameter  :: boltz     = 1.98624d-3/627.51d0 ! Boltzmann constant K to AU (kcal/K hartree/kcal)
-!  Double Precision, Parameter  :: boltz     = 8.617333262145d-5/27.211396132 ! Boltzmann constant K to AU (eV/K hartree/eV) from NIST
-  ! . . > Boltzmann constant
-  !Double Precision, Parameter  :: bohr      = 1.d0/0.529177249d0  ! AngtoAU
-  !Double Precision, Parameter  :: bohr_inv      = 0.529177249d0   ! AUtoAng
 

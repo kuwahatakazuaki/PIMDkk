@@ -21,8 +21,11 @@ endif
 
 ifeq ($(HOSTNAME),genkai)
 FC = mpiifort
+LMPROOT  = /home/pj24003139/ku40003238/bin
+INCS     = -I$(LMPROOT)/include
+LIBS     = -L$(LMPROOT)/lib64 -llammps_serial
+fcopt = -O2
 endif
-#fcopt = -O2 -cpp -pipe -Dmpi
 #fcopt = -g -mcmodel=medium -O3 -no-gcc -traceback -cpp
 
 # Debug
@@ -31,6 +34,8 @@ endif
 SRCS  = \
 Parameter.F90                      \
 utility.F90                        \
+LammpsInterface.F90                \
+LammpsCalculator.F90               \
 mod_model_force.F90                \
 mpi_module.F90                     \
 Main_MPI.F90                       \
@@ -86,8 +91,6 @@ force_water.F90                    \
 constrain.F90                      \
 exit.F90                           \
 
-#Print_Ham_tk2.F90                  \
-#Print_Ham_Classical.F90            \
 #Force_model_DoubleWell.F90         \
 #Init_Send_Recv_MPI_tk.F90          \
 #Init_Recv_Send_MPI_tk.F90          \
@@ -99,23 +102,20 @@ SRCSF77 =  \
 dlarnv.f   \
 dlaruv.f   \
 
-# -- main program --
-#all : $(dis)
-#all : $(PROG) $(vir) $(dis) $(bl) $(dist)
-
 
 all: $(PROG)
 	@echo -e '\e[34m Noraml termination!!!\e[m\n'
 
 $(PROG): $(OBJS) $(OBJSF77)
+ifeq ($(HOSTNAME),genkai)
+	$(FC) $(LIBS) $(OBJS) $(OBJSF77) -o $(PROG)
+else
 	$(FC) $(fcopt) $(OBJS) $(OBJSF77) -o $(PROG)
+endif
 
 
-# install: $(OBJS)
 install: $(PROG)
-#	$(FC) $(fcopt) $(OBJS)  -o $(PROG)
 	cp $(PROG) ../bin/pimd.exe
-#	cp $(PROG) ../bin/pimd_muon
 #	cp $(PROG) ../bin/$(PROG)
 
 
@@ -123,7 +123,11 @@ install: $(PROG)
 .SUFFIXES: .F90 .o 
 .F90.o: 
 	@echo "<< Compiling >>" $<
+ifeq ($(HOSTNAME),genkai)
+	$(FC) $(fcopt) $(INCS) -c -o $*.o $*.F90
+else
 	$(FC) $(fcopt) -c -o $*.o $*.F90
+endif
 	@echo
 
 .SUFFIXES: .f .o

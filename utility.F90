@@ -5,12 +5,10 @@ module utility
 contains
 
 ! +++ Module for IO +++
-  !subroutine exist_file(name_file)
-  !end subroutine exist_file
-  function exist_file(name_file) result(bool)
-    character(len=*), intent(in) :: name_file
-    logical :: bool
-  end function exist_file
+  !function exist_file(name_file) result(bool)
+  !  character(len=*), intent(in) :: name_file
+  !  logical :: bool
+  !end function exist_file
 
   subroutine read_val_next(line,key,val)
     character(len=*), intent(in) :: key, line
@@ -294,7 +292,7 @@ contains
     character(*), intent(in) :: message
     integer :: ierr
     print *, message
-    write_err(message)
+    call write_err(message)
     call mpi_abort(MPI_COMM_WORLD, -1, ierr)
     stop
 #else

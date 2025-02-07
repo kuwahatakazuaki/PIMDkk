@@ -46,6 +46,8 @@ subroutine Force_New_MPI_tk
       call force_nnp_matlantis
     !case(23)
     !  call force_nnp_aenet
+    case(24)
+      call force_LAMMPS
     case(31)
       call force_spcf
     case default
@@ -61,4 +63,15 @@ subroutine Force_New_MPI_tk
   potential = sum(Eenergy(:)) * dp_inv
 
   return
+contains
+
+  subroutine force_LAMMPS
+    USE Struct_,           ONLY: xyz_, abc_, force_
+    USE LAMMPSCalculator_, ONLY: lammps_calculator_, LAMMPSCalculator
+    TYPE(xyz_),   ALLOCATABLE :: cartesian_coordinates (:)   ! Atomic coordinates (Ang)
+    TYPE(force_), ALLOCATABLE :: forces(:)                   ! Forces acting on atoms (eV/Ang)
+    TYPE(lammps_calculator_) :: calculator   ! LAMMPS calculator
+
+  end subroutine force_LAMMPS
+
 end subroutine Force_New_MPI_tk

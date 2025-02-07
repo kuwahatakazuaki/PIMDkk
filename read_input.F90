@@ -3,7 +3,7 @@ subroutine read_parameter
   use Parameters
   use utility, only: program_abort, makedir
   implicit none
-  integer :: i, j, Uin, ios
+  integer :: i, j, Uin, ios, access
   character(len=100) :: line
 
   open(newunit=Uin,file=Finp,status='old',iostat=ios)
