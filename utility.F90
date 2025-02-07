@@ -272,7 +272,7 @@ contains
   function get_time() result(date_time)
     character(len=19) :: date_time
     integer :: newtime(8)
-    character :: b(3)
+    character(len=10) :: b(3)
     call date_and_time(b(1),b(2),b(3),newtime)
     write(date_time,'(i4,a1,i2.2,a1,i2.2,a1,i2.2,a1,i2.2,a1,i2.2)') &
       newtime(1),'/',newtime(2),'/',newtime(3),' ',newtime(5),':',newtime(6),':',newtime(7)

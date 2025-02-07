@@ -1,7 +1,6 @@
 subroutine Set_Allocate
   use Parameters
   implicit none
-  integer    :: th
 
   allocate(  atom_num(natom))
   allocate( r(3,Natom,Nbead) )
@@ -14,7 +13,6 @@ subroutine Set_Allocate
   allocate  (dnmmass(natom, nbead))
         !dnmmass(1:natom,1:nbead) = 0.d0
   allocate  (fictmass(natom, nbead))
-        !fictmass(1:natom,1:nbead) = 0.d0
 
   if ( Isimulation /= 10 ) then
     allocate  (qmass(nbead))
@@ -38,17 +36,11 @@ subroutine Set_Allocate
   allocate(dipoler(3,Nbead))
   allocate(pressure(nbead))
   allocate (charge(natom,nbead))
-     !charge(1:natom,1:nbead) = 0.d0
   allocate (hfcc(natom,nbead))
-     !hfcc(1:natom,1:nbead) = 0.d0
   allocate (nbo(natom,nbead))
-     !nbo(1:natom,1:nbead) = 0.d0
   allocate (Eenergy(nbead))
-     !Eenergy(1:nbead) = 0.d0
   allocate (homo(nbead))
-     !homo(1:nbead) = 0.d0
   allocate (lumo(nbead))
-     !lumo(1:nbead) = 0.d0
 
   select case(Ncent)
     case(1)
