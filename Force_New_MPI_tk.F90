@@ -87,9 +87,9 @@ contains
 
   ! Calculation in LAMMPS
     do Imode = 1, Nbead
-print *, Imode
+!print *, Imode
       r_temp(:,:) = r(:,:,Imode)
-      r_temp(:,:) = r_temp(:,:) * AngtoAU
+      r_temp(:,:) = r_temp(:,:) * AUtoAng
       do Iatom = 1, Natom
         cartesian_coordinates(Iatom)%x = r_temp(1,Iatom)
         cartesian_coordinates(Iatom)%y = r_temp(2,Iatom)
@@ -99,13 +99,17 @@ print *, Imode
 
       Eenergy(Imode) = calculator%potential_energy
       do Iatom = 1, Natom
-        calculator%forces(Iatom)%x = fr(1,Iatom,Imode)
-        calculator%forces(Iatom)%y = fr(2,Iatom,Imode)
-        calculator%forces(Iatom)%z = fr(3,Iatom,Imode)
+        fr(1,Iatom,Imode) = calculator%forces(Iatom)%x
+        fr(2,Iatom,Imode) = calculator%forces(Iatom)%y
+        fr(3,Iatom,Imode) = calculator%forces(Iatom)%z
       end do
     end do
-    fr(:,:,:) = fr(:,:,:) * dp_inv
+    Eenergy(:) = Eenergy(:) * kcalPmol2AU
+    fr(:,:,:) = fr(:,:,:) * dp_inv * kcalPmol2AU / AngtoAU
 
+    CALL calculator%close()
+    DEALLOCATE( cartesian_coordinates )
+    DEALLOCATE( forces )
 
   end subroutine force_LAMMPS
 
