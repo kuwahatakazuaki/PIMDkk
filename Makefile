@@ -20,11 +20,16 @@ fcopt = -O2 -pipe
 endif
 
 ifeq ($(HOSTNAME),genkai)
+ifeq ($(MPI),True)
 FC = mpiifort
+fcopt = -O2 -D_mpi_
+else
+FC = ifort
+fcopt = -O2
+endif
 LMPROOT  = /home/pj24003139/ku40003238/bin
 INCS     = -I$(LMPROOT)/include
 LIBS     = -L$(LMPROOT)/lib64 -llammps_serial
-fcopt = -O2
 endif
 #fcopt = -g -mcmodel=medium -O3 -no-gcc -traceback -cpp
 
@@ -88,6 +93,7 @@ Set_mopac.F90                      \
 Set_VASP.F90                       \
 neural_network.F90                 \
 force_water.F90                    \
+force_LAMMPS.F90                   \
 constrain.F90                      \
 exit.F90                           \
 

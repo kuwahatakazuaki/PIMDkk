@@ -73,7 +73,6 @@ subroutine Force_VASP_MPI
 
     close(Uinp)
 
-    !fr(:,:,Imode)=fr(:,:,Imode)*eVAng_HartBohr*dp_inv
     fr(:,:,Imode)=fr(:,:,Imode)*eVAng2AU*dp_inv
   enddo
 

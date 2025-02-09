@@ -21,6 +21,8 @@ Subroutine Force_Classical
       call force_nnp_araidai
     case(22)
       call force_nnp_matlantis
+    case(24)
+      call force_LAMMPS
 
     case(31)
       call force_spcf
@@ -31,9 +33,6 @@ Subroutine Force_Classical
   if (Iumb > 0) call calc_umbrella
 
   fur(:,:,1)=fr(:,:,1)
-
-  ! Move to main function
-  !call print_result_qm
 
   !potential = sum(Eenergy(:)) * dp_inv
   potential = Eenergy(1)
