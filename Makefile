@@ -2,11 +2,16 @@ PROG = pimd.exe
 SHELL   = /bin/bash
 OBJS    = $(SRCS:%.F90=%.o)
 OBJSF77 = $(SRCSF77:%.f=%.o)
+DEP     = $(OBJS:.o=.d)
+SRCS   += $(SRC_LAMMPS)
+OBJS   += $(OBJ_LAMMPS)
 FCOPT  += $(DFLAG)
+# GFLAG   =  -JModule -IModule
 #MPI  = True
 
+
 #test:
-#	@echo $(OBJ_LAMMPS)
+#	@echo $(DEP)
 
 ifeq ($(MPI),True)
 FC     = mpif90
@@ -16,13 +21,15 @@ FC     = gfortran
 #FCOPT = -g -O0 -pipe
 endif
 FCOPT  = -O2 -pipe
+# FCOPT  = -O2 -pipe -JModule -MMD 
 
 ifeq ($(HOSTNAME),genkai)
 LMPROOT  = /home/pj24003139/ku40003238/bin
 INCS     = -I$(LMPROOT)/include
 LIBS     = -L$(LMPROOT)/lib64 -llammps_serial
 DIR_LAMMPS = LAMMPS
-SRC_LAMMPS = $(wildcard $(DIR_LAMMPS)/*.F90)
+SRC_LAMMPS = $(DIR_LAMMPS)/LammpsInterface.F90 $(DIR_LAMMPS)/LammpsCalculator.F90 $(DIR_LAMMPS)/force_LAMMPS.F90
+# SRC_LAMMPS = $(wildcard $(DIR_LAMMPS)/*.F90)
 OBJ_LAMMPS = $(SRC_LAMMPS:%.F90=%.o)
 DFLAG += -D_LAMMPS_
 
@@ -138,8 +145,10 @@ endif
 	$(FC) $(FCOPT) -c -o $*.o $*.f
 	@echo
 
+-include $(DEP)
+
 clean: 
-	rm -rf *.o $(PROG) *.mod *exe
+	rm -rf *.o $(PROG) *.mod *exe *.d
 #	del *.o $(program) *.mod 
 
 
