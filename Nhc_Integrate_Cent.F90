@@ -3,7 +3,7 @@ Subroutine Nhc_Integrate_Cent
   use utility, only: norm_seq
   implicit none
   Double Precision :: skin, scale, dt_ys, vfact, pvfact
-  integer :: i, iys, iatom, Inhc, icolor
+  integer :: i, iys, iatom, Inhc
 
   skin = 0.d0
   do iatom = 1, Natom
@@ -59,9 +59,6 @@ Subroutine Nhc_Integrate_Cent
 
 
 !     /* update the paricle velocities */
-  !do iatom = 1, natom
-  !  vur(:,iatom,1) = vur(:,iatom,1)*scale
-  !enddo
   vur(:,:,1) = vur(:,:,1) * scale
 
   Return
@@ -72,8 +69,8 @@ Subroutine nhc_integrate_cent3
   Use Parameters
   Implicit None
   Double Precision  :: skin, scale, dt_ys, vfact, pvfact
-  real(8) :: vrfact(3), pvrfact(3), scaler(3), dkinr(3)
-  integer :: i, iys, iatom, Inhc, icolor
+  real(8) :: vrfact(3), pvrfact(3), dkinr(3)!, scaler(3)
+  integer :: i, iys, iatom, Inhc
 
 !  /*  start multiple time step integration  */
   do iys = 1, Nys
@@ -85,7 +82,6 @@ Subroutine nhc_integrate_cent3
 !  /*  for each atom                                    */
 
       dkinr(:) = fictmass(iatom,1)*vur(:,iatom,1)*vur(:,iatom,1)
-      scaler(:) = 1.d0
 
 !  /* update the force */
 
@@ -110,10 +106,8 @@ Subroutine nhc_integrate_cent3
 
       pvrfact(:) = dexp(-0.5d0*vrbc31(:,iatom,1)*dt_ys)
 
-      scaler(:) = scaler(:)*pvrfact
-
 !  /* update the force */
-      frbc31(:,iatom,1)=(scaler(:)*scaler(:)*dkinr(:) - gkt)/qmcent31(1)
+      frbc31(:,iatom,1)=(pvrfact(:)*pvrfact(:)*dkinr(:) - gkt)/qmcent31(1)
 
 !  /* update the thermostat position */
       do Inhc = 1, Nnhc
@@ -134,7 +128,7 @@ Subroutine nhc_integrate_cent3
       vrbc31(:,iatom,Nnhc) = vrbc31(:,iatom,Nnhc) + 0.25d0*frbc31(:,iatom,Nnhc)*dt_ys
 
 !  /* update the paricle velocities */
-      vur(:,iatom,1) = vur(:,iatom,1)*scaler(:)
+      vur(:,iatom,1) = vur(:,iatom,1)*pvrfact(:)
     enddo
   enddo
 

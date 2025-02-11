@@ -2,45 +2,44 @@ PROG = pimd.exe
 SHELL   = /bin/bash
 OBJS    = $(SRCS:%.F90=%.o)
 OBJSF77 = $(SRCSF77:%.f=%.o)
+FCOPT  += $(DFLAG)
 #MPI  = True
 
-#ifeq ($(HOSTNAME),wisteria)
-#FC = mpifrtpx
-#else
-#FC = mpif90
-#endif
+#test:
+#	@echo $(OBJ_LAMMPS)
 
 ifeq ($(MPI),True)
-FC = mpif90
-fcopt = -O2 -pipe -D_mpi_
+FC     = mpif90
+DFLAG += -D_mpi_
 else
-FC = gfortran
-fcopt = -O2 -pipe
-#fcopt = -g -O0 -pipe
+FC     = gfortran
+#FCOPT = -g -O0 -pipe
 endif
+FCOPT  = -O2 -pipe
 
 ifeq ($(HOSTNAME),genkai)
-ifeq ($(MPI),True)
-FC = mpiifort
-fcopt = -O2 -D_mpi_
-else
-FC = ifort
-fcopt = -O2
-endif
 LMPROOT  = /home/pj24003139/ku40003238/bin
 INCS     = -I$(LMPROOT)/include
 LIBS     = -L$(LMPROOT)/lib64 -llammps_serial
-endif
-#fcopt = -g -mcmodel=medium -O3 -no-gcc -traceback -cpp
+DIR_LAMMPS = LAMMPS
+SRC_LAMMPS = $(wildcard $(DIR_LAMMPS)/*.F90)
+OBJ_LAMMPS = $(SRC_LAMMPS:%.F90=%.o)
+DFLAG += -D_LAMMPS_
 
-# Debug
-#fcopt = -g -check all -cpp
+ifeq ($(MPI),True)
+FC     = mpiifort
+DFLAG += -D_mpi_
+else
+FC     = ifort
+endif
+
+endif
+#FCOPT = -g -mcmodel=medium -O3 -no-gcc -traceback -cpp
+
 
 SRCS  = \
 Parameter.F90                      \
 utility.F90                        \
-LammpsInterface.F90                \
-LammpsCalculator.F90               \
 mod_model_force.F90                \
 mpi_module.F90                     \
 Main_MPI.F90                       \
@@ -82,7 +81,7 @@ Force_New_MPI_tk.F90               \
 set_pallarel.F90                   \
 Set_Gaussian_MPI_tk.F90            \
 Force_Gaussian_MPI_tk.F90          \
-print_ham.F90                  \
+print_ham.F90                      \
 Force_model_Morse.F90              \
 Set_siesta.F90                     \
 Force_VASP_MPI.F90                 \
@@ -93,15 +92,12 @@ Set_mopac.F90                      \
 Set_VASP.F90                       \
 neural_network.F90                 \
 force_water.F90                    \
-force_LAMMPS.F90                   \
 constrain.F90                      \
 exit.F90                           \
 
-#Force_model_DoubleWell.F90         \
-#Init_Send_Recv_MPI_tk.F90          \
-#Init_Recv_Send_MPI_tk.F90          \
-#Start_Recv_Send_MPI_tk.F90         \
-#Start_Send_Recv_MPI_tk.F90         \
+# LammpsInterface.F90                \
+# LammpsCalculator.F90               \
+# force_LAMMPS.F90                   \
 
 
 SRCSF77 =  \
@@ -116,7 +112,7 @@ $(PROG): $(OBJS) $(OBJSF77)
 ifeq ($(HOSTNAME),genkai)
 	$(FC) $(LIBS) $(OBJS) $(OBJSF77) -o $(PROG)
 else
-	$(FC) $(fcopt) $(OBJS) $(OBJSF77) -o $(PROG)
+	$(FC) $(FCOPT) $(OBJS) $(OBJSF77) -o $(PROG)
 endif
 
 
@@ -130,16 +126,16 @@ install: $(PROG)
 .F90.o: 
 	@echo "<< Compiling >>" $<
 ifeq ($(HOSTNAME),genkai)
-	$(FC) $(fcopt) $(INCS) -c -o $*.o $*.F90
+	$(FC) $(FCOPT) $(DFLAG) $(INCS) -c -o $*.o $*.F90
 else
-	$(FC) $(fcopt) -c -o $*.o $*.F90
+	$(FC) $(FCOPT) $(DFLAG) -c -o $*.o $*.F90
 endif
 	@echo
 
 .SUFFIXES: .f .o
 .f.o: 
 	@echo "<< Compiling >>" $<
-	$(FC) $(fcopt) -c -o $*.o $*.f
+	$(FC) $(FCOPT) -c -o $*.o $*.f
 	@echo
 
 clean: 

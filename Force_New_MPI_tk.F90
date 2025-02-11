@@ -46,8 +46,10 @@ subroutine Force_New_MPI_tk
       call force_nnp_matlantis
     !case(23)
     !  call force_nnp_aenet
+#ifdef _LAMMPS_
     case(24)
       call force_LAMMPS
+#endif
     case(31)
       call force_spcf
     case default

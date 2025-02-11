@@ -4,9 +4,9 @@ Subroutine Nhc_Integrate
   Implicit None
 
   Integer           :: iys, i
-  real(8) :: dkinr(3), scaler(3), pvrfact(3), vrfact(3)
+  real(8) :: dkinr(3), pvrfact(3), vrfact(3)!, scaler(3)
   Double Precision  :: dt_ys
-  integer :: iatom, imode, icolor, inhc
+  integer :: iatom, imode, inhc
 
   do iys = 1, nys
 
@@ -20,7 +20,6 @@ Subroutine Nhc_Integrate
 !   /*  calculate kinetic energy of normal mode coordinate  *
 !    *  for each atom                                       */
         dkinr(:) = fictmass(iatom,imode)*vur(:,iatom,imode)*vur(:,iatom,imode)
-        scaler(:) = 1.d0
 
 !   /* update the force */
         frbath(:,iatom,1,imode) = (dkinr(:) - gkt)/qmass(imode)
@@ -43,10 +42,8 @@ Subroutine Nhc_Integrate
 !   /* update the particle velocities */
         pvrfact(:) = dexp(-0.5d0*vrbath(:,iatom,1,imode)*dt_ys)
 
-        scaler(:) = scaler(:) * pvrfact(:)
-
 !   /* update the force */
-        frbath(:,iatom,1,imode)=(scaler(:)*scaler(:)*dkinr(:) - gkt)/qmass(imode)
+        frbath(:,iatom,1,imode)=(pvrfact(:)*pvrfact(:)*dkinr(:) - gkt)/qmass(imode)
 
 !   /* update the thermostat position */
         do inhc = 1, nnhc
@@ -71,7 +68,7 @@ Subroutine Nhc_Integrate
           = vrbath(:,iatom,nnhc,imode) + 0.25d0*frbath(:,iatom,nnhc,imode)*dt_ys
 
 !   /* update the paricle velocities */
-        vur(:,iatom,imode) = vur(:,iatom,imode)*scaler(:)
+        vur(:,iatom,imode) = vur(:,iatom,imode)*pvrfact(:)
       enddo
     enddo
   enddo
