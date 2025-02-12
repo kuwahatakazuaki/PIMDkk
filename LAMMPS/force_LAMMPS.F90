@@ -20,7 +20,8 @@ allocate( cartesian_coordinates(Natom) )
 allocate( forces(Natom) )
 
 ! Calculation in LAMMPS
-  do Imode = 1, Nbead
+  !do Imode = 1, Nbead
+  do Imode = Ista, Iend
     r_temp(:,:) = r(:,:,Imode)
     r_temp(:,:) = r_temp(:,:) * AUtoAng
     do Iatom = 1, Natom
@@ -38,7 +39,7 @@ allocate( forces(Natom) )
     end do
   end do
   Eenergy(:) = Eenergy(:) * kcalPmol2AU
-  fr(:,:,:) = fr(:,:,:) * dp_inv * kcalPmol2AU / AngtoAU
+  fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv * kcalPmol2AU / AngtoAU
 
   CALL calculator%close()
   DEALLOCATE( cartesian_coordinates )

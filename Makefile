@@ -6,40 +6,46 @@ DEP     = $(OBJS:.o=.d)
 SRCS   += $(SRC_LAMMPS)
 OBJS   += $(OBJ_LAMMPS)
 FCOPT  += $(DFLAG)
+DIR_LAMMPS = LAMMPS
 # GFLAG   =  -JModule -IModule
-#MPI  = True
-
+MPI  = True
 
 #test:
 #	@echo $(DEP)
 
-ifeq ($(MPI),True)
-FC     = mpif90
-DFLAG += -D_mpi_
-else
-FC     = gfortran
-#FCOPT = -g -O0 -pipe
-endif
-FCOPT  = -O2 -pipe
-# FCOPT  = -O2 -pipe -JModule -MMD 
 
 ifeq ($(HOSTNAME),genkai)
+# ===== Kyushu Super Computer =====
 LMPROOT  = /home/pj24003139/ku40003238/bin
 INCS     = -I$(LMPROOT)/include
 LIBS     = -L$(LMPROOT)/lib64 -llammps_serial
-DIR_LAMMPS = LAMMPS
 SRC_LAMMPS = $(DIR_LAMMPS)/LammpsInterface.F90 $(DIR_LAMMPS)/LammpsCalculator.F90 $(DIR_LAMMPS)/force_LAMMPS.F90
 # SRC_LAMMPS = $(wildcard $(DIR_LAMMPS)/*.F90)
 OBJ_LAMMPS = $(SRC_LAMMPS:%.F90=%.o)
 DFLAG += -D_LAMMPS_
+FCOPT  = -O2 # -pipe
 
-ifeq ($(MPI),True)
-FC     = mpiifort
-DFLAG += -D_mpi_
+  ifeq ($(MPI),True)
+  FC     = mpiifort
+  DFLAG += -D_mpi_
+  else
+  FC     = ifort
+  endif
+# ===== Kyushu Super Computer =====
+
 else
-FC     = ifort
-endif
 
+# ===== Other =====
+FCOPT  = -O2 -pipe -JModule
+#FCOPT = -g -O0 -pipe
+# FCOPT  = -O2 -pipe -JModule -MMD
+  ifeq ($(MPI),True)
+  FC     = mpif90
+  DFLAG += -D_mpi_
+  else
+  FC     = gfortran
+  endif
+# ===== Other =====
 endif
 #FCOPT = -g -mcmodel=medium -O3 -no-gcc -traceback -cpp
 
@@ -149,6 +155,7 @@ endif
 
 clean: 
 	rm -rf *.o $(PROG) *.mod *exe *.d
+	rm -rf $(DIR_LAMMPS)/*.o
 #	del *.o $(program) *.mod 
 
 
