@@ -8,6 +8,7 @@ subroutine force_LAMMPS
   TYPE(lammps_calculator_) :: calculator   ! LAMMPS calculator
   integer :: Iatom, Imode
   INTEGER(KIND=c_int64_t), POINTER :: total_atoms
+  integer, allocatable :: lammps_id(:)
   real(8) :: r_temp(3,Natom)
 
 ! Set LAMMPS calculator
@@ -18,6 +19,7 @@ subroutine force_LAMMPS
 
 allocate( cartesian_coordinates(Natom) )
 allocate( forces(Natom) )
+allocate( lammps_id(Natom) )
 
 ! Calculation in LAMMPS
   !do Imode = 1, Nbead
@@ -40,6 +42,8 @@ allocate( forces(Natom) )
   end do
   Eenergy(:) = Eenergy(:) * kcalPmol2AU
   fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv * kcalPmol2AU / AngtoAU
+
+  lammps_id = calculator%atom_id
 
   CALL calculator%close()
   DEALLOCATE( cartesian_coordinates )

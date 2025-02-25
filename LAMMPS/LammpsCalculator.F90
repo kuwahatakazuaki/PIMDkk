@@ -53,6 +53,9 @@
        TYPE(lammps)              :: lammps             ! LAMMPS instance
        REAL(wp)                  :: potential_energy   ! Potential energy (eV)
        TYPE(force_), ALLOCATABLE :: forces(:)          ! Forces on atoms  (eV/Ang)
+
+       ! --- Add Kuwa 2025/02/25 ---
+       integer, allocatable :: atom_id(:)
      CONTAINS
        PRIVATE
        PROCEDURE, PUBLIC :: run
@@ -208,6 +211,11 @@
                                             + forces(2,i)**2  &
                                             + forces(3,i)**2 ) * coefficient
       END DO
+
+      IF ( ALLOCATED( self%atom_id ) .EQV. .FALSE. ) ALLOCATE( self%atom_id(1:num_atoms) )
+      do i = 1, num_atoms
+      self%atom_id(i) = atom_id(i)
+      end do
 
       RETURN
     END SUBROUTINE run
