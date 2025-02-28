@@ -88,12 +88,14 @@ end if
 
 
 !9999 format(a2,1x,E15.9,1x,E15.9,1x,E15.9)
-9999 format(a,1x,E15.9,1x,E15.9,1x,E15.9)
+9999 format(a,E15.7,E15.7,E15.7)
+!9999 format(a,1x,E15.9,1x,E15.9,1x,E15.9)
 9998 format(3E23.15)
 9997 format(2E23.15)
 9996 format(E23.15)
 8004 format(100F12.5)  ! HFCC
-8005 format(3F15.10)   ! Force
+8005 format(3E15.7)   ! Force
+! 8005 format(3F15.10)   ! Force
 8006 format(F0.10)     ! Potential
 8007 format(100F10.6)  ! Charge
 8008 format(4F10.5)    ! Dipole

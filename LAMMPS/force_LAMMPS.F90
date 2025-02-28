@@ -7,6 +7,7 @@ subroutine force_LAMMPS
   TYPE(force_), ALLOCATABLE :: forces(:)                   ! Forces acting on atoms (eV/Ang)
   TYPE(lammps_calculator_) :: calculator   ! LAMMPS calculator
   integer :: Iatom, Imode
+  integer :: i, Uout
   INTEGER(KIND=c_int64_t), POINTER :: total_atoms
   integer, allocatable :: lammps_id(:)
   real(8) :: r_temp(3,Natom)
@@ -43,7 +44,19 @@ allocate( lammps_id(Natom) )
   Eenergy(:) = Eenergy(:) * kcalPmol2AU
   fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv * kcalPmol2AU / AngtoAU
 
-  lammps_id = calculator%atom_id
+lammps_id = calculator%atom_id
+open(newunit=Uout,file='lammps_id.out',position='append')
+  write(Uout,*) "# step", istepsv
+  do i = 1, Natom
+    write(Uout,*) lammps_id(i)
+  end do
+close(Uout)
+open(newunit=Uout,file='lammps_force.out',position='append')
+  write(Uout,*) istepsv
+  do i = 1, Natom
+    write(Uout,*) fr(:,i,1)
+  end do
+close(Uout)
 
   CALL calculator%close()
   DEALLOCATE( cartesian_coordinates )

@@ -8,7 +8,7 @@ OBJS   += $(OBJ_LAMMPS)
 FCOPT  += $(DFLAG)
 DIR_LAMMPS = LAMMPS
 # GFLAG   =  -JModule -IModule
-MPI  = True
+# MPI  = True
 
 #test:
 #	@echo $(DEP)
