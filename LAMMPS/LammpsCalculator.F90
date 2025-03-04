@@ -92,8 +92,11 @@
     ! For LAMMPS
       CHARACTER(LEN=16), PARAMETER :: command_line_args(5) =  &   !
                                        [ CHARACTER(LEN=16) :: 'lmp_nano', '-log', 'none', '-screen', 'none' ]
+! === For Debug Print Standard Out === 
+      !CHARACTER(LEN=16), PARAMETER :: command_line_args(3) =  &   !
+      !                                 [ CHARACTER(LEN=16) :: 'lmp_nano', '-log', 'none' ]
+! === For Debug Print Standard Out === 
 
-    ! I/O check
       ierr = 0
       IF ( PRESENT(lammps_file) .EQV. .FALSE. ) THEN
          WRITE(6,'(2X,A)') "'lammps_file' is mandatory in 'LAMMPSCalculator'!!!"
@@ -102,7 +105,8 @@
       IF ( ierr == 1 ) STOP
 
     ! Create a LAMMPS instance (and initialize MPI)
-      calculator%lammps = lammps( command_line_args(1:5) )
+      !calculator%lammps = lammps( command_line_args(1:5) )
+      calculator%lammps = lammps( command_line_args(:) )
 
     ! Call lammps_file() to have LAMMPS read and process commands from a file
       CALL calculator%lammps%file( 'lammps.in' )

@@ -44,19 +44,20 @@ allocate( lammps_id(Natom) )
   Eenergy(:) = Eenergy(:) * kcalPmol2AU
   fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv * kcalPmol2AU / AngtoAU
 
-lammps_id = calculator%atom_id
-open(newunit=Uout,file='lammps_id.out',position='append')
-  write(Uout,*) "# step", istepsv
-  do i = 1, Natom
-    write(Uout,*) lammps_id(i)
-  end do
-close(Uout)
-open(newunit=Uout,file='lammps_force.out',position='append')
-  write(Uout,*) istepsv
-  do i = 1, Natom
-    write(Uout,*) fr(:,i,1)
-  end do
-close(Uout)
+!print *, "# step", istepsv
+!lammps_id = calculator%atom_id
+!open(newunit=Uout,file='lammps_id.out',position='append')
+!  write(Uout,*) "# step", istepsv
+!  do i = 1, Natom
+!    write(Uout,*) lammps_id(i)
+!  end do
+!close(Uout)
+!open(newunit=Uout,file='lammps_force.out',position='append')
+!  write(Uout,*) istepsv
+!  do i = 1, Natom
+!    write(Uout,*) fr(:,i,1)
+!  end do
+!close(Uout)
 
   CALL calculator%close()
   DEALLOCATE( cartesian_coordinates )
