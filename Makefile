@@ -36,7 +36,7 @@ FCOPT  = -O2 # -pipe
 else
 
 # ===== Other =====
-FCOPT  = -O2 -pipe -JModule
+FCOPT  = -O2 -pipe # -JModule
 #FCOPT = -g -O0 -pipe
 # FCOPT  = -O2 -pipe -JModule -MMD
   ifeq ($(MPI),True)

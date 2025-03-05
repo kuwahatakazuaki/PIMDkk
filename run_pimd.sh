@@ -1,8 +1,8 @@
 #!/bin/bash
 input="input.inp"
-output="output"
+output="err.out"
 machinefile="mpihosts"
-pimddir="/Users/kuwahatakazuaki/Desktop/PIMD/NewPIMD/PIMD6"
+pimddir="/Users/kuwahatakazuaki/Desktop/PIMD/NewPIMD/bin"
 dir_result=`grep -A1 "address_result" $input |tail -1`
 dir_scratch=`grep -A1 "address_scr" $input |tail -1`
 Lrestart=`grep -A1 "Lrestart" $input |tail -1`

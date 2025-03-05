@@ -8,7 +8,7 @@ subroutine force_spcf
 !===================================================================
   use Parameters, only: &
     r, fr, pi, dipr => dipoler, Natom, Nbead, pot => Eenergy, &
-    Ista, Iend
+    Ista, Iend, dp_inv
   use utility, only: program_abort
 
   implicit none
@@ -143,11 +143,9 @@ subroutine force_spcf
            rinv12 =  rinv6*rinv6
 
            pot(k) = pot(k) - 4.d0*es6*rinv6 + 4.d0*es12*rinv12
-
            dvdr = + 24.d0*es6*rinv6*rinv - 48.d0*es12*rinv12*rinv
 
            fr(:,i,k) = fr(:,i,k) - dvdr*rr(:)*rinv
-
            fr(:,j,k) = fr(:,j,k) + dvdr*rr(:)*rinv
 
         end do
@@ -190,7 +188,6 @@ subroutine force_spcf
            dvdr = - qi*qj*rinv2
 
            fr(:,i,k) = fr(:,i,k) - dvdr*rr(:)*rinv
-
            fr(:,j,k) = fr(:,j,k) + dvdr*rr(:)*rinv
 
         end do
@@ -205,18 +202,15 @@ subroutine force_spcf
 
   !do k = 1, nbead
   do k = Ista, Iend
-
      dipr(:,k) = 0.d0
-
      do i = 1, natom, 3
         i_o = i
         i_h = i + 1
         i_g = i + 2
-
         dipr(:,k) = dipr(:,k) + q_o*r(:,i_o,k) + q_h*(r(:,i_h,k)+r(:,i_g,k))
      end do
-
   end do
+  fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv
 
   return
 end subroutine force_spcf

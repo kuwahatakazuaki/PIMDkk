@@ -86,7 +86,7 @@ subroutine Restart_Write(istep)
   integer :: Istep, Uout
   integer :: i, j, inhc, icolor
 
-  if (istep > 1) call system('cat '//trim(dir_result)//'/restart.dat >'//trim(dir_result)//'/restart1.dat')
+  if (istep > out_step) call system('cat '//trim(dir_result)//'/restart.dat >'//trim(dir_result)//'/restart1.dat')
 
   open(newunit=Uout, file=trim(dir_result)//'/restart.dat', status = 'unknown')
     write(Uout,'(i10)') Istep

@@ -4,10 +4,17 @@ subroutine Set_Gaussian_MPI_tk
   implicit none
   integer :: i,j,k,imode, Uout
   integer :: access
+  logical :: Ltemp, Lg0xrun
 
   if ( MyRank == 0 ) then
-    if ( access("./gauss.tmp", " ") /= 0) call err_set_tmp
-    if ( access("./g0xrun_p", " ")  /= 0) call err_set_g0xrun
+    inquire(FILE='./gauss.tmp',EXIST=Ltemp)
+    inquire(FILE='./g0xrun_p', EXIST=Lg0xrun)
+    if ( Ltemp   .eqv. .false. ) call err_set_tmp
+    if ( Lg0xrun .eqv. .false. ) call err_set_g0xrun
+    if ( (Ltemp .and. Lg0xrun) .eqv. .false. ) &
+        call program_abort('== Stop Input files are missing ==')
+    !if ( access("./gauss.tmp", " ") /= 0) call err_set_tmp
+    !if ( access("./g0xrun_p", " ")  /= 0) call err_set_g0xrun
   end if
 
   do imode=ista,iend
@@ -52,7 +59,6 @@ contains
     close(Nunit)
     print *, 'ERROR!! "gauss.tmp" is NOT exist!'
     print *, 'Please use "gauss.tmp" template'
-    call program_abort('')
   end subroutine err_set_tmp
 
   subroutine err_set_g0xrun
@@ -64,7 +70,6 @@ contains
     close(Nunit)
     print *, 'ERROR!! "g0xrun_p" is NOT exist!'
     print *, 'Please use "g0xrun_p" template'
-    call program_abort('')
   end subroutine err_set_g0xrun
 
 end subroutine Set_Gaussian_MPI_tk

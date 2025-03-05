@@ -11,16 +11,16 @@ $dt
 $Isimulation      # 0:PIMD, 1:RPMD, 2:CMD (For classical, just set Nbead=1)
 0
 $out_step
-5
+1
 $Nref             # time deconposition for reversible RESPA
 5
-$Nys              # read as "nys", deconposition of thermostat. chose 1 or 3 or 5
+$Nys              # Deconposition of thermostat. chose 1 or 3 or 5
 5
 $Nnhc
 4
 $gamma
 1.0
-$Ncent            # Method of Centroid NHC, 0: NVE
+$Ncent            # Method of Centroid NHC, 0: NVE, 3: NVT
 3
 $Lrestart
 .F.
@@ -29,7 +29,7 @@ $Iforce           # 1:MOPAC, 6:Gaussian, 8:VASP, 9:SIESTA, 15:Harmonic, 16:Doubl
 $address_result   # Result directory
 ./Result
 $address_scr      # Scretch directory
-/dev/shm/Kuwahata/Harmonic
+./Scr
 $seed
 1
 3
