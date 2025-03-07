@@ -135,8 +135,9 @@ install: $(PROG)
 
 
 # -- for F90 program --
-.SUFFIXES: .F90 .o 
-.F90.o: 
+#.SUFFIXES: .F90 .o
+#.F90.o:
+%.o:%.F90
 	@echo "<< Compiling >>" $<
 ifeq ($(HOSTNAME),genkai)
 	$(FC) $(FCOPT) $(DFLAG) $(INCS) -c -o $*.o $*.F90
@@ -145,8 +146,9 @@ else
 endif
 	@echo
 
-.SUFFIXES: .f .o
-.f.o: 
+# .SUFFIXES: .f .o
+# .f.o:
+%.o:%.f
 	@echo "<< Compiling >>" $<
 	$(FC) $(FCOPT) -c -o $*.o $*.f
 	@echo

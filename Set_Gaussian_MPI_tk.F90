@@ -23,7 +23,6 @@ subroutine Set_Gaussian_MPI_tk
      call system('cp gauss.tmp '//trim(addresstmp))
 ! kuwahata 2021/06/06 for ITO
      call system('cp -f g0xrun_p '//trim(address0))
-!    call system('cp g0xrun_p '//trim(addresstmp))
 ! End kuwahata 2021/06/06 for ITO
      !If(NGenGau==1) Then
      !   call system('cp gauss.bss '//trim(addresstmp))
