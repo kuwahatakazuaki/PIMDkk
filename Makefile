@@ -23,7 +23,7 @@ SRC_LAMMPS = $(DIR_LAMMPS)/LammpsInterface.F90 $(DIR_LAMMPS)/LammpsCalculator.F9
 # SRC_LAMMPS = $(wildcard $(DIR_LAMMPS)/*.F90)
 OBJ_LAMMPS = $(SRC_LAMMPS:%.F90=%.o)
 DFLAG += -D_LAMMPS_
-FCOPT  = -O2 # -pipe
+FCOPT  = -O2 # -pipe -qmkl
 
   ifeq ($(MPI),True)
   FC     = mpiifort
@@ -130,8 +130,7 @@ endif
 
 
 install: $(PROG)
-	cp $(PROG) ../bin/pimd.exe
-#	cp $(PROG) ../bin/$(PROG)
+	cp $(PROG) ../bin/$(PROG)
 
 
 # -- for F90 program --

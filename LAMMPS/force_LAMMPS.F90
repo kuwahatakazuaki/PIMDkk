@@ -1,6 +1,6 @@
 subroutine force_LAMMPS
   use Parameters
-  use utility
+  use utility, only: calc_inv_mat33
   USE, INTRINSIC :: ISO_C_BINDING, ONLY: c_int64_t
   USE Struct_,           ONLY: xyz_, abc_, force_
   USE LAMMPSCalculator_, ONLY: lammps_calculator_, LAMMPSCalculator
@@ -18,7 +18,8 @@ subroutine force_LAMMPS
 lattice(1,:) = [12.8512848674,    0.0000000000,    0.0000000000]
 lattice(2,:) = [ 0.2132032072,   12.6594123484,    0.0000000000]
 lattice(3,:) = [ 0.1438686986,   -0.0357082118,   12.7223433492]
-call get_inv_mat(lattice,lat_inv,3)
+!call get_inv_mat(lattice,lat_inv,3)
+lat_inv = calc_inv_mat33(lattice)
 
 ! Set LAMMPS calculator
   calculator = LAMMPSCalculator( lammps_file = 'lammps.in' )
@@ -77,20 +78,20 @@ r_temp(:,Iatom) = matmul(s(:,Iatom),lattice)
 
 contains
 
-  subroutine get_inv_mat(mat,inv,n)
-    integer :: n
-    real(8), intent(in)  :: mat(n,n)
-    real(8), intent(out) :: inv(n,n)
-    integer :: lwork, lda, info
-    real(8), allocatable :: work(:)
-    integer, allocatable :: ipiv(:)
-    inv(:,:) = mat(:,:)
-    lda = n
-    lwork = 64*n
-    allocate(work(lwork),ipiv(n))
-    call dgetrf(N, N, inv, lda, ipiv, info)
-    call dgetri(N, inv, lda, ipiv, work, lwork, info)
-  end subroutine get_inv_mat
+  !subroutine get_inv_mat(mat,inv,n)
+  !  integer :: n
+  !  real(8), intent(in)  :: mat(n,n)
+  !  real(8), intent(out) :: inv(n,n)
+  !  integer :: lwork, lda, info
+  !  real(8), allocatable :: work(:)
+  !  integer, allocatable :: ipiv(:)
+  !  inv(:,:) = mat(:,:)
+  !  lda = n
+  !  lwork = 64*n
+  !  allocate(work(lwork),ipiv(n))
+  !  call dgetrf(N, N, inv, lda, ipiv, info)
+  !  call dgetri(N, inv, lda, ipiv, work, lwork, info)
+  !end subroutine get_inv_mat
 
 end subroutine force_LAMMPS
 
