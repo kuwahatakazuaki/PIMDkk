@@ -59,9 +59,10 @@ contains
       if ( MyRank == 0 ) then
         call MPI_Gather(MPI_IN_PLACE,Natom*MyNbead,MPI_DOUBLE_PRECISION,&
                         hfcc(1,Ista),Natom*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
-      end if
+      else
         call MPI_Gather(hfcc(1,Ista),Natom*MyNbead,MPI_DOUBLE_PRECISION,&
                         hfcc(1,Ista),Natom*MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+      end if
     end if
 
   end subroutine MyMPI_gather_others
