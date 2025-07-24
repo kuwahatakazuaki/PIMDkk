@@ -20,9 +20,6 @@ Subroutine Calc_Constant
   address0=trim(dir_scr)//'/'
   laddress=len_trim(dir_scr)+1
   addresstmp=trim(trim(dir_scr)//'/')
-  !address0=trim(address2)//'/'
-  !laddress=len_trim(address2)+1
-  !addresstmp=trim(trim(address2)//'/')
 
 !
 !     /*   parameters for path integral simulation   */
@@ -44,5 +41,5 @@ Subroutine Calc_Constant
   !    simulation = "MD"
   !end select
 
-  Return
-End Subroutine
+  return
+end subroutine Calc_Constant

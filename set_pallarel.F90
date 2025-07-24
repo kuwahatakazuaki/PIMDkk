@@ -13,22 +13,27 @@ subroutine set_pallarel
   Nhmod=mod(Nbead,Nproc)
   numeach=(Nbead-Nhmod)/Nproc
 
-  Do i=1,Nhmod
+  do i=1,Nhmod
     listeach(i)=numeach+1
-  Enddo
-  Do i=Nhmod+1,Nproc
+  end do
+
+  do i=Nhmod+1,Nproc
     listeach(i)=numeach
-  Enddo
+  end do
   numeach=listeach(myrank+1)
+
   ista=1
-  Do i=1,myrank
+  do i=1,myrank
     ista=ista+listeach(i)
-  Enddo
+  end do
   iend=ista+listeach(myrank+1)-1
+
 #else
+
   implicit none
   ista = 1
   iend = Nbead
+
 #endif
 
   return

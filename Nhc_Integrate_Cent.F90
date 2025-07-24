@@ -1,4 +1,4 @@
-Subroutine Nhc_Integrate_Cent
+subroutine nhc_Integrate_Cent
   use Parameters
   use utility, only: norm_seq
   implicit none
@@ -62,10 +62,10 @@ Subroutine Nhc_Integrate_Cent
   vur(:,:,1) = vur(:,:,1) * scale
 
   Return
-End Subroutine
+end subroutine nhc_Integrate_Cent
 
 
-Subroutine nhc_integrate_cent3
+subroutine nhc_integrate_cent3
   Use Parameters
   Implicit None
   Double Precision  :: skin, scale, dt_ys, vfact, pvfact
@@ -133,4 +133,4 @@ Subroutine nhc_integrate_cent3
   enddo
 
 return
-End Subroutine
+end subroutine nhc_integrate_cent3

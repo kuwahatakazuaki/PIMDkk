@@ -1,4 +1,4 @@
-Subroutine Getforce_Ref
+subroutine Getforce_Ref
   use Parameters
   use utility, only: program_abort
   implicit none
@@ -12,4 +12,4 @@ Subroutine Getforce_Ref
   enddo
 
 return
-End Subroutine
+end subroutine Getforce_Ref

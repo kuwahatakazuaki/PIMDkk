@@ -22,8 +22,6 @@ subroutine Broad1
   call MPI_Bcast(Iseeds,4,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   call MPI_BCAST(NCent,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   call MPI_BCAST(freq1,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-  !call MPI_BCAST(address,80,MPI_CHARACTER,0,MPI_COMM_WORLD,IERR)
-  !call MPI_BCAST(address2,80,MPI_CHARACTER,0,MPI_COMM_WORLD,IERR)
   call MPI_BCAST(dir_result,80,MPI_CHARACTER,0,MPI_COMM_WORLD,IERR)
   call MPI_BCAST(dir_scr,80,MPI_CHARACTER,0,MPI_COMM_WORLD,IERR)
   call MPI_BCAST(version,80,MPI_CHARACTER,0,MPI_COMM_WORLD,IERR)
@@ -48,7 +46,7 @@ subroutine Broad1
 #endif
 
   return
-End Subroutine
+end subroutine Broad1
 
 subroutine Broad2
   use Parameters
@@ -113,5 +111,5 @@ subroutine Broad3
 #endif
 
   return
-end subroutine
+end subroutine Broad3
 

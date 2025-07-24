@@ -9,7 +9,7 @@ subroutine PI_NEW_MPI
   call Normal_Mode
   call Init_Mass
 
-  !call set_each_exe
+  !call set_Iforce
 
   select case(Iforce)
     case(1)
@@ -64,9 +64,9 @@ subroutine PI_NEW_MPI
         case(0)
           continue
         case(1)
-         call Nhc_Integrate_Cent
+         call nhc_Integrate_Cent
         case(3)
-         call Nhc_Integrate_Cent3
+         call nhc_Integrate_Cent3
       end select
       call Vupdate
 
@@ -88,7 +88,6 @@ subroutine PI_NEW_MPI
         end do
       end if
 
-!     call Getforce_Ref
       call nmtrans_ur2r       ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
       call Force_New_MPI_tk   ! Obtaining fx
       if ( mod(istepsv,out_step) == 0 ) call print_result_qm
@@ -99,9 +98,9 @@ subroutine PI_NEW_MPI
         case(0)
           continue
         case(1)
-         call Nhc_Integrate_Cent
+         call nhc_Integrate_Cent
         case(3)
-         call Nhc_Integrate_Cent3
+         call nhc_Integrate_Cent3
       end select
       call Ham_Temp
 

@@ -2,7 +2,7 @@ Subroutine Set_Deallocate
   Use Parameters
   Implicit None
 
-  deallocate  (physmass)
+  deallocate(physmass)
   deallocate(  r)
   deallocate( ur)
   deallocate(vur)

@@ -22,7 +22,6 @@ subroutine Setup_time_mass
   select case(Ncent)
     case(1)
       qmcent11(1) = 3.d0*dble(natom)/beta/omega2
-      ! qmcent11(1) = 3.d0/beta/omega2 ??
       do inhc=2,nnhc
         qmcent11(inhc) = 1.d0/beta/omega2
       enddo

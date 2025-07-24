@@ -6,10 +6,6 @@ subroutine Ham_Temp
   integer :: i, j, k, iatom, imode, inhc, icolor
   real(8) :: get_kinetic_ene!, temp
 
-  !dkin  = 0.d0
-  !call Kinetic_Energy(dkin)
-  !dkinetic = dkin
-  !dkinetic = 0.5d0*dkinetic
   dkinetic = get_kinetic_ene()
   temp = 2.d0*dkinetic/dble(natom)/KtoAU/3.d0
   temp = temp/dble(nbead)
@@ -25,7 +21,7 @@ subroutine Ham_Temp
       virial = virial + dot_product( fr(:,i,j) , r(:,i,j) )
     end do
   end do
-  PV  = (dkinetic + virial)/3.0d0 * AUtoJ / dble(nbead)
+  !PV  = (dkinetic + virial)/3.0d0 * AUtoJ / dble(nbead)
 
 !
 !   /*  quantum kinetic energy (harmonic interaction):  *

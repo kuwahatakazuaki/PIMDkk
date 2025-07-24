@@ -32,7 +32,6 @@ subroutine Classical
     if ( mod(istepsv,out_step) == 0 ) call print_result_qm
     call Ham_Temp_Classical
     call print_ham(Irestep)
-    !call Print_Ham_Classical(Irestep)
   end if
 
   do istepsv = Irestep + 1, Nstep
@@ -58,7 +57,6 @@ subroutine Classical
        call Nhc_Integrate_Cent3
     end select
     call Ham_Temp_Classical
-    !call Print_Ham_Classical(istepsv)
     call print_ham(istepsv)
     if ( mod(istepsv,out_step)==0 ) call Restart_Write_Classical(istepsv)
 
