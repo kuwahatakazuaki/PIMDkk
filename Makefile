@@ -99,6 +99,7 @@ calc_umbrella.F90                  \
 force_siesta.F90                   \
 Set_mopac.F90                      \
 Set_VASP.F90                       \
+set_Iforce.F90                     \
 neural_network.F90                 \
 force_water.F90                    \
 constrain.F90                      \
