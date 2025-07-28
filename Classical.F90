@@ -7,18 +7,20 @@ subroutine Classical
   call Setup_time_mass
   call Init_Mass
 
-  select case(Iforce)
-    case(1)
-      call Set_mopac
-    case(6)
-      call Set_Gaussian_MPI_tk
-    case(8)
-      call Set_VASP
-    case(21)
-      call set_nnp_araidai
-    case(22)
-      call set_nnp_matlantis
-  end select
+  call set_Iforce
+
+  !select case(Iforce)
+  !  case(1)
+  !    call Set_mopac
+  !  case(6)
+  !    call Set_Gaussian_MPI_tk
+  !  case(8)
+  !    call Set_VASP
+  !  case(21)
+  !    call set_nnp_araidai
+  !  case(22)
+  !    call set_nnp_matlantis
+  !end select
 
 
   if ( Lrestart .eqv. .True. ) then

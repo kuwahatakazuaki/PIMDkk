@@ -16,7 +16,7 @@ subroutine Set_mopac
     call system('cp mopac.mop '//trim(addresstmp))
   enddo
 
-return
+  return
 
 contains
 

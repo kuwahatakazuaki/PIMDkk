@@ -3,8 +3,8 @@ subroutine Uupdate
   implicit none
   integer :: imode, iatom
 
-  do imode = 1, nbead
-    do iatom = 1, natom
+  do imode = 1, Nbead
+    do iatom = 1, Natom
       ur(:,iatom,imode) = ur(:,iatom,imode) + dt_ref*vur(:,iatom,imode)
       !ur(:,iatom,imode) = ur(:,iatom,imode) + 0.5 * dt_ref*vur(:,iatom,imode)
     enddo
@@ -17,8 +17,8 @@ subroutine Vupdate
   implicit none
   integer :: imode, iatom
 
-  do imode = 1, nbead
-    do iatom = 1, natom
+  do imode = 1, Nbead
+    do iatom = 1, Natom
       vur(:,iatom,imode) = vur(:,iatom,imode) + 0.5d0*dt*fur(:,iatom,imode)/fictmass(iatom,imode)
     enddo
   enddo

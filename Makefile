@@ -92,7 +92,6 @@ Set_Gaussian_MPI_tk.F90            \
 Force_Gaussian_MPI_tk.F90          \
 print_ham.F90                      \
 Force_model_Morse.F90              \
-Set_siesta.F90                     \
 Force_VASP_MPI.F90                 \
 print_result_qm.F90                \
 calc_umbrella.F90                  \
@@ -105,6 +104,7 @@ force_water.F90                    \
 constrain.F90                      \
 exit.F90                           \
 
+# Set_siesta.F90                     \
 # LammpsInterface.F90                \
 # LammpsCalculator.F90               \
 # force_LAMMPS.F90                   \
