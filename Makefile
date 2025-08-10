@@ -102,6 +102,7 @@ set_Iforce.F90                     \
 neural_network.F90                 \
 force_water.F90                    \
 constrain.F90                      \
+PIHMC.F90                          \
 exit.F90                           \
 
 # Set_siesta.F90                     \

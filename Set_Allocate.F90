@@ -2,52 +2,59 @@ subroutine Set_Allocate
   use Parameters
   implicit none
 
-  allocate(  atom_num(natom))
+  allocate( atom_num(Natom) )
   allocate( r(3,Natom,Nbead) )
   allocate( ur(3,Natom,Nbead) )
   allocate( vur(3,Natom,Nbead) )
   allocate( fr(3,Natom,Nbead) )
   allocate( fur(3,Natom,Nbead) )
-  allocate  (physmass(natom))
-  allocate  (dnmmass(natom, nbead))
-  allocate  (fictmass(natom, nbead))
+  allocate( physmass(Natom))
+  allocate( dnmmass(Natom, Nbead))
+  allocate( fictmass(Natom, Nbead))
 
-  if ( Isimulation /= 10 ) then
-    allocate  (qmass(nbead))
-    allocate( fur_ref(3,Natom,Nbead) )
-    allocate (tnm(nbead, nbead))
-    allocate (tnminv(nbead, nbead))
-    allocate (u(nbead, nbead))
-    allocate (uinv(nbead, nbead))
-    allocate ( rbath(3,Natom,Nnhc,Nbead))
-    allocate ( vrbath(3,Natom,Nnhc,Nbead))
-    allocate ( frbath(3,Natom,Nnhc,Nbead))
+  if ( Isimulation == 3 ) then
+    allocate( r_old(3,Natom,Nbead) )
+    allocate( ur_old(3,Natom,Nbead) )
+    allocate( vur_old(3,Natom,Nbead) )
+    allocate( fr_old(3,Natom,Nbead) )
+    allocate( fur_ref_old(3,Natom,Nbead) )
+    allocate( pot_old(Nbead))
   end if
 
-  allocate (alabel(natom))
-  allocate(dipoler(3,Nbead))
-  allocate(pressure(nbead))
-  allocate (charge(natom,nbead))
-  allocate (hfcc(natom,nbead))
-  allocate (nbo(natom,nbead))
-  allocate (Eenergy(nbead))
-  allocate (homo(nbead))
-  allocate (lumo(nbead))
+  if ( Isimulation /= 10 ) then
+    allocate( qmass(Nbead))
+    allocate( fur_ref(3,Natom,Nbead) )
+    allocate( tnm(Nbead, Nbead))
+    allocate( tnminv(Nbead, Nbead))
+    allocate( u(Nbead, Nbead))
+    allocate( uinv(Nbead, Nbead))
+    allocate( rbath(3,Natom,Nnhc,Nbead))
+    allocate( vrbath(3,Natom,Nnhc,Nbead))
+    allocate( frbath(3,Natom,Nnhc,Nbead))
+  end if
+
+  allocate( alabel(Natom))
+  allocate( dipoler(3,Nbead))
+  allocate( pressure(Nbead))
+  allocate( charge(Natom,Nbead))
+  allocate( hfcc(Natom,Nbead))
+  allocate( nbo(Natom,Nbead))
+  allocate( Eenergy(Nbead))
 
   select case(Ncent)
     case(1)
-      allocate  (rbc11(nnhc))
-      allocate  (vbc11(nnhc))
-      allocate  (fbc11(nnhc))
-      allocate  (qmcent11(nnhc))
+      allocate( rbc11(Nnhc))
+      allocate( vbc11(Nnhc))
+      allocate( fbc11(Nnhc))
+      allocate( qmcent11(Nnhc))
     case(3)
-      allocate ( rbc31(3,Natom,Nnhc) )
-      allocate ( vrbc31(3,Natom,Nnhc) )
-      allocate ( frbc31(3,Natom,Nnhc) )
-      allocate  (qmcent31(nnhc))
+      allocate( rbc31(3,Natom,Nnhc) )
+      allocate( vrbc31(3,Natom,Nnhc) )
+      allocate( frbc31(3,Natom,Nnhc) )
+      allocate( qmcent31(Nnhc))
   end select
 
-  allocate   (ysweight(nys))
+  allocate( ysweight(nys))
 
   return
 end subroutine Set_Allocate

@@ -6,7 +6,7 @@ subroutine print_ham(Istep)
   integer :: Uout
 
   select case(Isimulation)
-    case(0:2)
+    case(0:3)
       call print_ham_qm
     case(10)
       call print_ham_cl

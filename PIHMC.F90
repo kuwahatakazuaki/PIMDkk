@@ -1,0 +1,149 @@
+subroutine PIHMC
+  use Parameters
+  use utility, only: program_abort, ranf1
+  implicit none
+  integer :: iref, Uout
+  integer :: Idyn, Ndyn = 5
+
+  call Setup_time_mass
+  call set_pallarel
+  call Normal_Mode
+  call Init_Mass
+
+  call set_Iforce
+
+  if ( Lrestart .eqv. .True. ) then
+    if (MyRank == 0) Then
+       call restart_read
+    end if
+    call Broad3
+  else
+    call print_ini
+    call NM_Position
+    if (MyRank == 0) Then
+      call Init_Velocity
+      call Init_Bath
+    end if
+    call Broad3
+    call Temp_ctr
+    call nmtrans_ur2r ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
+    call Force_New_MPI_tk
+    if ( mod(istepsv,out_step) == 0 ) call print_result_qm
+    call nmtrans_fr2fur     !call Getfnm  ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i)
+
+    if ( MyRank == 0 ) then
+      call Ham_Temp
+      call print_ham(Irestep)
+    end if
+  end if
+
+  call Getforce_Ref
+
+  call save_hmc
+  if ( MyRank == 0 ) then
+
+    main_loop: &
+    do istepsv = Irestep+1, nstep
+
+      dyn_loop: &
+      do Idyn = 1, Ndyn
+
+        call Vupdate
+        do iref=1, Nref   ! Nref = 5
+          call Vupdate_Ref
+          call Uupdate
+          call Getforce_Ref
+          call Vupdate_Ref
+        end do
+        call nmtrans_ur2r       ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
+        call Force_New_MPI_tk   ! Obtaining fx
+        call nmtrans_fr2fur     ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i) !call Getfnm
+        call Vupdate
+
+      end do dyn_loop
+
+      call getenergy_hmc
+      call judge_hmc
+
+      if ( mod(istepsv,out_step) == 0 ) call print_result_qm
+      call Ham_Temp
+
+      if (MyRank == 0) Then
+        call print_ham(istepsv)
+        if ( mod(istepsv,out_step)==0 ) call Restart_Write(istepsv)
+      end if
+
+      if (mod(istepsv,10) == 0) then
+        call exit_program
+      end if
+
+    end do main_loop
+
+  else
+    do istepsv = Irestep+1, nstep
+      call Force_New_MPI_tk
+    end do
+  end if
+
+  if (MyRank == 0) then
+    open(newunit=Uout,file=Fout,status='old',position='append')
+      write(Uout,'(" ",a)')  repeat('*',121)
+    close(Uout)
+  end if
+
+  return
+
+contains
+
+  subroutine save_hmc
+    ur_old(:,:,:)      = ur(:,:,:)
+    vur_old(:,:,:)     = vur(:,:,:)
+    fur_old(:,:,:)     = fur(:,:,:)
+    fur_ref_old(:,:,:) = fur_ref(:,:,:)
+    pot_old(:)         = Eenergy(:)
+  end subroutine save_hmc
+
+  subroutine judge_hmc
+    implicit none
+    real(8) :: bfactor
+
+    bfactor = beta * (hamiltonian - hamiltonian_old)
+
+    if ( bfactor < 75.d0 ) then
+      if ( bfactor <= 0.0d0 ) then
+        Naccept = Naccept + 1
+      else
+        if ( exp(-bfactor) >= ranf1() ) then
+          Naccept = Naccept + 1
+        else
+          Nreject = Nreject + 1
+          !call recover_hmc
+        end if
+      end if
+    else
+      Nreject = Nreject + 1
+    end if
+
+  end subroutine judge_hmc
+
+  subroutine getenergy_hmc
+    use utility, only: norm_seq
+    integer :: Imode, Iatom
+    real(8) :: factqk
+    real(8) :: get_kinetic_ene
+
+    dkinetic = get_kinetic_ene()
+
+    qkinetic = 0.0d0
+    do Imode = 2, nbead
+    do Iatom = 1, natom
+      factqk = 0.5d0*dnmmass(Iatom,Imode)*omega_p2
+      qkinetic = qkinetic + factqk * norm_seq( ur(:,Iatom,Imode) )
+    end do
+    end do
+
+    hamiltonian = dkinetic + qkinetic + potential
+  end subroutine getenergy_hmc
+
+
+end subroutine PIHMC

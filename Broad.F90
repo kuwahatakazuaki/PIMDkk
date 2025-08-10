@@ -80,7 +80,7 @@ subroutine Broad3
   implicit none
   integer :: ierr
 
-  Call MPI_BCAST(Irestep,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  call MPI_BCAST(Irestep,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   call MPI_Bcast(ur(1,1,1),3*natom*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
   call MPI_Bcast(vur(1,1,1),3*natom*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
   call MPI_Bcast(fur(1,1,1),3*natom*nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
@@ -95,18 +95,9 @@ subroutine Broad3
       call MPI_Bcast(vbc11,nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
       call MPI_Bcast(fbc11,nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
     case(3)
-    !Call MPI_BCAST(fxbc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-    !Call MPI_BCAST(fybc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-    !Call MPI_BCAST(fzbc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-    call MPI_Bcast(frbc31(1,1,1),3*natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-    !Call MPI_BCAST(vxbc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-    !Call MPI_BCAST(vybc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-    !Call MPI_BCAST(vzbc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-    call MPI_Bcast(vrbc31(1,1,1),3*natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-    !Call MPI_BCAST(xbc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-    !Call MPI_BCAST(ybc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-    !Call MPI_BCAST(zbc31(1,1),natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-    call MPI_Bcast(rbc31(1,1,1),3*natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+      call MPI_Bcast(frbc31(1,1,1),3*natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+      call MPI_Bcast(vrbc31(1,1,1),3*natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+      call MPI_Bcast(rbc31(1,1,1),3*natom*nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
   end select
 #endif
 

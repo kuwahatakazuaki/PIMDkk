@@ -1,6 +1,6 @@
 Subroutine Set_Deallocate
-  Use Parameters
-  Implicit None
+  use Parameters
+  implicit none
 
   deallocate(physmass)
   deallocate(  r)
@@ -14,38 +14,36 @@ Subroutine Set_Deallocate
   deallocate(hfcc)
   deallocate(nbo)
   deallocate(Eenergy)
-  deallocate(homo)
-  deallocate(lumo)
 
   if ( Isimulation /= 10 ) then
     deallocate(fur_ref)
-    deallocate (tnm)
-    deallocate (tnminv)
-    deallocate (u)
-    deallocate (uinv)
+    deallocate(tnm)
+    deallocate(tnminv)
+    deallocate(u)
+    deallocate(uinv)
     deallocate(rbath)
     deallocate(vrbath)
     deallocate(frbath)
-    deallocate  (qmass)
+    deallocate(qmass)
   end if
 
   select case(Ncent)
     case(1)
-      deallocate  (rbc11)
-      deallocate  (vbc11)
-      deallocate  (fbc11)
-      deallocate  (qmcent11)
+      deallocate(rbc11)
+      deallocate(vbc11)
+      deallocate(fbc11)
+      deallocate(qmcent11)
     case(3)
       deallocate(rbc31)
       deallocate(vrbc31)
       deallocate(frbc31)
-      deallocate  (qmcent31)
+      deallocate(qmcent31)
   end select
-  deallocate  (dnmmass)
-  deallocate  (fictmass)
-  deallocate   (ysweight)
+  deallocate(dnmmass)
+  deallocate(fictmass)
+  deallocate(ysweight)
 
-  Return
-End Subroutine Set_Deallocate
+  return
+end subroutine Set_Deallocate
 
 

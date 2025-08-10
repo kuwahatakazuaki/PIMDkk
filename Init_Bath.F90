@@ -1,4 +1,4 @@
-Subroutine Init_Bath
+subroutine Init_Bath
   use Parameters
   Implicit None
   Double Precision :: gasd, vsigma
@@ -50,5 +50,5 @@ Subroutine Init_Bath
       enddo
   end select
 
-  Return
-End Subroutine
+  return
+end subroutine

@@ -8,23 +8,7 @@ subroutine PI_NEW_MPI
   call set_pallarel
   call Normal_Mode
   call Init_Mass
-
   call set_Iforce
-
-  !select case(Iforce)
-  !  case(1)
-  !    call Set_mopac
-  !  case(6)
-  !    call Set_Gaussian_MPI_tk  ! Set for chk, rwf, etc.
-  !  case(8)
-  !    call Set_VASP
-  !  case(9)
-  !    call Set_siesta
-  !  case(21)
-  !    call set_nnp_araidai
-  !  case(22)
-  !    call set_nnp_matlantis
-  !end select
 
   if ( Lrestart .eqv. .True. ) then
     if (MyRank == 0) Then

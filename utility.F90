@@ -311,6 +311,10 @@ contains
     call system(command)
   end subroutine makedir
 
+  real(8) function ranf1()
+    call random_number(ranf1)
+  end function ranf1
+
 
   !subroutine get_inv_mat(mat,inv,n)
   !  integer :: n

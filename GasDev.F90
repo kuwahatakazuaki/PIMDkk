@@ -1,8 +1,8 @@
-Subroutine gasdev(gasd)
+subroutine gasdev(gasd)
+  use utility, only : ranf1
   implicit none
   Double Precision :: R_Number,v1,v2,rsq,gset,fac,gasd
   Integer          :: iset
-  real(8) :: ranf1
   save iset, gset
   data iset /0/
 
@@ -32,9 +32,6 @@ Subroutine gasdev(gasd)
   Return
 End Subroutine
 
-real(8) function ranf1()
-  call random_number(ranf1)
-end function ranf1
 
 subroutine set_random_seed(Irand)
   integer :: Irand, i

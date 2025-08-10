@@ -30,10 +30,12 @@ program Path_Integral
   call Calc_Constant
   call Check_Inp
 
-! Isimulation = 0:PIMD, 1:RPMD, 2CMD, 10:CL
+! Isimulation = 0:PIMD, 1:RPMD, 2:CMD, 3:PIHMC 10:CL
   select case(Isimulation)
     case(0:2)
       call PI_NEW_MPI
+    case(3)
+      call PIHMC
     case(10)
       call Classical
     case default

@@ -3,8 +3,8 @@ subroutine Ham_Temp
   use utility, only: norm_seq
   implicit none
   Double Precision :: qdummy, factqk, dkin
-  integer :: i, j, k, iatom, imode, inhc, icolor
-  real(8) :: get_kinetic_ene!, temp
+  integer :: i, j, k, Iatom, Imode, inhc, icolor
+  real(8) :: get_kinetic_ene
 
   dkinetic = get_kinetic_ene()
   temp = 2.d0*dkinetic/dble(natom)/KtoAU/3.d0
@@ -16,8 +16,8 @@ subroutine Ham_Temp
 !
 
   virial = 0.0d0
-  do j = 1, nbead
-    do i = 1, natom
+  do j = 1, Nbead
+    do i = 1, Natom
       virial = virial + dot_product( fr(:,i,j) , r(:,i,j) )
     end do
   end do
@@ -27,11 +27,11 @@ subroutine Ham_Temp
 !   /*  quantum kinetic energy (harmonic interaction):  *
 !    *  primitive estimator                             */
 !
-  qkinetic = 0.d0
-  do imode = 2, nbead
-    do iatom = 1, natom
-      factqk = 0.5d0*dnmmass(iatom,imode)*omega_p2
-      qkinetic = qkinetic + factqk * norm_seq( ur(:,iatom,imode) )
+  qkinetic = 0.0d0
+  do Imode = 2, Nbead
+    do Iatom = 1, Natom
+      factqk = 0.5d0*dnmmass(Iatom,Imode)*omega_p2
+      qkinetic = qkinetic + factqk * norm_seq( ur(:,Iatom,Imode) )
     enddo
   enddo
 !

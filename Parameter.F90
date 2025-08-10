@@ -29,7 +29,8 @@ module Parameters
   real(8), allocatable :: dnmmass(:,:),fictmass(:,:),qmass(:),ysweight(:)
   real(8), allocatable :: qmcent11(:), qmcent31(:)
   real(8), allocatable :: dipoler(:,:), atom_num(:)
-  real(8), allocatable :: charge(:,:),nbo(:,:),Eenergy(:),homo(:),lumo(:), hfcc(:,:)
+  real(8), allocatable :: charge(:,:), Eenergy(:), hfcc(:,:), nbo(:,:) ! Eenergy should be replaced with pot
+  !real(8), allocatable :: homo(:), lumo(:)
   real(8)              :: gamma1 = 1.0d0, gamma2, omega_system
   real(8)              :: omega_p2, omega2
   real(8)              :: gkt, gnkt, dp_inv, E_Virial
@@ -76,6 +77,16 @@ module Parameters
   integer :: umb_atom1 = 0, umb_atom2 = 0, umb_atom3 = 0
   real(8) :: umb_cons = 1d-5, umb_pot
 ! End Kuwahata 2020/10/06
+
+! Parameters for PIHMC
+  integer :: Naccept, Nreject
+  real(8), allocatable :: &
+    r_old(:,:,:), fr_old(:,:,:), ur_old(:,:,:), vur_old(:,:,:)
+  real(8), allocatable :: fur_old(:,:,:), fur_ref_old(:,:,:)
+  real(8), allocatable :: pot_old(:)
+  real(8)              :: dkinetic_old, qkinetic_old
+  real(8)              :: potential_old, hamiltonian_old
+! Parameters for PIHMC
 
   integer :: Icons = 0, cons_atom1, cons_atom2, cons_atom3
   real(8) :: cons_strenght, cons_val
