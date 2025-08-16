@@ -42,7 +42,7 @@ Subroutine Force_MOPAC_MPI
        if ( index(line,trim(key1)) > 0 ) exit  ! Reading "SCE Done"
      end do
      read(line,*) Cdummy(1:3), enetemp
-     Eenergy(imode) = enetemp * 0.0367493238d0
+     pot_bead(imode) = enetemp * 0.0367493238d0
 !  +++ End Reading "ENERGY" +++
 
 !  +++ Reading "Atomic Force" +++
@@ -90,7 +90,7 @@ Subroutine Force_MOPAC_MPI
 
 !    potential=0.0D+00
 !    do imode=1,nbead
-!       potential=potential+Eenergy(imode)
+!       potential=potential+pot_bead(imode)
 !    enddo
 !    potential=potential/dp
 

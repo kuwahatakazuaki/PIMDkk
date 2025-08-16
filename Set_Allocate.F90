@@ -2,7 +2,7 @@ subroutine Set_Allocate
   use Parameters
   implicit none
 
-  allocate( atom_num(Natom) )
+  !allocate( atom_num(Natom) )
   allocate( r(3,Natom,Nbead) )
   allocate( ur(3,Natom,Nbead) )
   allocate( vur(3,Natom,Nbead) )
@@ -39,7 +39,7 @@ subroutine Set_Allocate
   allocate( charge(Natom,Nbead))
   allocate( hfcc(Natom,Nbead))
   allocate( nbo(Natom,Nbead))
-  allocate( Eenergy(Nbead))
+  allocate( pot_bead(Nbead))
 
   select case(Ncent)
     case(1)

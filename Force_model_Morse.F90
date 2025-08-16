@@ -4,7 +4,7 @@
 ! Atoms must be order of "O", "O", "H"
 subroutine Force_Double_Morse
   use Parameters, &
-    only: r, fr, Natom, Nbead, Eenergy, potential, &
+    only: r, fr, Natom, Nbead, pot_bead, potential, &
           alabel, dp_inv, dir_result, istepsv, MyRank, &
           Lsave_force, physmass, dipoler, &
           AUtoAng, AngtoAU, Ista, Iend
@@ -21,7 +21,7 @@ subroutine Force_Double_Morse
   real(8) :: f31(3), f32(3)
 
   fr(:,:,:) = 0.0d0
-  Eenergy(:) = 0.0d0
+  pot_bead(:) = 0.0d0
   do imode = Ista, Iend
     f31(:)  = Fmorse(r(:,3,imode),r(:,1,imode))
     f32(:)  = Fmorse(r(:,3,imode),r(:,2,imode))
@@ -29,7 +29,7 @@ subroutine Force_Double_Morse
     fr(:,2,imode) = Fharmo(r(:,2,imode),rO2(:)) - f32(:)
     fr(:,3,imode) = f31(:) + f32(:)
 
-    Eenergy(imode) &
+    pot_bead(imode) &
           = harmonic(r(:,1,imode),rO1(:)) + &
             harmonic(r(:,2,imode),rO2(:)) + &
             morse(r(:,3,imode),r(:,1,imode)) + morse(r(:,3,imode),r(:,2,imode))
@@ -44,7 +44,7 @@ end subroutine Force_Double_Morse
 ! ++++++++++++++++++++++
 subroutine Force_Harmonic
   Use Parameters, & 
-    only: r, fr, Natom, Nbead, Eenergy, potential, &
+    only: r, fr, Natom, Nbead, pot_bead, potential, &
           alabel, dp_inv, dir_result, istepsv, MyRank, &
           Lsave_force, physmass, dipoler, &
           AUtoAng, AngtoAU, Ista, Iend
@@ -76,7 +76,7 @@ subroutine Force_Harmonic
 
   ! +++ Calculating Force in which atom (i) feels from atom (j) +++
   fr(:,:,:) = 0.0d0
-  Eenergy(:) = 0.0d0
+  pot_bead(:) = 0.0d0
   do imode = Ista, Iend
     do i = 1, Natom
       do j = i+1, Natom
@@ -88,7 +88,7 @@ subroutine Force_Harmonic
       end do
     end do
     dipoler(:,imode) = rij(:)
-    Eenergy(imode) = Eenergy(imode) + 0.5d0 * cons * (dis - r0)**2
+    pot_bead(imode) = pot_bead(imode) + 0.5d0 * cons * (dis - r0)**2
     dis_beads(imode) = dis
   end do
   fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv
@@ -131,7 +131,7 @@ end subroutine Force_Harmonic
 ! +++++++++++++++++++++++++
 subroutine Force_model_Morse
   Use Parameters, & 
-    only: r, fr, Natom, Nbead, Eenergy, potential, &
+    only: r, fr, Natom, Nbead, pot_bead, potential, &
           alabel, dp_inv, dir_result, istepsv, &
           Lsave_force, AUtoAng, AngtoAU
   implicit none
@@ -165,7 +165,7 @@ subroutine Force_model_Morse
 
   ! +++ Calculating enetemp +++
   open(newunit=Udis,file=trim(dir_result)//'/distance.dat',status='unknown',position='append')
-    Eenergy(:) = 0.0d0
+    pot_bead(:) = 0.0d0
     write(Udis,*) "# ", istepsv
     do imode = 1, Nbead
       do i = 1, Natom
@@ -174,7 +174,7 @@ subroutine Force_model_Morse
           !dis = dsqrt( dot_product( rij(:),rij(:) ) )
           dis = norm2(rij(:))
           temp = 1 - exp(-curvat * (dis-r0))
-          Eenergy(imode) = Eenergy(imode) + De * temp * temp
+          pot_bead(imode) = pot_bead(imode) + De * temp * temp
           write(Udis,*) dis * AUtoAng
         end do
       end do

@@ -57,7 +57,7 @@ subroutine Broad2
   real(8) :: tempr(3,Natom)
 
   Call MPI_BCAST(physmass,natom,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-  Call MPI_BCAST(atom_num,natom,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  !Call MPI_BCAST(atom_num,natom,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   Call MPI_BCAST(alabel,2*natom,MPI_CHARACTER,0,MPI_COMM_WORLD,IERR)
 
   if ( MyRank == 0 ) then

@@ -79,7 +79,7 @@ Subroutine Force_Gaussian_classical
 101 continue
 
 
-     Eenergy(imode2)=enetemp
+     pot_bead(imode2)=enetemp
      rewind(igauss+id)
 !  +++ End Reading "SCF Done" +++
 

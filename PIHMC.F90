@@ -42,10 +42,10 @@ subroutine PIHMC
   call save_hmc
   if ( MyRank == 0 ) then
 
-    main_loop: &
+    loop_main: &
     do istepsv = Irestep+1, nstep
 
-      dyn_loop: &
+      loop_dyn: &
       do Idyn = 1, Ndyn
 
         call Vupdate
@@ -60,7 +60,7 @@ subroutine PIHMC
         call nmtrans_fr2fur     ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i) !call Getfnm
         call Vupdate
 
-      end do dyn_loop
+      end do loop_dyn
 
       call getenergy_hmc
       call judge_hmc
@@ -77,7 +77,7 @@ subroutine PIHMC
         call exit_program
       end if
 
-    end do main_loop
+    end do loop_main
 
   else
     do istepsv = Irestep+1, nstep
@@ -95,14 +95,6 @@ subroutine PIHMC
 
 contains
 
-  subroutine save_hmc
-    ur_old(:,:,:)      = ur(:,:,:)
-    vur_old(:,:,:)     = vur(:,:,:)
-    fur_old(:,:,:)     = fur(:,:,:)
-    fur_ref_old(:,:,:) = fur_ref(:,:,:)
-    pot_old(:)         = Eenergy(:)
-  end subroutine save_hmc
-
   subroutine judge_hmc
     implicit none
     real(8) :: bfactor
@@ -117,14 +109,30 @@ contains
           Naccept = Naccept + 1
         else
           Nreject = Nreject + 1
-          !call recover_hmc
+          call recover_hmc
         end if
       end if
     else
       Nreject = Nreject + 1
+      call recover_hmc
     end if
-
   end subroutine judge_hmc
+
+  subroutine recover_hmc
+    ur(:,:,:)        = ur_old(:,:,:)
+    vur(:,:,:)       = vur_old(:,:,:)
+    fur(:,:,:)       = fur_old(:,:,:)
+    fur_ref(:,:,:)   = fur_ref_old(:,:,:)
+    pot_bead(:)       = pot_old(:)
+  end subroutine recover_hmc
+
+  subroutine save_hmc
+    ur_old(:,:,:)      = ur(:,:,:)
+    vur_old(:,:,:)     = vur(:,:,:)
+    fur_old(:,:,:)     = fur(:,:,:)
+    fur_ref_old(:,:,:) = fur_ref(:,:,:)
+    pot_old(:)         = pot_bead(:)
+  end subroutine save_hmc
 
   subroutine getenergy_hmc
     use utility, only: norm_seq

@@ -73,7 +73,7 @@ subroutine Force_Gaussian_MPI_tk
     read(line(38:60),*) enetemp ! For MP2
 101 continue
 
-    Eenergy(imode) = enetemp
+    pot_bead(imode) = enetemp
     rewind(Uinp)
 !  +++ End Reading "SCF Done" +++
 

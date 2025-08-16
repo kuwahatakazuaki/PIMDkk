@@ -68,7 +68,7 @@ subroutine Force_VASP_MPI
       enddo
       read(line(32:45),*) enetemp
       !enetemp = enetemp * ev_to_hartree
-      Eenergy(Imode) = enetemp * eVtoAU
+      pot_bead(Imode) = enetemp * eVtoAU
 ! +++ End Reading "energy  without entropy" +++
 
     close(Uinp)

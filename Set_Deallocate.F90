@@ -13,7 +13,7 @@ Subroutine Set_Deallocate
   deallocate(charge)
   deallocate(hfcc)
   deallocate(nbo)
-  deallocate(Eenergy)
+  deallocate(pot_bead)
 
   if ( Isimulation /= 10 ) then
     deallocate(fur_ref)

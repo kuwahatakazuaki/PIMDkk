@@ -62,7 +62,7 @@ subroutine Force_New_MPI_tk
   call MyMPI_gather_fr
   call MyMPI_gather_others
 #endif
-  potential = sum(Eenergy(:)) * dp_inv
+  potential = sum(pot_bead(:)) * dp_inv
 
   return
 contains
@@ -98,14 +98,14 @@ contains
 !      end do
 !      call calculator%run( cartesian_coordinates = cartesian_coordinates(:) )
 !
-!      Eenergy(Imode) = calculator%potential_energy
+!      pot_bead(Imode) = calculator%potential_energy
 !      do Iatom = 1, Natom
 !        fr(1,Iatom,Imode) = calculator%forces(Iatom)%x
 !        fr(2,Iatom,Imode) = calculator%forces(Iatom)%y
 !        fr(3,Iatom,Imode) = calculator%forces(Iatom)%z
 !      end do
 !    end do
-!    Eenergy(:) = Eenergy(:) * kcalPmol2AU
+!    pot_bead(:) = pot_bead(:) * kcalPmol2AU
 !    fr(:,:,:) = fr(:,:,:) * dp_inv * kcalPmol2AU / AngtoAU
 !
 !    CALL calculator%close()

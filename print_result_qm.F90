@@ -79,7 +79,7 @@ if(MyRank==0) Then
     open(newunit=Uene,file=trim(dir_result)//'/ene.dat',status='unknown',form='formatted',position='append')
       write(Uene,'("#",I10)') istepsv
       do imode=1,Nbead
-        write(Uene,8006) Eenergy(imode)
+        write(Uene,8006) pot_bead(imode)
       end do
     close(Uene)
   end if

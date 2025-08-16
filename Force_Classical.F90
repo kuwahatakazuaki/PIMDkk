@@ -36,8 +36,8 @@ Subroutine Force_Classical
 
   fur(:,:,1)=fr(:,:,1)
 
-  !potential = sum(Eenergy(:)) * dp_inv
-  potential = Eenergy(1)
+  !potential = sum(pot_bead(:)) * dp_inv
+  potential = pot_bead(1)
 
   Return
 contains
@@ -88,7 +88,7 @@ contains
        if ( index(line,trim(key1)) > 0 ) exit  ! Reading "SCE Done"
      end do
      read(line,*) Cdummy(1:3), enetemp
-     Eenergy(imode) = enetemp * 0.0367493238d0
+     pot_bead(imode) = enetemp * 0.0367493238d0
 !  +++ End Reading "ENERGY" +++
 
 !  +++ Reading "Atomic Force" +++
@@ -208,7 +208,7 @@ contains
       enddo
       read(line(32:45),*) enetemp
       enetemp = enetemp * ev_to_hartree
-      Eenergy(imode2)=enetemp
+      pot_bead(imode2)=enetemp
 ! +++ End Reading "energy  without entropy" +++
 
     close(igauss+id)

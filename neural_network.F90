@@ -1,7 +1,7 @@
 subroutine force_nnp_matlantis
 !!! === Nproc much be 1 at current verion === !!!
   use Parameters, &
-    only: Eenergy, r, fr, Natom, AUtoAng, eVtoAU, dp_inv, alabel, &
+    only: pot_bead, r, fr, Natom, AUtoAng, eVtoAU, dp_inv, alabel, &
           addresstmp, Ista, Iend, laddress, MyRank, Nbead, eVAng2AU, &
           Lperiodic
   use utility, only: program_abort
@@ -49,12 +49,12 @@ subroutine force_nnp_matlantis
       call program_abort('There is no "'//Fenergy//'"')
     end if
     do j = 1, Nbead
-      read(Uinp,*) Eenergy(j)
+      read(Uinp,*) pot_bead(j)
     end do
   close(Uinp)
 
   fr(:,:,:)  = fr(:,:,:) * eVAng2AU * dp_inv
-  Eenergy(:) = Eenergy(:) * eVtoAU
+  pot_bead(:) = pot_bead(:) * eVtoAU
   !end if
 
 contains
@@ -151,7 +151,7 @@ end subroutine set_nnp_araidai
 
 subroutine force_nnp_araidai
   use Parameters, &
-    only: Eenergy, r, fr, Natom, AUtoAng, eVtoAU, dp_inv, alabel, &
+    only: pot_bead, r, fr, Natom, AUtoAng, eVtoAU, dp_inv, alabel, &
           addresstmp, Ista, Iend, laddress, eVAng2AU
   use utility, only: program_abort
 
@@ -196,14 +196,14 @@ subroutine force_nnp_araidai
     !call system('cd '//trim(addresstmp)//' ; mpiexec.hydra -n 1 ./n2training ; cd ../.. ')
 
     open(newunit=Uinp,file=trim(addresstmp)//'foce_npp.out',status='old')
-      read(Uinp,*) Eenergy(Imode)
+      read(Uinp,*) pot_bead(Imode)
       do i = 1, Natom
         read(Uinp,*) dummyC, fr(:,i,Imode)
       end do
     close(Uinp)
 
     fr(:,:,Imode)=fr(:,:,Imode)*eVAng2AU*dp_inv
-    Eenergy(Imode) = Eenergy(Imode) * eVtoAU
+    pot_bead(Imode) = pot_bead(Imode) * eVtoAU
   end do
 
 return

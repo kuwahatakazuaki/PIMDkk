@@ -1,6 +1,6 @@
 subroutine  add_constrain
   use Parameters, &
-    only: r, fr, ur, Natom, Nbead,  Eenergy, potential, myrank, &
+    only: r, fr, ur, Natom, Nbead,  pot_bead, potential, myrank, &
           alabel, dp_inv, dir_result, istepsv, Iforce, &
           AUtoAng, KtoAU, AngtoAU, &
           Icons, cons_strenght, cons_val, &
@@ -13,7 +13,7 @@ end subroutine add_constrain
 
 !subroutine calc_umbrella
 !  use Parameters, &
-!    only: r, fr, Natom, Nbead,  Eenergy, potential, myrank, &
+!    only: r, fr, Natom, Nbead,  pot_bead, potential, myrank, &
 !          alabel, dp_inv, dir_result, istepsv, Iforce, &
 !          AUtoAng, KtoAU, AngtoAU, &
 !          atom1 => umb_atom1, atom2  => umb_atom2, atom3 => umb_atom3, &
@@ -41,7 +41,7 @@ end subroutine add_constrain
 !        r_mid(:) = 0.5d0*(r1(:)+r2(:))
 !        rij(:)  = r3(:) -  r_mid(:)
 !        umb_pot = umb_cons * dot_product(rij(:),rij(:))
-!        Eenergy(Imode) = Eenergy(Imode) + umb_pot
+!        pot_bead(Imode) = pot_bead(Imode) + umb_pot
 !
 !        fij(:) = umb_cons * rij(:) * dp_inv
 !        fr(:,atom1,Imode) = fr(:,atom1,Imode) + fij(:)

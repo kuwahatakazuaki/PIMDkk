@@ -25,11 +25,11 @@ module Parameters
   real(8), allocatable :: rbc31(:,:,:), vrbc31(:,:,:), frbc31(:,:,:)
   real(8), allocatable :: tnm(:,:), tnminv(:,:)
   real(8), allocatable :: u(:,:), uinv(:,:)
-  real(8), allocatable :: pot(:), physmass(:)
-  real(8), allocatable :: dnmmass(:,:),fictmass(:,:),qmass(:),ysweight(:)
+  real(8), allocatable :: physmass(:)   !pot(:),
+  real(8), allocatable :: dnmmass(:,:), fictmass(:,:), qmass(:), ysweight(:)
   real(8), allocatable :: qmcent11(:), qmcent31(:)
-  real(8), allocatable :: dipoler(:,:), atom_num(:)
-  real(8), allocatable :: charge(:,:), Eenergy(:), hfcc(:,:), nbo(:,:) ! Eenergy should be replaced with pot
+  real(8), allocatable :: dipoler(:,:) !, atom_num(:)
+  real(8), allocatable :: charge(:,:), pot_bead(:), hfcc(:,:), nbo(:,:) ! Eenergy(:)
   !real(8), allocatable :: homo(:), lumo(:)
   real(8)              :: gamma1 = 1.0d0, gamma2, omega_system
   real(8)              :: omega_p2, omega2

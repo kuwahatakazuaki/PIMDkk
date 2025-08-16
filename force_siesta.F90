@@ -43,7 +43,7 @@ subroutine force_siesta
          read(igauss+id,'(a)',end=401) line
          if ( index(line,'siesta: E_KS(eV)') > 0 ) exit
        end do
-       read(line(31:41),*) Eenergy(imode2)
+       read(line(31:41),*) pot_bead(imode2)
      close(igauss+id)
 !  +++ End Reading "SCF Done" +++
 
@@ -63,7 +63,7 @@ subroutine force_siesta
      call system('rm -rf '//trim(addresstmp)//'*log')
 
      fr(:,:,imode2) = fr(:,:,imode2) * dp_inv * eVtoAU * AUtoAng
-     Eenergy(imode2) = Eenergy(imode2) * eVtoAU
+     pot_bead(imode2) = pot_bead(imode2) * eVtoAU
    enddo
 
 

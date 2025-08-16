@@ -7,7 +7,7 @@ subroutine force_spcf
 !
 !===================================================================
   use Parameters, only: &
-    r, fr, pi, dipr => dipoler, Natom, Nbead, pot => Eenergy, &
+    r, fr, pi, dipr => dipoler, Natom, Nbead, pot => pot_bead, &
     Ista, Iend, dp_inv
   use utility, only: program_abort
 
