@@ -78,7 +78,6 @@ RandomG.F90                        \
 Force_Gaussian_classical.F90       \
 Force_MOPAC_MPI.F90                \
 Force_Classical.F90                \
-GasDev.F90                         \
 PI_NEW_MPI.F90                     \
 Classical.F90                      \
 print_ini.F90                      \
@@ -109,6 +108,7 @@ exit.F90                           \
 # LammpsInterface.F90                \
 # LammpsCalculator.F90               \
 # force_LAMMPS.F90                   \
+# GasDev.F90                         \
 
 
 SRCSF77 =  \

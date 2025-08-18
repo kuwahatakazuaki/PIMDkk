@@ -4,7 +4,7 @@
 
 Subroutine NM_Position
   use Parameters
-  use utility, only: program_abort
+  use utility, only: program_abort, gasdev
   implicit none
   Double Precision :: gasd, usigma
   integer :: i, j
@@ -14,9 +14,12 @@ Subroutine NM_Position
     do j = 2, nbead
       do i = 1, natom
         usigma = dsqrt(1.d0/beta/omega_p2/dnmmass(i,j))
-        call gasdev(gasd); ur(1,i,j) = usigma*gasd
-        call gasdev(gasd); ur(2,i,j) = usigma*gasd
-        call gasdev(gasd); ur(3,i,j) = usigma*gasd
+        !call gasdev(gasd); ur(1,i,j) = usigma*gasd
+        !call gasdev(gasd); ur(2,i,j) = usigma*gasd
+        !call gasdev(gasd); ur(3,i,j) = usigma*gasd
+        ur(1,i,j) = usigma*gasdev()
+        ur(2,i,j) = usigma*gasdev()
+        ur(3,i,j) = usigma*gasdev()
       enddo
     enddo
   Else
