@@ -17,7 +17,6 @@ subroutine Check_Inp
       write(Uout,9998) ' +++++ Given Temperature   ', Temperature
       write(Uout,9998) ' +++++ Given time step     ', dt / fs2AU
       write(Uout,9998) ' +++++ Output step (fs)    ', dt / fs2AU * out_step
-      !write(Uout,9998) ' +++++ Adiabaticity param. ', gamma1
       write(Uout,9999) ' +++++ Method of Centr NHC ', ncent
       write(Uout,9999) ' +++++ Length of Centr NHC ', nnhc
       write(Uout,9995) ' +++++ Flag for Restart    ', Lrestart

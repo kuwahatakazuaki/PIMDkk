@@ -1,4 +1,4 @@
-subroutine PIHMC
+subroutine PIHMC_normal
   use Parameters
   use utility, only: program_abort, ranf1
   implicit none
@@ -11,18 +11,16 @@ subroutine PIHMC
   call Init_Mass
 
   call set_Iforce
-
   if ( Lrestart .eqv. .True. ) then
-    if (MyRank == 0) Then
-       call restart_read
-    end if
+    !if (MyRank == 0) Then
+    call restart_read
+    !end if
     call Broad3
   else
     call print_ini
     call NM_Position
-    if (MyRank == 0) Then
+    if (MyRank == 0) then
       call Init_Velocity
-      call Init_Bath
     end if
     call Broad3
     call Temp_ctr
@@ -31,15 +29,16 @@ subroutine PIHMC
     if ( mod(istepsv,out_step) == 0 ) call print_result_qm
     call nmtrans_fr2fur     !call Getfnm  ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i)
 
-    if ( MyRank == 0 ) then
-      call Ham_Temp
-      call print_ham(Irestep)
-    end if
+    !if ( MyRank == 0 ) then
+    call Ham_Temp
+    call print_ham(Irestep)
+    !end if
   end if
 
   call Getforce_Ref
 
   call save_hmc
+stop 'HERE0'
   if ( MyRank == 0 ) then
 
     loop_main: &
@@ -67,11 +66,10 @@ subroutine PIHMC
 
       if ( mod(istepsv,out_step) == 0 ) call print_result_qm
       call Ham_Temp
-
-      if (MyRank == 0) Then
-        call print_ham(istepsv)
-        if ( mod(istepsv,out_step)==0 ) call Restart_Write(istepsv)
-      end if
+      !if (MyRank == 0) Then
+      call print_ham(istepsv)
+      if ( mod(istepsv,out_step)==0 ) call Restart_Write(istepsv)
+      !end if
 
       if (mod(istepsv,10) == 0) then
         call exit_program
@@ -116,6 +114,11 @@ contains
       Nreject = Nreject + 1
       call recover_hmc
     end if
+
+    if (MyRank ==0 ) call Init_Velocity
+    !call Broad_velocity
+    call getenergy_hmc
+    call save_hmc
   end subroutine judge_hmc
 
   subroutine recover_hmc
@@ -123,7 +126,7 @@ contains
     vur(:,:,:)       = vur_old(:,:,:)
     fur(:,:,:)       = fur_old(:,:,:)
     fur_ref(:,:,:)   = fur_ref_old(:,:,:)
-    pot_bead(:)       = pot_old(:)
+    pot_bead(:)      = pot_old(:)
   end subroutine recover_hmc
 
   subroutine save_hmc
@@ -154,4 +157,4 @@ contains
   end subroutine getenergy_hmc
 
 
-end subroutine PIHMC
+end subroutine PIHMC_normal

@@ -35,7 +35,7 @@ program Path_Integral
     case(0:2)
       call PI_NEW_MPI
     case(3)
-      call PIHMC
+      call PIHMC_normal
     case(10)
       call Classical
     case default

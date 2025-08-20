@@ -54,30 +54,6 @@ $Nnhc
 $gamma
 1.0
 
-$Iumb             # Umbrella sampling
-0
-$umb_atom1
-1
-$umb_atom2
-2
-$umb_atom2
-3
-$umb_cons
-1d-5
-
-$Icons            # 1:bond
-0
-$cons_atom1
-1
-$cons_atom2
-2
-$cons_atom3
-3
-$cons_val
-1.0d0
-$cons_strenght
-5.0d0
-
 $Lexit            # Exit the program (True of False)
 .F.
 $end parameter
@@ -103,4 +79,28 @@ H       -3.583174    0.466477    0.411941
 H       -2.291315   -0.301693    0.722959
 $end Coords
 
+
+$Iumb             # Umbrella sampling
+0
+$umb_atom1
+1
+$umb_atom2
+2
+$umb_atom2
+3
+$umb_cons
+1d-5
+
+$Icons            # 1:bond
+0
+$cons_atom1
+1
+$cons_atom2
+2
+$cons_atom3
+3
+$cons_val
+1.0d0
+$cons_strenght
+5.0d0
 

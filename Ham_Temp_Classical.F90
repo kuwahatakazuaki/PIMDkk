@@ -3,12 +3,8 @@ Subroutine Ham_Temp_Classical
   use utility, only: norm_seq, outer_product
   implicit none
   integer :: iatom, icolor, Inhc, i, j
-  real(8) :: get_kinetic_ene!, temp
+  real(8) :: get_kinetic_ene
 
-
-  !dkinetic = 0.0d0
-  !call Kinetic_Energy(dkinetic)
-  !dkinetic = 0.5d0*dkinetic
   dkinetic = get_kinetic_ene()
   temp = 2.d0*dkinetic/dble(natom)/KtoAU/3.d0
   temp = temp/dble(nbead)

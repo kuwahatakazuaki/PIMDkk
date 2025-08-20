@@ -4,27 +4,28 @@ subroutine print_result_qm
   implicit none
   integer :: i,j,k, imode, iatom
   integer :: Upre, Udip, Uchar, Uhfc, Ucoor, Ufor, Uene
-if(MyRank==0) Then
 
-  if( Lsave_dipole .eqv. .True. ) then
+if (MyRank==0) then
+
+  if ( Lsave_dipole .eqv. .True. ) then
     open(newunit=Udip,file=trim(dir_result)//'/dipole.dat',status='unknown',form='formatted',position='append')
       write(Udip,'("#",I10)') istepsv
       do imode=1,nbead
         write(Udip,8008) dipoler(:,imode)
       end do
     close(Udip)
-  endif
+  end if
 
-  if( Lsave_charge .eqv. .True.) then
+  if ( Lsave_charge .eqv. .True.) then
     open(newunit=Uchar,file=trim(dir_result)//'/charge.dat',status='unknown',form='formatted',position='append')
       write(Uchar,'("#", I10)') istepsv
       do imode=1,nbead
         write(Uchar,8007) charge(:,imode)
       end do
     close(Uchar)
-  endif
+  end if
 
-  if( Lsave_hfcc .eqv. .True. ) then
+  if ( Lsave_hfcc .eqv. .True. ) then
     open(newunit=Uhfc,file=trim(dir_result)//'/hfcc.dat',status='unknown',form='formatted',position='append')
     write(Uhfc,'("#", I10)') istepsv
     do imode=1,nbead

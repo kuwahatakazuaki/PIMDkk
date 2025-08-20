@@ -4,19 +4,16 @@ subroutine Init_Velocity
   implicit none
   real(8) :: vsigma
   !real(8) :: gasdev, vsigma
-  integer :: imode, iatom
+  integer :: Imode, Iatom
 !
 !     /*  vsigma: standard deviation of Maxwell distribution  */
 !
-  do imode = 1, nbead
-    do iatom = 1, natom
-      vsigma = dsqrt(1.d0/beta/fictmass(iatom,imode))
-      !call gasdev(gasd); vur(1,iatom,imode) = vsigma*gasd
-      !call gasdev(gasd); vur(2,iatom,imode) = vsigma*gasd
-      !call gasdev(gasd); vur(3,iatom,imode) = vsigma*gasd
-      vur(1,iatom,imode) = vsigma*gasdev()
-      vur(2,iatom,imode) = vsigma*gasdev()
-      vur(3,iatom,imode) = vsigma*gasdev()
+  do Imode = 1, Nbead
+    do Iatom = 1, Natom
+      vsigma = dsqrt(1.d0/beta/fictmass(Iatom,Imode))
+      vur(1,Iatom,Imode) = vsigma*gasdev()
+      vur(2,Iatom,Imode) = vsigma*gasdev()
+      vur(3,Iatom,Imode) = vsigma*gasdev()
     enddo
   enddo
 

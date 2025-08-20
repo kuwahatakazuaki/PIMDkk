@@ -5,6 +5,7 @@ subroutine restart_read
   integer :: i, j, inhc, icolor
   real(8) :: pur(3)
 
+if ( MyRank == 0 ) then
   open(newunit=Uinp, file=trim(dir_result)//'/restart.dat', status = 'unknown')
     read(Uinp,*) Irestep
     do j = 1, Nbead
@@ -75,8 +76,8 @@ subroutine restart_read
           enddo
         enddo
     end select
-
   close(Uinp)
+end if
   return
 end subroutine restart_read
 
@@ -86,7 +87,10 @@ subroutine Restart_Write(istep)
   integer :: Istep, Uout
   integer :: i, j, inhc, icolor
 
-  if (istep > out_step) call system('cat '//trim(dir_result)//'/restart.dat >'//trim(dir_result)//'/restart1.dat')
+if ( MyRank == 0 ) then
+  if (istep > out_step) then
+    call system('cat '//trim(dir_result)//'/restart.dat >'//trim(dir_result)//'/restart1.dat')
+  end if
 
   open(newunit=Uout, file=trim(dir_result)//'/restart.dat', status = 'unknown')
     write(Uout,'(i10)') Istep
@@ -154,6 +158,7 @@ subroutine Restart_Write(istep)
         enddo
     end select
   close(Uout)
+end if
 
 return
 end subroutine Restart_Write

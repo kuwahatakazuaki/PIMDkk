@@ -45,8 +45,8 @@ Subroutine Remove_TnR_All
 ! Obtain the Inverse Matrix of Momenta
 !
     detmat = calc_determinant33(inertia)
-!if ( detmat <= 0.00001d0 ) goto 100
     dinvmat(:,:) = 0.0d0
+
     if ( detmat <= delta ) then
       do i = 1, 3
         if ( abs(inertia(i,i)) > delta ) dinvmat(i,i) = 1/inertia(i,i)
@@ -65,7 +65,6 @@ Subroutine Remove_TnR_All
     enddo
     ang_vel(:) = matmul(dinvmat,moment)
 
-!100   continue
 !
 ! Subtract Translation and Rotation Velocities of COM from 
 ! Velocities of Atoms
@@ -84,6 +83,7 @@ Subroutine Remove_TnR_All
 
   enddo
   Return
+
 contains
 
   function calc_inertia(m,r) result(L)

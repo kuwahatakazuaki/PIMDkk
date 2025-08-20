@@ -4,57 +4,62 @@ module utility
 
 contains
 
-real(8) function gasdev()
-  !use utility, only : ranf1
-  implicit none
-  real(8) :: R_Number,v1,v2,rsq,gset,fac!,gasd
-  Integer          :: iset
-  save iset, gset
-  data iset /0/
+! +++ Random Generator +++
+  real(8) function gasdev()
+    implicit none
+    real(8) :: R_Number,v1,v2,rsq,gset,fac!,gasd
+    Integer          :: iset
+    save iset, gset
+    data iset /0/
 
-  if (iset==0) Then
-     do
-       call RandomG (1,R_Number)
-       v1  = 2.d0 * R_Number - 1.d0
-       call RandomG (1,R_Number)
-       v2  = 2.d0 * R_Number - 1.d0
+    if (iset==0) Then
+       do
+         call RandomG(1,R_Number)
+         v1  = 2.d0 * R_Number - 1.d0
+         call RandomG(1,R_Number)
+         v2  = 2.d0 * R_Number - 1.d0
 
-       !v1  = 2.d0 * ranf1() - 1.d0
-       !v2  = 2.d0 * ranf1() - 1.d0
+         !v1  = 2.d0 * ranf1() - 1.d0
+         !v2  = 2.d0 * ranf1() - 1.d0
 
-       rsq = v1*v1 + v2*v2
-       if (rsq < 1.d0 .and. rsq  > 0.d0) Then
-          fac  = dsqrt(-2.d0*dlog(rsq)/rsq)
-          gset   = v1 * fac
-          gasdev = v2 * fac
-          exit
-       end if
-     end do
-     iset   = 1
-  else
-     gasdev = gset
-     iset   = 0
-  end if
-  return
-!end subroutine
-end function gasdev
+         rsq = v1*v1 + v2*v2
+         if (rsq < 1.d0 .and. rsq  > 0.d0) Then
+            fac  = dsqrt(-2.d0*dlog(rsq)/rsq)
+            gset   = v1 * fac
+            gasdev = v2 * fac
+            exit
+         end if
+       end do
+       iset   = 1
+    else
+       gasdev = gset
+       iset   = 0
+    end if
+    return
+  end function gasdev
 
+  subroutine set_random_seed(Irand)
+    integer :: Irand, i
+    integer :: Nseeds
+    integer, allocatable :: seeds(:)
 
-subroutine set_random_seed(Irand)
-  integer :: Irand, i
-  integer :: Nseeds
-  integer, allocatable :: seeds(:)
+    call random_seed(size=Nseeds)
+    if ( .not. allocated(seeds) ) allocate(seeds(Nseeds))
 
-  call random_seed(size=Nseeds)
-  if ( .not. allocated(seeds) ) allocate(seeds(Nseeds))
+    if ( Irand == 0 ) then
+    do i = 1, Nseeds
+      call system_clock(count=seeds(i))
+    end do
+    end if
+    call random_seed(put=seeds(:))
+  end subroutine set_random_seed
 
-  if ( Irand == 0 ) then
-  do i = 1, Nseeds
-    call system_clock(count=seeds(i))
-  end do
-  end if
-  call random_seed(put=seeds(:))
-end subroutine set_random_seed
+  real(8) function ranf1()
+    call random_number(ranf1)
+  end function ranf1
+! +++ Random Generator +++
+
+!--------------------------------------------------------------------!
 
 ! +++ Module for IO +++
   !function exist_file(name_file) result(bool)
@@ -83,6 +88,8 @@ end subroutine set_random_seed
     401 print *, 'ERROR!!: There is no key: "'//key//'"' ; stop
   end subroutine search_line
 ! +++ Module for IO +++
+
+!--------------------------------------------------------------------!
 
 ! +++ Calculation of Matrix +++
   function calc_inv_mat33(mat) result(inv)
@@ -297,7 +304,7 @@ end subroutine set_random_seed
     end do
   end function lowerchr
 
-  !--------------------------------------------------------------------!
+!--------------------------------------------------------------------!
 
   function upperchr(str_in) result(str_out)
     character(len=*), intent(in) :: str_in
@@ -362,10 +369,6 @@ end subroutine set_random_seed
     write(*,*) trim(command)
     call system(command)
   end subroutine makedir
-
-  real(8) function ranf1()
-    call random_number(ranf1)
-  end function ranf1
 
 
   !subroutine get_inv_mat(mat,inv,n)

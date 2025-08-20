@@ -17,6 +17,7 @@ subroutine Set_Allocate
     allocate( ur_old(3,Natom,Nbead) )
     allocate( vur_old(3,Natom,Nbead) )
     allocate( fr_old(3,Natom,Nbead) )
+    allocate( fur_old(3,Natom,Nbead) )
     allocate( fur_ref_old(3,Natom,Nbead) )
     allocate( pot_old(Nbead))
   end if

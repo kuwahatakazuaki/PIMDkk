@@ -5,12 +5,14 @@ subroutine print_ham(Istep)
   integer, intent(in) :: Istep
   integer :: Uout
 
-  select case(Isimulation)
-    case(0:3)
-      call print_ham_qm
-    case(10)
-      call print_ham_cl
-  end select
+  if ( MyRank == 0 ) then
+    select case(Isimulation)
+      case(0:3)
+        call print_ham_qm
+      case(10)
+        call print_ham_cl
+    end select
+  end if
 
 contains
   subroutine print_ham_qm
