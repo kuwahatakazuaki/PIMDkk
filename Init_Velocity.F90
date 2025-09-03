@@ -3,7 +3,6 @@ subroutine Init_Velocity
   use utility, only: gasdev
   implicit none
   real(8) :: vsigma
-  !real(8) :: gasdev, vsigma
   integer :: Imode, Iatom
 !
 !     /*  vsigma: standard deviation of Maxwell distribution  */

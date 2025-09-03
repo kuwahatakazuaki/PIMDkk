@@ -87,8 +87,12 @@ subroutine read_parameter
         name_simulation = "PIMD"
       case(1)
         name_simulation = "RPMD"
+        Ncent = 0
       case(2)
         name_simulation = "CMD"
+      case(3:4)
+        name_simulation = "PIHMC"
+        Ncent = 0
       case(10)
         name_simulation = "CLMD"
     end select

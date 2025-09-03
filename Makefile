@@ -51,7 +51,7 @@ Parameter.F90                      \
 utility.F90                        \
 mod_model_force.F90                \
 mpi_module.F90                     \
-Main_MPI.F90                       \
+main.F90                           \
 Broad.F90                          \
 read_input.F90                     \
 Set_Allocate.F90                   \
@@ -109,6 +109,7 @@ exit.F90                           \
 # LammpsCalculator.F90               \
 # force_LAMMPS.F90                   \
 # GasDev.F90                         \
+# Main_MPI.F90                       \
 
 
 SRCSF77 =  \

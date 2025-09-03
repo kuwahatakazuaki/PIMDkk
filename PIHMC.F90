@@ -3,7 +3,7 @@ subroutine PIHMC_normal
   use utility, only: program_abort, ranf1
   implicit none
   integer :: iref, Uout
-  integer :: Idyn, Ndyn = 5
+  integer :: Idyn, Ndyn = 20
 
   call Setup_time_mass
   call set_pallarel
@@ -11,6 +11,7 @@ subroutine PIHMC_normal
   call Init_Mass
 
   call set_Iforce
+
   if ( Lrestart .eqv. .True. ) then
     !if (MyRank == 0) Then
     call restart_read
@@ -38,7 +39,7 @@ subroutine PIHMC_normal
   call Getforce_Ref
 
   call save_hmc
-stop 'HERE0'
+
   if ( MyRank == 0 ) then
 
     loop_main: &
@@ -66,10 +67,9 @@ stop 'HERE0'
 
       if ( mod(istepsv,out_step) == 0 ) call print_result_qm
       call Ham_Temp
-      !if (MyRank == 0) Then
       call print_ham(istepsv)
+      call print_pihmc(istepsv)
       if ( mod(istepsv,out_step)==0 ) call Restart_Write(istepsv)
-      !end if
 
       if (mod(istepsv,10) == 0) then
         call exit_program
@@ -93,9 +93,21 @@ stop 'HERE0'
 
 contains
 
+  subroutine print_pihmc(Istep)
+    implicit none
+    integer, intent(in) :: Istep
+    integer :: Uout
+  if ( MyRank == 0 ) then
+    open(newunit=Uout,file=trim(dir_result)//'/pihmc.out',position='append')
+      write(Uout,*) Istep, ratio
+    close(Uout)
+  end if
+  end subroutine print_pihmc
+
   subroutine judge_hmc
     implicit none
     real(8) :: bfactor
+    real(8) :: temp_rand
 
     bfactor = beta * (hamiltonian - hamiltonian_old)
 
@@ -103,7 +115,10 @@ contains
       if ( bfactor <= 0.0d0 ) then
         Naccept = Naccept + 1
       else
-        if ( exp(-bfactor) >= ranf1() ) then
+        temp_rand = ranf1()
+print *, istepsv, bfactor, exp(-bfactor), temp_rand
+        !if ( exp(-bfactor) >= ranf1() ) then
+        if ( exp(-bfactor) >= temp_rand ) then
           Naccept = Naccept + 1
         else
           Nreject = Nreject + 1
@@ -114,7 +129,8 @@ contains
       Nreject = Nreject + 1
       call recover_hmc
     end if
-
+    ratio = dble(Naccept) / dble(Naccept+Nreject)
+!print *, istepsv, bfactor, Naccept, Nreject
     if (MyRank ==0 ) call Init_Velocity
     !call Broad_velocity
     call getenergy_hmc
@@ -127,6 +143,7 @@ contains
     fur(:,:,:)       = fur_old(:,:,:)
     fur_ref(:,:,:)   = fur_ref_old(:,:,:)
     pot_bead(:)      = pot_old(:)
+    hamiltonian      = hamiltonian_old
   end subroutine recover_hmc
 
   subroutine save_hmc
@@ -135,6 +152,7 @@ contains
     fur_old(:,:,:)     = fur(:,:,:)
     fur_ref_old(:,:,:) = fur_ref(:,:,:)
     pot_old(:)         = pot_bead(:)
+    hamiltonian_old    = hamiltonian
   end subroutine save_hmc
 
   subroutine getenergy_hmc

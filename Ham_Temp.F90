@@ -7,7 +7,7 @@ subroutine Ham_Temp
   real(8) :: get_kinetic_ene
 
   dkinetic = get_kinetic_ene()
-  temp = 2.d0*dkinetic/dble(natom)/KtoAU/3.d0
+  temp = 2.d0*dkinetic/dble(Natom)/KtoAU/3.d0
   temp = temp/dble(nbead)
 
 !
@@ -49,7 +49,7 @@ subroutine Ham_Temp
     do imode = 2, nbead
       qdummy = qmass(imode)
       do inhc = 1, nnhc
-        do iatom = 1, natom
+        do iatom = 1, Natom
           ebath = ebath                                                   &
                 + 0.5d0 * qdummy * norm_seq( vrbath(:,iatom,inhc,imode) ) &
                 + gkt * sum( rbath(:,iatom,inhc,imode) )
@@ -70,7 +70,7 @@ subroutine Ham_Temp
       enddo
     case(3)
     do inhc=1,nnhc
-      do iatom=1,natom
+      do iatom=1,Natom
         ebath_cent=ebath_cent + 0.5d0 * qmcent31(inhc) * norm_seq( vrbc31(:,iatom,inhc) ) &
                               + gkt * sum( rbc31(:,iatom,inhc) )
       enddo

@@ -79,11 +79,10 @@ module Parameters
 ! End Kuwahata 2020/10/06
 
 ! Parameters for PIHMC
-  integer :: Naccept, Nreject
+  integer :: Naccept = 0, Nreject = 0, ratio
   real(8), allocatable :: &
     r_old(:,:,:), fr_old(:,:,:), ur_old(:,:,:), vur_old(:,:,:)
-  real(8), allocatable :: fur_old(:,:,:), fur_ref_old(:,:,:)
-  real(8), allocatable :: pot_old(:)
+  real(8), allocatable :: fur_old(:,:,:), fur_ref_old(:,:,:), pot_old(:)
   real(8)              :: dkinetic_old, qkinetic_old
   real(8)              :: potential_old, hamiltonian_old
 ! Parameters for PIHMC

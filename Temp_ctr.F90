@@ -1,8 +1,7 @@
 subroutine Temp_ctr
   use Parameters
   implicit none
-  Double Precision :: temp_scale, tempi
-  !integer :: imode, iatom
+  real(8) :: temp_scale, tempi
   real(8) :: get_kinetic_ene
 
   tempi = get_kinetic_ene()
