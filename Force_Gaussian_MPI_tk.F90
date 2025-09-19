@@ -35,7 +35,7 @@ subroutine Force_Gaussian_MPI_tk
 !    open(Uinp,file=trim(addresstmp)//'gauss.xyz',status='unknown')
     open(newunit=Uinp,file=trim(addresstmp)//'gauss.com',status='old',position='append')
       do iatom = 1, Natom
-        write(Uinp,*) alabel(iatom),r(:,iatom,imode)*AUtoAng
+        write(Uinp,*) alabel(iatom),r(:,iatom,imode)*AU2Ang
       end do
       write(Uinp,*)
     close(Uinp)

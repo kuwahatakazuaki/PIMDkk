@@ -40,7 +40,7 @@ Subroutine Force_Gaussian_classical
      call system('cat '//trim(addresstmp)//'gauss.tmp1 > '//trim(addresstmp)//'gauss.com') ! location of Check file
      open(igauss+id,file=trim(addresstmp)//'gauss.com',status='old',position='append')
        do iatom2=1,natom
-         write(igauss+id,9999) alabel(iatom2), r(:,iatom2,imode2)*AUtoAng
+         write(igauss+id,9999) alabel(iatom2), r(:,iatom2,imode2)*AU2Ang
        enddo
        write(igauss+id,*)
      close(igauss+id)

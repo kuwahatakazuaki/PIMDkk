@@ -5,13 +5,13 @@ module Parameters
   ! fs -- > a.u.
   real(8), parameter :: fs2AU  = 1.d0 / 0.024188843d0   ! fs2AU
   ! Mass amu -- > A.U.
-  real(8), parameter :: factmass  = 1.6605402d-27/9.1093897d-31 ! mass2AU
-  real(8), parameter :: eVtoAU    = 1.0d0/27.21162d0
-  real(8), parameter :: AngtoAU   = 1.0d0/0.529177249d0
-  real(8), parameter :: AUtoAng   = 0.529177249d0   ! bohr_inv
-  real(8), parameter :: AUtoJ     = 4.35974434d-18
-  real(8), parameter :: KtoAU     = 8.617333262145d-5/27.211396132d0 ! Boltzmann constant K to AU (eV/K hartree/eV) from NIST
-  real(8), parameter :: eVAng2AU  = eVtoAU * AUtoAng
+  real(8), parameter :: amu2AU    = 1.6605402d-27/9.1093897d-31 ! amu2AU
+  real(8), parameter :: eV2AU     = 1.0d0/27.21162d0
+  real(8), parameter :: Ang2AU    = 1.0d0/0.529177249d0
+  real(8), parameter :: AU2Ang    = 0.529177249d0   ! bohr_inv
+  real(8), parameter :: AU2J      = 4.35974434d-18
+  real(8), parameter :: K2AU      = 8.617333262145d-5/27.211396132d0 ! Boltzmann constant K to AU (eV/K hartree/eV) from NIST
+  real(8), parameter :: eVAng2AU  = eV2AU * AU2Ang
   real(8), parameter :: AU2kcalPmol = 627.509469d0 ! 1 Hartree = 627.509469 kcal/mol
   real(8), parameter :: kcalPmol2AU = 1.0d0/AU2kcalPmol
   integer, parameter :: LINELEN = 120
@@ -28,7 +28,7 @@ module Parameters
   real(8), allocatable :: physmass(:)   !pot(:),
   real(8), allocatable :: dnmmass(:,:), fictmass(:,:), qmass(:), ysweight(:)
   real(8), allocatable :: qmcent11(:), qmcent31(:)
-  real(8), allocatable :: dipoler(:,:) !, atom_num(:)
+  real(8), allocatable :: dipoler(:,:)
   real(8), allocatable :: charge(:,:), pot_bead(:), hfcc(:,:), nbo(:,:) ! Eenergy(:)
   !real(8), allocatable :: homo(:), lumo(:)
   real(8)              :: gamma1 = 1.0d0, gamma2, omega_system
@@ -79,7 +79,8 @@ module Parameters
 ! End Kuwahata 2020/10/06
 
 ! Parameters for PIHMC
-  integer :: Naccept = 0, Nreject = 0, ratio
+  integer :: Naccept = 0, Nreject = 0
+  real(8) :: ratio
   real(8), allocatable :: &
     r_old(:,:,:), fr_old(:,:,:), ur_old(:,:,:), vur_old(:,:,:)
   real(8), allocatable :: fur_old(:,:,:), fur_ref_old(:,:,:), pot_old(:)
@@ -107,8 +108,6 @@ module Struct_
   END TYPE force_
 end module Struct_
 
-!!YK Set the method for electronic structure calculation
-!    Integer                       :: theory
 !!YK If additional basis sets for g03 or g09 calculations are necessary
 !    Integer                       :: NGenGau
 !!YK Switch for QM/MM calculation

@@ -1,7 +1,7 @@
 subroutine force_nnp_matlantis
 !!! === Nproc much be 1 at current verion === !!!
   use Parameters, &
-    only: pot_bead, r, fr, Natom, AUtoAng, eVtoAU, dp_inv, alabel, &
+    only: pot_bead, r, fr, Natom, AU2Ang, eV2AU, dp_inv, alabel, &
           addresstmp, Ista, Iend, laddress, MyRank, Nbead, eVAng2AU, &
           Lperiodic
   use utility, only: program_abort
@@ -54,7 +54,7 @@ subroutine force_nnp_matlantis
   close(Uinp)
 
   fr(:,:,:)  = fr(:,:,:) * eVAng2AU * dp_inv
-  pot_bead(:) = pot_bead(:) * eVtoAU
+  pot_bead(:) = pot_bead(:) * eV2AU
   !end if
 
 contains
@@ -67,7 +67,7 @@ contains
       call system( 'cp LATTICE '//trim(addresstmp)//trim(Fout(Imode)) )
       open(newunit=Uout,file=trim(addresstmp)//trim(Fout(Imode)),status='old',position='append')
         do i = 1, Natom
-          write(Uout,*) r(:,i,Imode) * AUtoAng
+          write(Uout,*) r(:,i,Imode) * AU2Ang
         end do
         write(Uout,*)
       close(Uout)
@@ -83,7 +83,7 @@ contains
         write(Uout,*) Natom
         write(Uout,*) 'Properties=species:S:1:pos:R:3 pbc="F F F"'
         do i = 1, Natom
-          write(Uout,*) alabel(i), r(:,i,Imode)*AUtoAng
+          write(Uout,*) alabel(i), r(:,i,Imode)*AU2Ang
         end do
       close(Uout)
     end do
@@ -151,7 +151,7 @@ end subroutine set_nnp_araidai
 
 subroutine force_nnp_araidai
   use Parameters, &
-    only: pot_bead, r, fr, Natom, AUtoAng, eVtoAU, dp_inv, alabel, &
+    only: pot_bead, r, fr, Natom, AU2Ang, eV2AU, dp_inv, alabel, &
           addresstmp, Ista, Iend, laddress, eVAng2AU
   use utility, only: program_abort
 
@@ -185,7 +185,7 @@ subroutine force_nnp_araidai
       end do
       do i=1,Natom
         write(Uout,9998) &
-         "atom", r(:,i,Imode)*AUtoAng, alabel(i), 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0
+         "atom", r(:,i,Imode)*AU2Ang, alabel(i), 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0, 0.0d0
       enddo
       do i = 6, 8
         write(Uout,'(a)') trim(inp_train(i))
@@ -203,7 +203,7 @@ subroutine force_nnp_araidai
     close(Uinp)
 
     fr(:,:,Imode)=fr(:,:,Imode)*eVAng2AU*dp_inv
-    pot_bead(Imode) = pot_bead(Imode) * eVtoAU
+    pot_bead(Imode) = pot_bead(Imode) * eV2AU
   end do
 
 return

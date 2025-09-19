@@ -5,7 +5,7 @@ subroutine Temp_ctr
   real(8) :: get_kinetic_ene
 
   tempi = get_kinetic_ene()
-  tempi = 2.d0*tempi/(3.d0*dble(natom))/KtoAU
+  tempi = 2.d0*tempi/(3.d0*dble(natom))/K2AU
   tempi = tempi/dble(nbead)
 
   temp_scale = dsqrt(temperature/tempi)

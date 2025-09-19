@@ -6,10 +6,8 @@ Subroutine Ham_Temp_Classical
   real(8) :: get_kinetic_ene
 
   dkinetic = get_kinetic_ene()
-  temp = 2.d0*dkinetic/dble(natom)/KtoAU/3.d0
+  temp = 2.d0*dkinetic/dble(natom)/K2AU/3.d0
   temp = temp/dble(nbead)
-
-
 
 !
 !   /*  calculate the total hamiltonian  */

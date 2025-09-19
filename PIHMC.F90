@@ -116,7 +116,7 @@ contains
         Naccept = Naccept + 1
       else
         temp_rand = ranf1()
-print *, istepsv, bfactor, exp(-bfactor), temp_rand
+!print *, istepsv, bfactor, exp(-bfactor), temp_rand
         !if ( exp(-bfactor) >= ranf1() ) then
         if ( exp(-bfactor) >= temp_rand ) then
           Naccept = Naccept + 1
@@ -130,9 +130,10 @@ print *, istepsv, bfactor, exp(-bfactor), temp_rand
       call recover_hmc
     end if
     ratio = dble(Naccept) / dble(Naccept+Nreject)
-!print *, istepsv, bfactor, Naccept, Nreject
+!print *, istepsv, bfactor, Naccept, Nreject, ratio
     if (MyRank ==0 ) call Init_Velocity
     !call Broad_velocity
+    call Temp_ctr
     call getenergy_hmc
     call save_hmc
   end subroutine judge_hmc

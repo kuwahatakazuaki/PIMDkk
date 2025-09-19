@@ -2,7 +2,7 @@ subroutine  add_constrain
   use Parameters, &
     only: r, fr, ur, Natom, Nbead,  pot_bead, potential, myrank, &
           alabel, dp_inv, dir_result, istepsv, Iforce, &
-          AUtoAng, KtoAU, AngtoAU, &
+          AU2Ang, K2AU, Ang2AU, &
           Icons, cons_strenght, cons_val, &
           atom1 => cons_atom1, atom2  => cons_atom2, atom3 => cons_atom3
   real(8) :: dis2, uij(3)
@@ -15,7 +15,7 @@ end subroutine add_constrain
 !  use Parameters, &
 !    only: r, fr, Natom, Nbead,  pot_bead, potential, myrank, &
 !          alabel, dp_inv, dir_result, istepsv, Iforce, &
-!          AUtoAng, KtoAU, AngtoAU, &
+!          AU2Ang, K2AU, Ang2AU, &
 !          atom1 => umb_atom1, atom2  => umb_atom2, atom3 => umb_atom3, &
 !          Ista, Iend, Iumb, umb_cons, umb_pot
 !  implicit none

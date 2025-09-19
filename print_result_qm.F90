@@ -60,7 +60,7 @@ if (MyRank==0) then
     write(Ucoor,'(I10)') istepsv
     do imode=1,nbead
       do iatom=1,natom
-        write(Ucoor,9999) alabel(iatom),r(:,iatom,imode)*AUtoAng
+        write(Ucoor,9999) alabel(iatom),r(:,iatom,imode)*AU2Ang
       end do
     end do
   close(Ucoor)

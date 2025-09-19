@@ -27,8 +27,8 @@ subroutine Force_VASP_MPI
     call system('cp LATTICE '//trim(addresstmp)//'POSCAR')
     open(newunit=Uout,file=trim(addresstmp)//'POSCAR',status='old',position='append')
       do Iatom=1,natom
-        write(Uout,*) r(:,Iatom,Imode)*AUtoAng
-        !write(Uout,9999) r(:,Iatom,Imode)*AUtoAng
+        write(Uout,*) r(:,Iatom,Imode)*AU2Ang
+        !write(Uout,9999) r(:,Iatom,Imode)*AU2Ang
       enddo
       write(Uout,*)
     close(Uout)
@@ -68,7 +68,7 @@ subroutine Force_VASP_MPI
       enddo
       read(line(32:45),*) enetemp
       !enetemp = enetemp * ev_to_hartree
-      pot_bead(Imode) = enetemp * eVtoAU
+      pot_bead(Imode) = enetemp * eV2AU
 ! +++ End Reading "energy  without entropy" +++
 
     close(Uinp)

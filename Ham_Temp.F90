@@ -7,7 +7,7 @@ subroutine Ham_Temp
   real(8) :: get_kinetic_ene
 
   dkinetic = get_kinetic_ene()
-  temp = 2.d0*dkinetic/dble(Natom)/KtoAU/3.d0
+  temp = 2.d0*dkinetic/dble(Natom)/K2AU/3.d0
   temp = temp/dble(nbead)
 
 !

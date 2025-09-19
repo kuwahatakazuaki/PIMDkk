@@ -76,7 +76,7 @@ contains
 
       open(imopac+id,file=trim(addresstmp)//'mopac.mop',status='old',position='append')
         do i = 1, natom
-         write(imopac+ID,*) alabel(i),r(:,i,imode)*AUtoAng
+         write(imopac+ID,*) alabel(i),r(:,i,imode)*AU2Ang
         end do
       close(imopac)
 
@@ -101,7 +101,7 @@ contains
       read(imopac+id,*) Idummy, Idummy, Cdummy(1:3), Ddummy, fr(2,i,imode)
       read(imopac+id,*) Idummy, Idummy, Cdummy(1:3), Ddummy, fr(3,i,imode)
     end do
-    fr(:,:,imode) = -fr(:,:,imode)*0.00159362D0 * AUtoAng * dp_inv
+    fr(:,:,imode) = -fr(:,:,imode)*0.00159362D0 * AU2Ang * dp_inv
 !  +++ End Reading "Atomic Force" +++
 
 
@@ -166,7 +166,7 @@ contains
 
     open(igauss+id,file=trim(addresstmp)//'POSCAR',status='old',position='append')
       do iatom2=1,natom
-        write(igauss+id,9999) r(:,iatom2,imode2)*AUtoAng
+        write(igauss+id,9999) r(:,iatom2,imode2)*AU2Ang
       enddo
       write(igauss+id,*)
     close(igauss+id)

@@ -3,9 +3,9 @@ Subroutine Remove_TnR_All
   use utility, only: outer_product, program_abort, calc_determinant33, calc_inv_mat33
   Implicit None
   real(8), parameter :: delta = 0.00001d0
-  Double Precision :: detmat! ,gradx,grady,gradz
-  Double Precision, Dimension(1:3,1:3) :: dinvmat
-  integer :: j, i
+  real(8) :: detmat! ,gradx,grady,gradz
+  real(8) :: dinvmat(3,3)
+  integer :: i, j
   real(8) :: sumvr(3), comr(3), gradr(3), totmas
   real(8) :: inertia(3,3), ang_vel(3), moment(3)
 !
@@ -19,7 +19,7 @@ Subroutine Remove_TnR_All
 !
 ! Calculate Center of Mass and Translational Velocity of COM
 !
-    do i = 1, natom
+    do i = 1, Natom
       sumvr(:) = sumvr(:)  + vur(:,i,j)*fictmass(i,j)
       comr(:)  = comr(:)   + ur(:,i,j)*fictmass(i,j)
     enddo
@@ -32,7 +32,7 @@ Subroutine Remove_TnR_All
 ! Construct the Momenta 
 !
     inertia(:,:) = 0.0d0
-    do i = 1, natom
+    do i = 1, Natom
       !cixx = cixx + fictmass(i,j) * ((uy(i,j)-comy)**2+(uz(i,j)-comz)**2)
       !ciyy = ciyy + fictmass(i,j) * ((ux(i,j)-comx)**2+(uz(i,j)-comz)**2)
       !cizz = cizz + fictmass(i,j) * ((uy(i,j)-comy)**2+(ux(i,j)-comx)**2)
@@ -53,14 +53,14 @@ Subroutine Remove_TnR_All
       end do
     else
       dinvmat(:,:) = calc_inv_mat33(inertia)
-!      do i = 1, natom
+!      do i = 1, Natom
 !        moment(:) = fictmass(i,j) * outer_product(ur(:,i,j)-comr(:), vur(:,i,j))
 !        ang_vel(:) = ang_vel(:) + matmul(dinvmat,moment)
 !      enddo
     end if
 
     moment(:) = 0.0d0
-    do i = 1, natom
+    do i = 1, Natom
       moment(:) = moment(:) + fictmass(i,j) * outer_product(ur(:,i,j)-comr(:), vur(:,i,j))
     enddo
     ang_vel(:) = matmul(dinvmat,moment)
@@ -69,14 +69,14 @@ Subroutine Remove_TnR_All
 ! Subtract Translation and Rotation Velocities of COM from 
 ! Velocities of Atoms
 !
-    do i = 1, natom
+    do i = 1, Natom
       vur(:,i,j) = vur(:,i,j) - sumvr(:)
       vur(:,i,j) &
         = vur(:,i,j) - outer_product(ang_vel,ur(:,i,j)-comr(:))
     enddo
 
 !moment(:) = 0.0d0
-!do i = 1, natom
+!do i = 1, Natom
 !  moment(:) = moment(:) + fictmass(i,j) * outer_product(ur(:,i,j)-comr(:), vur(:,i,j))
 !enddo
 !print *, moment(:)

@@ -1,5 +1,4 @@
 ! Obtaining force(fx) from position(x)
-
 ! Model potential of double morse
 ! Atoms must be order of "O", "O", "H"
 subroutine Force_Double_Morse
@@ -7,15 +6,15 @@ subroutine Force_Double_Morse
     only: r, fr, Natom, Nbead, pot_bead, potential, &
           alabel, dp_inv, dir_result, istepsv, MyRank, &
           Lsave_force, physmass, dipoler, &
-          AUtoAng, AngtoAU, Ista, Iend
+          AU2Ang, Ang2AU, Ista, Iend
   use utility, only: program_abort
   use mod_model_force, &
     only : harmonic, Fharmo, morse, Fmorse
 
   implicit none
   real(8), parameter :: lx = 0.5d0                     ! Angstrom
-  real(8), parameter :: rO1(3) = [ lx, 0.0d0, 0.0d0]  * AngtoAU ! AU
-  real(8), parameter :: rO2(3) = [-lx, 0.0d0, 0.0d0]  * AngtoAU ! AU
+  real(8), parameter :: rO1(3) = [ lx, 0.0d0, 0.0d0]  * Ang2AU ! AU
+  real(8), parameter :: rO2(3) = [-lx, 0.0d0, 0.0d0]  * Ang2AU ! AU
 
   integer :: i, j, imode, xyz
   real(8) :: f31(3), f32(3)
@@ -43,16 +42,16 @@ end subroutine Force_Double_Morse
 ! +++ Force_Harmonic +++
 ! ++++++++++++++++++++++
 subroutine Force_Harmonic
-  Use Parameters, & 
+  Use Parameters, &
     only: r, fr, Natom, Nbead, pot_bead, potential, &
           alabel, dp_inv, dir_result, istepsv, MyRank, &
           Lsave_force, physmass, dipoler, &
-          AUtoAng, AngtoAU, Ista, Iend
+          AU2Ang, Ang2AU, Ista, Iend
   use utility, only: program_abort
   implicit none
   integer :: i, j, imode, xyz
   integer :: Udis, Ucent
-  real(8), parameter :: qh = 1.0d0, qo = -1.0d0
+  !real(8), parameter :: qh = 1.0d0, qo = -1.0d0
   real(8) :: f_two(3), power, dis
   real(8) :: rij(3), temp!, rij2
   real(8) :: dis_beads(Nbead)
@@ -61,7 +60,7 @@ subroutine Force_Harmonic
   ! Parameters in Atomic unit
   ! Hydrogen molecule with U(x) = 1/2 * mass * omega^2 * x^2
   !real(8), parameter :: r0    = 1.41014d0
-  real(8), parameter :: r0    = 1.0d0 * AngtoAU
+  real(8), parameter :: r0    = 1.0d0 * Ang2AU
   real(8), parameter :: omega  = 3000 * 0.0000045564 ! cm-1 to Hartree
   real(8), parameter :: kb  = 0.49536 ! Force constant of OH
   real(8) :: cons, reduce_mass
@@ -92,30 +91,19 @@ subroutine Force_Harmonic
     dis_beads(imode) = dis
   end do
   fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv
-  dis_beads(:) = dis_beads(:) * AUtoAng
+  dis_beads(:) = dis_beads(:) * AU2Ang
   ! +++ End Calculating Force in which atom (i) feels from atom (j) +++
 
-  !! +++ Centroid +++
-  !do i = 1, Natom
-  !  do xyz = 1, 3
-  !    rcent(xyz,i) = sum(r(xyz,i,:))/dble(Nbead)
-  !  end do
-  !end do
-  !rij(:) = rcent(:,1) - rcent(:,2)
-  !dipo_cent(:) = rij(:)
-  !dis = norm2(rij(:)*AUtoAng)
-  !! +++ Centroid +++
-  !! +++ Print distance +++
-  if ( MyRank == 0 ) then
-    open(newunit=Udis,file=trim(dir_result)//'/distance.out',status='unknown',position='append')
-      write(Udis,*) "# ", istepsv
-      do imode = 1, Nbead
-        write(Udis,*) dis_beads(imode)
-      end do
-    close(Udis)
-
-  end if
-  ! +++ End Print distance +++
+  !!! +++ Print distance +++
+  !if ( MyRank == 0 ) then
+  !  open(newunit=Udis,file=trim(dir_result)//'/distance.out',status='unknown',position='append')
+  !    write(Udis,*) "# ", istepsv
+  !    do imode = 1, Nbead
+  !      write(Udis,*) dis_beads(imode)
+  !    end do
+  !  close(Udis)
+  !end if
+  !! +++ End Print distance +++
 
   9998 format(3E23.15)
   9999 format(a2,1x,E15.9,1x,E15.9,1x,E15.9)
@@ -133,7 +121,7 @@ subroutine Force_model_Morse
   Use Parameters, & 
     only: r, fr, Natom, Nbead, pot_bead, potential, &
           alabel, dp_inv, dir_result, istepsv, &
-          Lsave_force, AUtoAng, AngtoAU
+          Lsave_force, AU2Ang, Ang2AU
   implicit none
   integer :: i, j
   integer :: Udis, Ucoor, Ufor, Uene, imode
@@ -175,7 +163,7 @@ subroutine Force_model_Morse
           dis = norm2(rij(:))
           temp = 1 - exp(-curvat * (dis-r0))
           pot_bead(imode) = pot_bead(imode) + De * temp * temp
-          write(Udis,*) dis * AUtoAng
+          write(Udis,*) dis * AU2Ang
         end do
       end do
     end do

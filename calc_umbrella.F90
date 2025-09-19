@@ -3,7 +3,7 @@ subroutine calc_umbrella
   use Parameters, &
     only: r, fr, Natom, Nbead,  pot_bead, potential, myrank, &
           alabel, dp_inv, dir_result, istepsv, Iforce, &
-          AUtoAng, KtoAU, AngtoAU, &
+          AU2Ang, K2AU, Ang2AU, &
           atom1 => umb_atom1, atom2  => umb_atom2, atom3 => umb_atom3, &
           Ista, Iend, Iumb, umb_cons, umb_pot
   implicit none
@@ -41,15 +41,15 @@ subroutine calc_umbrella
 return
 end subroutine calc_umbrella
 
-  ! cons = umbrella_constant * AUtoAng * AUtoAng
+  ! cons = umbrella_constant * AU2Ang * AU2Ang
   ! +++ Calculating Force +++
   !! +++ Specific in Double well potential +++ 
   !if (Iforce == 12) then
   !  block
   !    real(8) :: a, distance, half_dis
   !    real(8) :: width, height
-  !    width  = umbrella_width  * AngtoAU
-  !    height = umbrella_height * KtoAU
+  !    width  = umbrella_width  * Ang2AU
+  !    height = umbrella_height * K2AU
   !    a = height / (width * width)
   !    do imode = 1, Nbead
   !

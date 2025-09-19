@@ -24,7 +24,7 @@ subroutine force_siesta
        write(igauss+id,'("AtomicCoordinatesFormat  Ang")')
        write(igauss+id,'("%block AtomicCoordinatesAndAtomicSpecies")')
        do i = 1, Natom
-         write(igauss+id,*) r(:,i,imode2)*AUtoAng
+         write(igauss+id,*) r(:,i,imode2)*AU2Ang
        end do
        write(igauss+id,'("%endblock AtomicCoordinatesAndAtomicSpecies")')
      close(igauss+id)
@@ -62,8 +62,8 @@ subroutine force_siesta
      call system('rm -rf '//trim(addresstmp)//'INPUT_TMP*')
      call system('rm -rf '//trim(addresstmp)//'*log')
 
-     fr(:,:,imode2) = fr(:,:,imode2) * dp_inv * eVtoAU * AUtoAng
-     pot_bead(imode2) = pot_bead(imode2) * eVtoAU
+     fr(:,:,imode2) = fr(:,:,imode2) * dp_inv * eV2AU * AU2Ang
+     pot_bead(imode2) = pot_bead(imode2) * eV2AU
    enddo
 
 

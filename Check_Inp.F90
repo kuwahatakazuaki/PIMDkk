@@ -43,11 +43,11 @@ subroutine Check_Inp
         write(Uout,*) ' +++++ Atomic Label, Mass, and Coords +++++'
         if ( Langstrom .eqv. .True. ) then
           do Iatom = 1, Natom
-            write(Uout,9996) alabel(iatom), PhysMass(iatom)/factmass, ur(:,Iatom,1)*AUtoAng
+            write(Uout,9996) alabel(iatom), PhysMass(iatom)/amu2AU, ur(:,Iatom,1)*AU2Ang
           end do
         else
           do Iatom = 1, Natom
-            write(Uout,9996) alabel(iatom), PhysMass(iatom)/factmass, ur(:,Iatom,1)
+            write(Uout,9996) alabel(iatom), PhysMass(iatom)/amu2AU, ur(:,Iatom,1)
           end do
         end if
         write(Uout,'(a,a)')  '  ',repeat('+',42)
