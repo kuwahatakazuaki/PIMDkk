@@ -11,7 +11,8 @@ subroutine force_LAMMPS
   integer :: i, Uout
   INTEGER(KIND=c_int64_t), POINTER :: total_atoms
   integer, allocatable :: lammps_id(:)
-  real(8) :: r_temp(3,Natom), lattice(3,3), lat_inv(3,3)
+  real(8) :: r_temp(3,Natom), lat_inv(3,3)
+  !real(8) :: r_temp(3,Natom), lattice(3,3), lat_inv(3,3)
   real(8), allocatable :: s(:,:)
 
 

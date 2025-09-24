@@ -38,7 +38,8 @@ module Parameters
   real(8)              :: ebath, ebath_cent, dkinetic, qkinetic
   real(8)              :: beta, temperature, dt, dt_ref
   real(8)              :: potential, hamiltonian, temp
-  real(8) :: freq1 = 10.0d0
+  real(8)              :: freq1 = 10.0d0
+  real(8)              :: lattice(3,3)
 
   integer              :: Ncent  ! Type of the thermostat
   integer              :: Irestep = 0
@@ -111,6 +112,4 @@ end module Struct_
 
 !!YK If additional basis sets for g03 or g09 calculations are necessary
 !    Integer                       :: NGenGau
-!!YK Switch for QM/MM calculation
-!    Integer                       :: NQMMM
 
