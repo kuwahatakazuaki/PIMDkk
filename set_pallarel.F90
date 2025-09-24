@@ -4,7 +4,7 @@ subroutine set_pallarel
 #ifdef _mpi_
   use MPI
   implicit none
-  integer   :: i,j,k,n,n0
+  integer   :: i,j,k
   integer :: Nhmod, numeach
 
   Allocate (listeach(Nproc))

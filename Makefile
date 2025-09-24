@@ -85,7 +85,7 @@ Restart.F90                        \
 Remove_TnR_All.F90                 \
 Virial_Estimator.F90               \
 Set_Deallocate.F90                 \
-Force_New_MPI_tk.F90               \
+Force_New_MPI.F90                  \
 set_pallarel.F90                   \
 Set_Gaussian_MPI_tk.F90            \
 Force_Gaussian_MPI_tk.F90          \

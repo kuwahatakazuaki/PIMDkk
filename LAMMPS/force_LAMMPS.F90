@@ -15,11 +15,10 @@ subroutine force_LAMMPS
   real(8), allocatable :: s(:,:)
 
 
-lattice(1,:) = [12.8512848674,    0.0000000000,    0.0000000000]
-lattice(2,:) = [ 0.2132032072,   12.6594123484,    0.0000000000]
-lattice(3,:) = [ 0.1438686986,   -0.0357082118,   12.7223433492]
-!call get_inv_mat(lattice,lat_inv,3)
-lat_inv = calc_inv_mat33(lattice)
+!lattice(1,:) = [12.8512848674,    0.0000000000,    0.0000000000]
+!lattice(2,:) = [ 0.2132032072,   12.6594123484,    0.0000000000]
+!lattice(3,:) = [ 0.1438686986,   -0.0357082118,   12.7223433492]
+!lat_inv = calc_inv_mat33(lattice)
 
 ! Set LAMMPS calculator
   calculator = LAMMPSCalculator( lammps_file = 'lammps.in' )
@@ -35,12 +34,12 @@ allocate( s(3,Natom) )
 ! Calculation in LAMMPS
   !do Imode = 1, Nbead
   do Imode = Ista, Iend
-    r_temp(:,:) = r(:,:,Imode)
-    r_temp(:,:) = r_temp(:,:) * AUtoAng
+    r_temp(:,:) = r(:,:,Imode) * AU2Ang
+    !r_temp(:,:) = r_temp(:,:) * AUtoAng
     do Iatom = 1, Natom
-s(:,Iatom) = matmul(r_temp(:,Iatom),lat_inv)
-s(:,Iatom) = s(:,Iatom) - dble(nint(s(:,Iatom)+0.5d0))+1.0d0
-r_temp(:,Iatom) = matmul(s(:,Iatom),lattice)
+!s(:,Iatom) = matmul(r_temp(:,Iatom),lat_inv)
+!s(:,Iatom) = s(:,Iatom) - dble(nint(s(:,Iatom)+0.5d0))+1.0d0
+!r_temp(:,Iatom) = matmul(s(:,Iatom),lattice)
       cartesian_coordinates(Iatom)%x = r_temp(1,Iatom)
       cartesian_coordinates(Iatom)%y = r_temp(2,Iatom)
       cartesian_coordinates(Iatom)%z = r_temp(3,Iatom)
@@ -55,7 +54,8 @@ r_temp(:,Iatom) = matmul(s(:,Iatom),lattice)
     end do
   end do
   Eenergy(:) = Eenergy(:) * kcalPmol2AU
-  fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv * kcalPmol2AU / AngtoAU
+  fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv * kcalPmol2AU / Ang2AU
+  !fr(:,:,Ista:Iend) = fr(:,:,Ista:Iend) * dp_inv * kcalPmol2AU / AngtoAU
 
 !print *, "# step", istepsv
 !lammps_id = calculator%atom_id

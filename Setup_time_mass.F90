@@ -21,12 +21,12 @@ subroutine Setup_time_mass
 ! /*   thermostat attached to centroids   */
   select case(Ncent)
     case(1)
-      qmcent11(1) = 3.d0*dble(natom)/beta/omega2
+      qmcent11(1) = 3.d0*dble(Natom)/beta/omega2
       do inhc=2,nnhc
         qmcent11(inhc) = 1.d0/beta/omega2
       enddo
     case(3)
-      qmcent31(1) = 3.d0*dble(natom)/beta/omega2
+      qmcent31(1) = 3.d0*dble(Natom)/beta/omega2
       ! qmcent31(1) = 1.0d0/beta/omega2 ??
       do inhc=2,nnhc
         qmcent31(inhc) = 1.d0/beta/omega2
@@ -37,7 +37,7 @@ subroutine Setup_time_mass
 ! /*   thermostat attached to non-centroid modes   */
   if ( Isimulation /= 10 ) then
     qmass(1) = 0.0d0
-    do imode = 2, nbead
+    do imode = 2, Nbead
       qmass(imode) = 1.d0/beta/omega_p2
     enddo
   end if
@@ -47,7 +47,7 @@ subroutine Setup_time_mass
 !  adiabaticity parameter for centroid MD
   gamma2 = gamma1*gamma1
   If( Isimulation == 2 ) then
-    do imode = 2, nbead
+    do imode = 2, Nbead
       qmass(imode) = gamma2*qmass(imode)
     enddo
   EndIf

@@ -6,7 +6,6 @@ subroutine Classical
 
   call Setup_time_mass
   call Init_Mass
-
   call set_Iforce
 
   !select case(Iforce)
@@ -21,7 +20,6 @@ subroutine Classical
   !  case(22)
   !    call set_nnp_matlantis
   !end select
-
 
   if ( Lrestart .eqv. .True. ) then
     call restart_read_classical

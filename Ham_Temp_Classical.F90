@@ -6,8 +6,9 @@ Subroutine Ham_Temp_Classical
   real(8) :: get_kinetic_ene
 
   dkinetic = get_kinetic_ene()
-  temp = 2.d0*dkinetic/dble(natom)/K2AU/3.d0
-  temp = temp/dble(nbead)
+  temp = 2.d0*dkinetic*AU2K/dble(3*Natom*Nbead)
+  !temp = 2.d0*dkinetic/dble(natom)/K2AU/3.d0
+  !temp = temp/dble(nbead)
 
 !
 !   /*  calculate the total hamiltonian  */
@@ -28,7 +29,6 @@ Subroutine Ham_Temp_Classical
         ebath_cent=ebath_cent + 0.5d0*qmcent11(Inhc)*vbc11(Inhc)*vbc11(Inhc) &
                               + gkt*rbc11(Inhc)
       enddo
-      !hamiltonian = hamiltonian + ebath_cent
     case(3)
       do inhc=1,Nnhc
          do iatom=1,natom
@@ -36,7 +36,6 @@ Subroutine Ham_Temp_Classical
                                  + gkt * sum( rbc31(:,iatom,inhc) )
          enddo
       enddo
-      !hamiltonian = hamiltonian + ebath_cent
   end select
   hamiltonian = hamiltonian + ebath_cent
 

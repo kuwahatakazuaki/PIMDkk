@@ -2,13 +2,13 @@ subroutine Ham_Temp
   use Parameters
   use utility, only: norm_seq
   implicit none
-  Double Precision :: qdummy, factqk, dkin
-  integer :: i, j, k, Iatom, Imode, inhc, icolor
+  real(8) :: qdummy, factqk
+  integer :: i, j, k, Iatom, Imode, inhc!, icolor
   real(8) :: get_kinetic_ene
 
   dkinetic = get_kinetic_ene()
-  temp = 2.d0*dkinetic/dble(Natom)/K2AU/3.d0
-  temp = temp/dble(nbead)
+  temp = 2.d0*dkinetic*AU2K/dble(3*Natom*Nbead)
+  !temp = temp/dble(nbead)
 
 !
 !   pressure (PV) from virial and kinetic energy 

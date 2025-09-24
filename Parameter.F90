@@ -11,6 +11,7 @@ module Parameters
   real(8), parameter :: AU2Ang    = 0.529177249d0   ! bohr_inv
   real(8), parameter :: AU2J      = 4.35974434d-18
   real(8), parameter :: K2AU      = 8.617333262145d-5/27.211396132d0 ! Boltzmann constant K to AU (eV/K hartree/eV) from NIST
+  real(8), parameter :: AU2K      = 27.211396132d0/8.617333262145d-5
   real(8), parameter :: eVAng2AU  = eV2AU * AU2Ang
   real(8), parameter :: AU2kcalPmol = 627.509469d0 ! 1 Hartree = 627.509469 kcal/mol
   real(8), parameter :: kcalPmol2AU = 1.0d0/AU2kcalPmol

@@ -26,7 +26,7 @@ subroutine PIHMC_normal
     call Broad3
     call Temp_ctr
     call nmtrans_ur2r ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
-    call Force_New_MPI_tk
+    call Force_New_MPI
     if ( mod(istepsv,out_step) == 0 ) call print_result_qm
     call nmtrans_fr2fur     !call Getfnm  ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i)
 
@@ -56,7 +56,7 @@ subroutine PIHMC_normal
           call Vupdate_Ref
         end do
         call nmtrans_ur2r       ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
-        call Force_New_MPI_tk   ! Obtaining fx
+        call Force_New_MPI      ! Obtaining fx
         call nmtrans_fr2fur     ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i) !call Getfnm
         call Vupdate
 
@@ -79,7 +79,7 @@ subroutine PIHMC_normal
 
   else
     do istepsv = Irestep+1, nstep
-      call Force_New_MPI_tk
+      call Force_New_MPI
     end do
   end if
 

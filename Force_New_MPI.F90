@@ -1,4 +1,4 @@
-subroutine Force_New_MPI_tk
+subroutine Force_New_MPI
   use Parameters
   use utility, only: program_abort
 #ifdef _mpi_
@@ -114,4 +114,4 @@ contains
 !
 !  end subroutine force_LAMMPS
 
-end subroutine Force_New_MPI_tk
+end subroutine Force_New_MPI
