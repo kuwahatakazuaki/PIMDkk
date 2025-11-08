@@ -1,4 +1,5 @@
 subroutine Uupdate
+!subroutine update_pos_nor
   use Parameters
   implicit none
   integer :: imode, iatom
@@ -10,6 +11,7 @@ subroutine Uupdate
     enddo
   enddo
   return
+!end subroutine update_pos_nor
 end subroutine
 
 subroutine Vupdate

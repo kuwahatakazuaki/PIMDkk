@@ -56,12 +56,12 @@ contains
   subroutine print_start
     use utility, only: get_time
     integer :: Uout
-    if ( Lrestart .eqv. .False. ) then
-      open(newunit=Uout,file=Fout,status='replace')
-    else
-      open(newunit=Uout,file=Fout,status='old',position='append')
-    end if
-    !open(newunit=Uout,file=Fout,status='replace')
+    !if ( Lrestart .eqv. .False. ) then
+    !  open(newunit=Uout,file=Fout,status='replace')
+    !else
+    !  open(newunit=Uout,file=Fout,status='old',position='append')
+    !end if
+    open(newunit=Uout,file=Fout,status='replace')
       write(Uout,*) '***********************'
       write(Uout,*) '   Simulation Start!   '
       write(Uout,*) '***********************'

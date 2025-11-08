@@ -32,13 +32,13 @@ subroutine nmtrans_fr2fur
   fur(:,:,:) = 0.0d0
 
 !    *  fu(i) = fu(i) + sum_j fx(j)*tnm(j,i)  */
-  Do iatom = 1, natom
-    Do imode = 1, nbead
-      Do jmode = 1, nbead
+  do iatom = 1, natom
+    do imode = 1, nbead
+      do jmode = 1, nbead
         fur(:,iatom,imode) = fur(:,iatom,imode) + fr(:,iatom,jmode)*tnm(jmode,imode)
-      Enddo
-    Enddo
-  Enddo
+      end do
+    end do
+  end do
 
 return
 end subroutine nmtrans_fr2fur
