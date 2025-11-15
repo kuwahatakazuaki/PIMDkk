@@ -1,6 +1,6 @@
-Subroutine Calc_Constant
+subroutine Calc_Constant
   use Parameters
-  Implicit None
+  implicit none
   integer :: iatom
   real(8) :: omega_p, dp
 

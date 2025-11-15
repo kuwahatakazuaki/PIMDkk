@@ -5,6 +5,7 @@ subroutine Set_Allocate
   !allocate( atom_num(Natom) )
   allocate( r(3,Natom,Nbead) )
   allocate( ur(3,Natom,Nbead) )
+  allocate( vr(3,Natom,Nbead) )
   allocate( vur(3,Natom,Nbead) )
   allocate( fr(3,Natom,Nbead) )
   allocate( fur(3,Natom,Nbead) )

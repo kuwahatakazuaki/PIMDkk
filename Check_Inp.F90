@@ -7,7 +7,7 @@ subroutine Check_Inp
     open(newunit=Uout,file=Fout,status='old',position='append')
       write(Uout,'(a)')' +++++ Input Check +++++   '
       write(Uout,9999) ' +++++ Isimulation         ', Isimulation
-      write(Uout,9997) ' +++++ Simulation type     ', name_simulation
+      write(Uout,9997) ' +++++ Simulation type     ', trim(name_simulation)
       write(Uout,9999) ' +++++ Number of Atoms     ', Natom
       write(Uout,9999) ' +++++ Number of Beads     ', Nbead
       write(Uout,9999) ' +++++ Number of Steps     ', Nstep
@@ -59,7 +59,7 @@ subroutine Check_Inp
   return
 9999 Format(A26,I12)
 9998 Format(A26,F12.4)
-9997 Format(A26,6X,A)
+9997 Format(A26,8X,A)
 !9997 Format(A26,A80)
 9996 Format(A4,1X,4F12.6)
 9995 Format(A26,L12)

@@ -36,7 +36,7 @@ subroutine PIHMC_normal
     !end if
   end if
 
-  call Getforce_Ref
+  call getforce_ref_nor
 
   call save_hmc
 
@@ -48,17 +48,17 @@ subroutine PIHMC_normal
       loop_dyn: &
       do Idyn = 1, Ndyn
 
-        call Vupdate
+        call update_vel_nor
         do iref=1, Nref   ! Nref = 5
-          call Vupdate_Ref
-          call Uupdate
-          call Getforce_Ref
-          call Vupdate_Ref
+          call update_vel_ref_nor
+          call update_pos_nor
+          call getforce_ref_nor
+          call update_vel_ref_nor
         end do
         call nmtrans_ur2r       ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
         call Force_New_MPI      ! Obtaining fx
         call nmtrans_fr2fur     ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i) !call Getfnm
-        call Vupdate
+        call update_vel_nor
 
       end do loop_dyn
 

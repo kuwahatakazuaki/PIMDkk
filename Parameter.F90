@@ -19,7 +19,7 @@ module Parameters
 
   integer              :: Natom, Nbead, Nstep, Isimulation
   integer              :: Nref, Nys, Nnhc, out_step = 1
-  real(8), allocatable :: r(:,:,:), fr(:,:,:), ur(:,:,:), vur(:,:,:)
+  real(8), allocatable :: r(:,:,:), fr(:,:,:), vr(:,:,:), ur(:,:,:), vur(:,:,:)
   real(8), allocatable :: fur(:,:,:), fur_ref(:,:,:)
   real(8), allocatable :: rbath(:,:,:,:), vrbath(:,:,:,:), frbath(:,:,:,:)
   real(8), Allocatable :: rbc11(:),vbc11(:),fbc11(:)

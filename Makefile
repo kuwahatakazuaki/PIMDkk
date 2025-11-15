@@ -72,8 +72,7 @@ Nhc_Integrate_Cent.F90             \
 Ham_Temp.F90                       \
 Ham_Temp_Classical.F90             \
 Nhc_Integrate.F90                  \
-Vupdate_Ref.F90                    \
-Update.F90                         \
+update_pos_vel.F90                 \
 RandomG.F90                        \
 Force_Gaussian_classical.F90       \
 Force_MOPAC_MPI.F90                \
@@ -110,6 +109,7 @@ exit.F90                           \
 # force_LAMMPS.F90                   \
 # GasDev.F90                         \
 # Main_MPI.F90                       \
+# Vupdate_Ref.F90                    \
 
 
 SRCSF77 =  \

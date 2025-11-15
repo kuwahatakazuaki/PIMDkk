@@ -36,7 +36,7 @@ subroutine PI_NEW_MPI
     !end if
   end if
 
-  call Getforce_Ref
+  call getforce_ref_nor
   if ( MyRank == 0 ) then
 
     main_loop: &
@@ -49,22 +49,22 @@ subroutine PI_NEW_MPI
         case(3)
          call nhc_Integrate_Cent3
       end select
-      call Vupdate
+      call update_vel_nor
 
       if ( Ncent == 0 ) then ! NVE simulation
         do iref=1, Nref   ! Nref = 5
-          call Vupdate_Ref
-          call Uupdate
-          call Getforce_Ref
-          call Vupdate_Ref
+          call update_vel_ref_nor
+          call update_pos_nor
+          call getforce_ref_nor
+          call update_vel_ref_nor
         end do
       else
         do iref=1, Nref   ! Nref = 5
           call Nhc_Integrate
-          call Vupdate_Ref
-          call Uupdate
-          call Getforce_Ref
-          call Vupdate_Ref
+          call update_vel_ref_nor
+          call update_pos_nor
+          call getforce_ref_nor
+          call update_vel_ref_nor
           call Nhc_Integrate
         end do
       end if
@@ -73,7 +73,7 @@ subroutine PI_NEW_MPI
       call Force_New_MPI      ! Obtaining fx
       if ( mod(istepsv,out_step) == 0 ) call print_result_qm
       call nmtrans_fr2fur     ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i) !call Getfnm
-      call Vupdate
+      call update_vel_nor
 
       select case(Ncent)
         case(0)

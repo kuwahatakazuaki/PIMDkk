@@ -43,11 +43,11 @@ subroutine Classical
       case(3)
         call Nhc_Integrate_Cent3
     end select
-    call Vupdate
-    call Uupdate
+    call update_vel_nor
+    call update_pos_nor
     call Force_Classical
     if ( mod(istepsv,out_step) == 0 ) call print_result_qm
-    call Vupdate
+    call update_vel_nor
     select case(Ncent)
       case(0)
         continue

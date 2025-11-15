@@ -1,7 +1,7 @@
 subroutine Init_Mass
   use Parameters
   implicit none
-  integer :: imode, iatom
+  integer :: Imode, Iatom
   real(8) :: dp, di, twopi
 
   twopi=2.d0*pi
@@ -9,23 +9,23 @@ subroutine Init_Mass
 
 ! Kuwahata 2020/12/04  bug fixed
 !     dnmmass(:,1) = 0.d0
-!     dnmmass(:,Nbead) = 4.d0*physmass(iatom)
-!  do iatom = 1, natom
-!     do imode = 1, (Nbead-2)/2
-!        di = dble(imode)
-!        dnmmass(iatom,2*imode) = 2.d0*(1.d0-dcos(twopi*di/dp))*physmass(iatom)
-!        dnmmass(iatom,2*imode+1) = dnmmass(iatom,2*imode)
+!     dnmmass(:,Nbead) = 4.d0*physmass(Iatom)
+!  do Iatom = 1, Natom
+!     do Imode = 1, (Nbead-2)/2
+!        di = dble(Imode)
+!        dnmmass(Iatom,2*Imode) = 2.d0*(1.d0-dcos(twopi*di/dp))*physmass(Iatom)
+!        dnmmass(Iatom,2*Imode+1) = dnmmass(Iatom,2*Imode)
 !     enddo
 !  enddo
 
 
   dnmmass(:,1) = 0.d0
-  do iatom = 1, natom
-    dnmmass(iatom,Nbead) = 4.d0*dp*physmass(iatom)
-    do imode = 1, (Nbead-2)/2
-      di = dble(imode)
-      dnmmass(iatom,2*imode) = 2.d0*(1.d0-dcos(twopi*di/dp))*dp*physmass(iatom)
-      dnmmass(iatom,2*imode+1) = dnmmass(iatom,2*imode)
+  do Iatom = 1, Natom
+    dnmmass(Iatom,Nbead) = 4.d0*dp*physmass(Iatom)
+    do Imode = 1, (Nbead-2)/2
+      di = dble(Imode)
+      dnmmass(Iatom,2*Imode) = 2.d0*(1.d0-dcos(twopi*di/dp))*dp*physmass(Iatom)
+      dnmmass(Iatom,2*Imode+1) = dnmmass(Iatom,2*Imode)
     enddo
   enddo
 
@@ -37,17 +37,17 @@ subroutine Init_Mass
 
   if ( Isimulation == 1 .or. Isimulation == 10 ) then
 ! +++ For RPMD or conventional MD simulation +++
-    do iatom = 1, Natom
-      fictmass(iatom,:) = physmass(iatom)
+    do Iatom = 1, Natom
+      fictmass(Iatom,:) = physmass(Iatom)
     enddo
 ! +++ For RPMD or conventional MD simulation +++
   !else if ( Isimulation == 0 .or. Isimulation == 2 ) then
   else
 ! +++ For PIMD or CMD simulation +++
-    do iatom = 1, Natom
-      fictmass(iatom,1) = physmass(iatom)
-      do imode = 2, Nbead
-        fictmass(iatom,imode) = gamma2*dnmmass(iatom,imode)
+    do Iatom = 1, Natom
+      fictmass(Iatom,1) = physmass(Iatom)
+      do Imode = 2, Nbead
+        fictmass(Iatom,Imode) = gamma2*dnmmass(Iatom,Imode)
       enddo
     enddo
 ! +++ For CMD simulation +++
