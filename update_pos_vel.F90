@@ -1,12 +1,6 @@
 subroutine update_pos_nor
   use Parameters
   implicit none
-  !integer :: Imode, Iatom
-  !do Imode = 1, Nbead
-  !  do Iatom = 1, Natom
-  !    ur(:,Iatom,Imode) = ur(:,Iatom,Imode) + dt_ref*vur(:,Iatom,Imode)
-  !  enddo
-  !enddo
   ur(:,:,:) = ur(:,:,:) + dt_ref*vur(:,:,:)
   return
 end subroutine update_pos_nor

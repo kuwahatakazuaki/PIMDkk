@@ -2,10 +2,10 @@ subroutine Normal_Mode
   use Parameters
   use utility, only: program_abort
   implicit none
-  Double Precision     :: sqp, sqpinv, dnorm, dum
-  Double Precision     :: di, dj
+  real(8) :: sqp, sqpinv, dnorm, sign_, dum
+  real(8) :: di, dj, dp
   integer :: i, j, jmode, imode
-  real(8) :: dp
+  !real(8) :: dp
 
 !     /* parameters */
   dp = dble(Nbead)
@@ -16,11 +16,11 @@ subroutine Normal_Mode
 !     /*  making unitary matrix for diagnalizing the spring matrix *
 !      *  using analytical expressions                             */
 
-  dum = -1.d0
+  sign_ = -1.d0
   do imode = 1, Nbead
      u(imode,1) = sqpinv
-     u(imode,Nbead) = dum*sqpinv
-     dum = dum*(-1.d0)
+     u(imode,Nbead) = sign_*sqpinv
+     sign_ = sign_*(-1.d0)
   enddo
 
   do imode = 1, (Nbead-2)/2

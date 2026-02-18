@@ -18,7 +18,8 @@ subroutine read_parameter
           call program_abort('ERROR!!: There is no "$end parameter"')
         end if
 
-      if     (index(line,"$Natom" )         == 1) then; read(Uin,*) Natom
+      !if     (index(line,"$Natom" )         == 1) then; read(Uin,*) Natom
+      if     (index(line,"$Ndim")           == 1) then; read(Uin,*) Ndim
       elseif (index(line,"$Nbead")          == 1) then; read(Uin,*) Nbead
       elseif (index(line,"$Nstep")          == 1) then; read(Uin,*) Nstep
       elseif (index(line,"$temperature")    == 1) then; read(Uin,*) temperature
@@ -47,8 +48,6 @@ subroutine read_parameter
         do i = 1, 4
           read(Uin,*) Iseeds(i)
         end do
-      !elseif (index(line,"$address_result") == 1) then; read(uin,'(a)') address
-      !elseif (index(line,"$address_scr")    == 1) then; read(uin,'(a)') address2
       elseif (index(line,"$address_result") == 1) then; read(uin,'(a)') dir_result
       elseif (index(line,"$address_scr")    == 1) then; read(uin,'(a)') dir_scr
 
@@ -78,10 +77,6 @@ subroutine read_parameter
         end if
     end do Search_Coords
 
-    if ( Nbead == 1 ) then
-      Isimulation = 10
-    end if
-
     select case(Isimulation)
       case(0)
         name_simulation = "PIMD"
@@ -97,8 +92,16 @@ subroutine read_parameter
         name_simulation = "CLMD"
     end select
 
+    if ( Nbead == 1 ) then
+      Isimulation = 10
+    end if
+
     if ( Isimulation == 1 .and. Ncent > 0 ) then
       call program_abort("You should be NVE for RPMD")
+    end if
+
+    if ( Ndim /= 1 .and. Ndim /= 3 ) then
+      call program_abort("Ndim must be 1 or 3")
     end if
 
     if ( access(trim(dir_result), ' ') /= 0 ) then

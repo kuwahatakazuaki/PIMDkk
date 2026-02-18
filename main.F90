@@ -5,15 +5,15 @@ program Path_Integral
 #endif
   use utility, only: program_abort
   implicit none
-  integer :: ierr
+  integer :: Ierr
 
 #ifdef _mpi_
-  call MPI_INIT(IERR)
-  call MPI_COMM_SIZE(MPI_COMM_WORLD,Nproc,IERR)
-  call MPI_COMM_RANK(MPI_COMM_WORLD,MyRank,IERR)
+  call MPI_INIT(Ierr)
+  call MPI_COMM_SIZE(MPI_COMM_WORLD,Nproc,Ierr)
+  call MPI_COMM_RANK(MPI_COMM_WORLD,MyRank,Ierr)
 #else
   MyRank = 0
-  NProc  = 1
+  Nproc  = 1
 #endif
 
   if ( MyRank == 0 ) then
@@ -46,7 +46,7 @@ program Path_Integral
   call Set_Deallocate
   call print_end
 #ifdef _mpi_
-  call MPI_FINALIZE(IERR)
+  call MPI_FINALIZE(Ierr)
 #endif
 
 stop

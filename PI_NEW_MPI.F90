@@ -11,9 +11,7 @@ subroutine PI_NEW_MPI
   call set_Iforce
 
   if ( Lrestart .eqv. .True. ) then
-    !if (MyRank == 0) Then
     call restart_read
-    !end if
     call Broad3
   else
     call print_ini

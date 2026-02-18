@@ -122,14 +122,15 @@ contains
         + mat(1,3)*mat(2,1)*mat(3,2) - mat(1,3)*mat(2,2)*mat(3,1)
   end function calc_determinant33
 
-  function outer_product(a,b) result(vec)
+  !function outer_product(a,b) result(vec)
+  function crossr_product(a,b) result(vec)
     real(8), intent(in) :: a(3), b(3)
     real(8) :: vec(3)
 
     vec(1) = a(2) * b(3) - a(3) * b(2)
     vec(2) = a(3) * b(1) - a(1) * b(3)
     vec(3) = a(1) * b(2) - a(2) * b(1)
-  end function outer_product
+  end function crossr_product
 ! +++ Calculation of Matrix +++
 
   real(8) function norm_seq(x)

@@ -8,6 +8,7 @@ subroutine Init_Mass
   dp = dble(Nbead)
 
 ! Kuwahata 2020/12/04  bug fixed
+
 !     dnmmass(:,1) = 0.d0
 !     dnmmass(:,Nbead) = 4.d0*physmass(Iatom)
 !  do Iatom = 1, Natom
@@ -17,7 +18,6 @@ subroutine Init_Mass
 !        dnmmass(Iatom,2*Imode+1) = dnmmass(Iatom,2*Imode)
 !     enddo
 !  enddo
-
 
   dnmmass(:,1) = 0.d0
   do Iatom = 1, Natom

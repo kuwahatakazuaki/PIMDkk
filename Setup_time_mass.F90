@@ -2,7 +2,7 @@ subroutine Setup_time_mass
   use Parameters
   implicit none
   double precision :: rndnumber
-  integer :: inhc, icolor, imode
+  integer :: Inhc, Icolor, Imode
 
 !YK Initiate Random Number Generator
   Call RandomG(0,rndnumber)
@@ -13,7 +13,7 @@ subroutine Setup_time_mass
     ista = 1
     iend = 1
   else
-    dt_ref = dt/dble(nref)
+    dt_ref = dt/dble(Nref)
   end if
 !
 !     /*   bath parameters for path integral MD   */
@@ -21,15 +21,17 @@ subroutine Setup_time_mass
 ! /*   thermostat attached to centroids   */
   select case(Ncent)
     case(1)
-      qmcent11(1) = 3.d0*dble(Natom)/beta/omega2
-      do inhc=2,nnhc
-        qmcent11(inhc) = 1.d0/beta/omega2
+      !qmcent11(1) = 3.d0*dble(Natom)/beta/omega2
+      qmcent11(1) = dble(Ndim*Natom)/beta/omega2
+      do Inhc = 2, Nnhc
+        qmcent11(Inhc) = 1.d0/beta/omega2
       enddo
     case(3)
-      qmcent31(1) = 3.d0*dble(Natom)/beta/omega2
+      qmcent31(1) = dble(Ndim*Natom)/beta/omega2
+      !qmcent31(1) = 3.d0*dble(Natom)/beta/omega2
       ! qmcent31(1) = 1.0d0/beta/omega2 ??
-      do inhc=2,nnhc
-        qmcent31(inhc) = 1.d0/beta/omega2
+      do Inhc = 2, Nnhc
+        qmcent31(Inhc) = 1.d0/beta/omega2
       enddo
   end select
 
@@ -37,8 +39,8 @@ subroutine Setup_time_mass
 ! /*   thermostat attached to non-centroid modes   */
   if ( Isimulation /= 10 ) then
     qmass(1) = 0.0d0
-    do imode = 2, Nbead
-      qmass(imode) = 1.d0/beta/omega_p2
+    do Imode = 2, Nbead
+      qmass(Imode) = 1.d0/beta/omega_p2
     enddo
   end if
 !
@@ -47,8 +49,8 @@ subroutine Setup_time_mass
 !  adiabaticity parameter for centroid MD
   gamma2 = gamma1*gamma1
   If( Isimulation == 2 ) then
-    do imode = 2, Nbead
-      qmass(imode) = gamma2*qmass(imode)
+    do Imode = 2, Nbead
+      qmass(Imode) = gamma2*qmass(Imode)
     enddo
   EndIf
 

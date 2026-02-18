@@ -1,14 +1,13 @@
 Subroutine Ham_Temp_Classical
   use Parameters
-  use utility, only: norm_seq, outer_product
+  use utility, only: norm_seq
   implicit none
   integer :: iatom, icolor, Inhc, i, j
   real(8) :: get_kinetic_ene
 
   dkinetic = get_kinetic_ene()
-  temp = 2.d0*dkinetic*AU2K/dble(3*Natom*Nbead)
-  !temp = 2.d0*dkinetic/dble(natom)/K2AU/3.d0
-  !temp = temp/dble(nbead)
+  temp = 2.d0*dkinetic*AU2K/dble(Ndim*Natom*Nbead)
+  !temp = 2.d0*dkinetic*AU2K/dble(3*Natom*Nbead)
 
 !
 !   /*  calculate the total hamiltonian  */
@@ -31,7 +30,7 @@ Subroutine Ham_Temp_Classical
       enddo
     case(3)
       do inhc=1,Nnhc
-         do iatom=1,natom
+         do iatom=1,Natom
            ebath_cent=ebath_cent + 0.5d0 * qmcent31(inhc) * norm_seq( vrbc31(:,iatom,inhc) ) &
                                  + gkt * sum( rbc31(:,iatom,inhc) )
          enddo

@@ -4,8 +4,7 @@ module Parameters
 ! +++ Constants for conversion +++
   ! fs -- > a.u.
   real(8), parameter :: fs2AU  = 1.d0 / 0.024188843d0   ! fs2AU
-  ! Mass amu -- > A.U.
-  real(8), parameter :: amu2AU    = 1.6605402d-27/9.1093897d-31 ! amu2AU
+  real(8), parameter :: amu2AU    = 1.6605402d-27/9.1093897d-31 ! atomic mass unit -> AU
   real(8), parameter :: eV2AU     = 1.0d0/27.21162d0
   real(8), parameter :: Ang2AU    = 1.0d0/0.529177249d0
   real(8), parameter :: AU2Ang    = 0.529177249d0   ! bohr_inv
@@ -17,7 +16,7 @@ module Parameters
   real(8), parameter :: kcalPmol2AU = 1.0d0/AU2kcalPmol
   integer, parameter :: LINELEN = 120
 
-  integer              :: Natom, Nbead, Nstep, Isimulation
+  integer              :: Natom, Nbead, Nstep, Isimulation, Ndof, Ndim = 3
   integer              :: Nref, Nys, Nnhc, out_step = 1
   real(8), allocatable :: r(:,:,:), fr(:,:,:), vr(:,:,:), ur(:,:,:), vur(:,:,:)
   real(8), allocatable :: fur(:,:,:), fur_ref(:,:,:)
@@ -31,7 +30,6 @@ module Parameters
   real(8), allocatable :: qmcent11(:), qmcent31(:)
   real(8), allocatable :: dipoler(:,:)
   real(8), allocatable :: charge(:,:), pot_bead(:), hfcc(:,:), nbo(:,:) ! Eenergy(:)
-  !real(8), allocatable :: homo(:), lumo(:)
   real(8)              :: gamma1 = 1.0d0, gamma2, omega_system
   real(8)              :: omega_p2, omega2
   real(8)              :: gkt, gnkt, dp_inv, E_Virial
@@ -41,10 +39,10 @@ module Parameters
   real(8)              :: freq1 = 10.0d0
   real(8)              :: lattice(3,3)
 
-  integer              :: Ncent  ! Type of the thermostat
+  integer              :: Ncent     ! Type of the thermostat
   integer              :: Irestep = 0
   integer              :: Nproc, MyRank
-  integer              :: Iforce ! Type of force
+  integer              :: Iforce    ! Type of force
   integer              :: Iseeds(4) ! Random Number Generator Seed
   integer              :: Ista, Iend, laddress
   integer, allocatable :: listeach(:),listeachtmp(:) !,ireqa(:,:),ireqb(:,:)

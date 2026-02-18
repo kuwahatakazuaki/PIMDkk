@@ -1,7 +1,6 @@
 subroutine getforce_ref_nor
-!subroutine Getforce_Ref
   use Parameters
-  use utility, only: program_abort
+  !use utility, only: program_abort
   implicit none
   integer :: i, j
 
@@ -14,4 +13,3 @@ subroutine getforce_ref_nor
 
 return
 end subroutine getforce_ref_nor
-!end subroutine Getforce_Ref

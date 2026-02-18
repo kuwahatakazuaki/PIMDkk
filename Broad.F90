@@ -10,6 +10,7 @@ subroutine Broad1
   call MPI_BCAST(Natom,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   call MPI_BCAST(temperature,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
   call MPI_BCAST(Nbead,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
+  call MPI_BCAST(Ndim,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   call MPI_BCAST(Nstep,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   call MPI_BCAST(dt,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
   call MPI_BCAST(Isimulation,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
@@ -39,7 +40,6 @@ subroutine Broad1
 
   call MPI_BCAST(Iumb,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   call MPI_BCAST(umb_cons,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-  !call MPI_BCAST(umb_pot,1,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
   call MPI_BCAST(umb_atom1,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   call MPI_BCAST(umb_atom2,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   call MPI_BCAST(umb_atom3,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
@@ -57,14 +57,13 @@ subroutine Broad2
   real(8) :: tempr(3,Natom)
 
   Call MPI_BCAST(physmass,Natom,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-  !Call MPI_BCAST(atom_num,Natom,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
   Call MPI_BCAST(alabel,2*Natom,MPI_CHARACTER,0,MPI_COMM_WORLD,IERR)
 
   if ( MyRank == 0 ) then
     tempr(:,:) = ur(:,:,1)
   EndIf
 
-  call MPI_Bcast(tempr,3*Natom,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  call MPI_Bcast(tempr,Ndim*Natom,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
 
   ur(:,:,1) = tempr(:,:)
 #endif
@@ -81,14 +80,14 @@ subroutine Broad3
   integer :: ierr
 
   call MPI_BCAST(Irestep,1,MPI_INTEGER,0,MPI_COMM_WORLD,IERR)
-  call MPI_Bcast(ur(1,1,1),3*Natom*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-  call MPI_Bcast(vr(1,1,1),3*Natom*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-  call MPI_Bcast(vur(1,1,1),3*Natom*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-  call MPI_Bcast(fur(1,1,1),3*Natom*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  call MPI_Bcast(ur(1,1,1),Ndim*Natom*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  call MPI_Bcast(vr(1,1,1),Ndim*Natom*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  call MPI_Bcast(vur(1,1,1),Ndim*Natom*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  call MPI_Bcast(fur(1,1,1),Ndim*Natom*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
 
-  call MPI_Bcast(vrbath(1,1,1,1),3*Natom*Nnhc*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-  call MPI_Bcast(rbath(1,1,1,1),3*Natom*Nnhc*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-  call MPI_Bcast(frbath(1,1,1,1),3*Natom*Nnhc*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  call MPI_Bcast(vrbath(1,1,1,1),Ndim*Natom*Nnhc*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  call MPI_Bcast(rbath(1,1,1,1),Ndim*Natom*Nnhc*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+  call MPI_Bcast(frbath(1,1,1,1),Ndim*Natom*Nnhc*Nbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
 
   select case(Ncent)
     case(1)
@@ -96,9 +95,9 @@ subroutine Broad3
       call MPI_Bcast(vbc11,Nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
       call MPI_Bcast(fbc11,Nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
     case(3)
-      call MPI_Bcast(frbc31(1,1,1),3*Natom*Nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-      call MPI_Bcast(vrbc31(1,1,1),3*Natom*Nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
-      call MPI_Bcast(rbc31(1,1,1),3*Natom*Nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+      call MPI_Bcast(frbc31(1,1,1),Ndim*Natom*Nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+      call MPI_Bcast(vrbc31(1,1,1),Ndim*Natom*Nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
+      call MPI_Bcast(rbc31(1,1,1),Ndim*Natom*Nnhc,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,IERR)
   end select
 #endif
 

@@ -1,6 +1,6 @@
 Subroutine Remove_TnR_All
   Use Parameters
-  use utility, only: outer_product, program_abort, calc_determinant33, calc_inv_mat33
+  use utility, only: crossr_product, program_abort, calc_determinant33, calc_inv_mat33
   Implicit None
   real(8), parameter :: delta = 0.00001d0
   real(8) :: detmat! ,gradx,grady,gradz
@@ -20,8 +20,8 @@ Subroutine Remove_TnR_All
 ! Calculate Center of Mass and Translational Velocity of COM
 !
     do i = 1, Natom
-      sumvr(:) = sumvr(:)  + vur(:,i,j)*fictmass(i,j)
-      comr(:)  = comr(:)   + ur(:,i,j)*fictmass(i,j)
+      sumvr(:) = sumvr(:) + vur(:,i,j)*fictmass(i,j)
+      comr(:)  = comr(:)  + ur(:,i,j)*fictmass(i,j)
     enddo
     totmas = sum(fictmass(:,j))
     sumvr(:) = sumvr(:) / totmas
@@ -29,16 +29,10 @@ Subroutine Remove_TnR_All
 
 !
 ! Calculate Rotational Velocity of COM
-! Construct the Momenta 
+! Construct the Momenta of Inertia
 !
     inertia(:,:) = 0.0d0
     do i = 1, Natom
-      !cixx = cixx + fictmass(i,j) * ((uy(i,j)-comy)**2+(uz(i,j)-comz)**2)
-      !ciyy = ciyy + fictmass(i,j) * ((ux(i,j)-comx)**2+(uz(i,j)-comz)**2)
-      !cizz = cizz + fictmass(i,j) * ((uy(i,j)-comy)**2+(ux(i,j)-comx)**2)
-      !cixy = cixy - fictmass(i,j) *  (ux(i,j)-comx) *  (uy(i,j)-comy)
-      !ciyz = ciyz - fictmass(i,j) *  (uz(i,j)-comz) *  (uy(i,j)-comy)
-      !cizx = cizx - fictmass(i,j) *  (ux(i,j)-comx) *  (uz(i,j)-comz)
       inertia(:,:) = inertia(:,:) + calc_inertia(fictmass(i,j),ur(:,i,j)-comr(:))
     enddo
 !
@@ -61,7 +55,8 @@ Subroutine Remove_TnR_All
 
     moment(:) = 0.0d0
     do i = 1, Natom
-      moment(:) = moment(:) + fictmass(i,j) * outer_product(ur(:,i,j)-comr(:), vur(:,i,j))
+      moment(:) = moment(:) + fictmass(i,j) * crossr_product(ur(:,i,j)-comr(:), vur(:,i,j))
+      !moment(:) = moment(:) + fictmass(i,j) * outer_product(ur(:,i,j)-comr(:), vur(:,i,j))
     enddo
     ang_vel(:) = matmul(dinvmat,moment)
 
@@ -72,7 +67,8 @@ Subroutine Remove_TnR_All
     do i = 1, Natom
       vur(:,i,j) = vur(:,i,j) - sumvr(:)
       vur(:,i,j) &
-        = vur(:,i,j) - outer_product(ang_vel,ur(:,i,j)-comr(:))
+        = vur(:,i,j) - crossr_product(ang_vel,ur(:,i,j)-comr(:))
+        != vur(:,i,j) - outer_product(ang_vel,ur(:,i,j)-comr(:))
     enddo
 
 !moment(:) = 0.0d0
@@ -82,7 +78,7 @@ Subroutine Remove_TnR_All
 !print *, moment(:)
 
   enddo
-  Return
+  return
 
 contains
 

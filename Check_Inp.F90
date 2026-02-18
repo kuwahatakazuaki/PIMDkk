@@ -9,6 +9,7 @@ subroutine Check_Inp
       write(Uout,9999) ' +++++ Isimulation         ', Isimulation
       write(Uout,9997) ' +++++ Simulation type     ', trim(name_simulation)
       write(Uout,9999) ' +++++ Number of Atoms     ', Natom
+      write(Uout,9999) ' +++++ Number of Dim       ', Ndim
       write(Uout,9999) ' +++++ Number of Beads     ', Nbead
       write(Uout,9999) ' +++++ Number of Steps     ', Nstep
 #ifdef _mpi_
@@ -17,8 +18,8 @@ subroutine Check_Inp
       write(Uout,9998) ' +++++ Given Temperature   ', Temperature
       write(Uout,9998) ' +++++ Given time step     ', dt / fs2AU
       write(Uout,9998) ' +++++ Output step (fs)    ', dt / fs2AU * out_step
-      write(Uout,9999) ' +++++ Method of Centr NHC ', ncent
-      write(Uout,9999) ' +++++ Length of Centr NHC ', nnhc
+      write(Uout,9999) ' +++++ Method of Centr NHC ', Ncent
+      write(Uout,9999) ' +++++ Length of Centr NHC ', Nnhc
       write(Uout,9995) ' +++++ Flag for Restart    ', Lrestart
       write(Uout,9999) ' +++++ Flag for Force Calc ', Iforce
       write(Uout,9999) ' +++++ Seed for Random No.1', Iseeds(1)

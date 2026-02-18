@@ -1,9 +1,11 @@
 $The Number of Proccesors
 1
-$temperature
-300.0
+$Ndim
+3
 $Nbead
 16
+$temperature
+300.0
 $Nstep
 1000
 $dt

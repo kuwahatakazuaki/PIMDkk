@@ -4,7 +4,7 @@ subroutine print_ini
   implicit none
   integer :: i, Uham, Uchar, Uhfc, Uout, Udip
 
-if(myrank==0) then
+if (MyRank == 0) then
 
 ! +++ Start Nbead == 1 +++
   if (Nbead == 1) then
@@ -16,9 +16,9 @@ if(myrank==0) then
     close(Uham)
 
     open(newunit=Uout,file=Fout,status='old',position='append')
-      write(Uout,'(" "a)') repeat('*',95)
+      write(Uout,'(" ",a)') repeat('*',95)
       write(Uout,'(a)') '   Step  Hamiltonian  Temperature  Potential    DKinetic     EBath_Cent    Date & Time'
-      write(Uout,'(" "a)') repeat('*',95)
+      write(Uout,'(" ",a)') repeat('*',95)
     close(Uout)
 
 ! +++ End Nbead == 1 +++
@@ -34,10 +34,10 @@ if(myrank==0) then
     close(Uham)
 
     open(newunit=Uout,file=Fout,status='old',position='append')
-      write(Uout,'(" "a)')  repeat('*',121)
+      write(Uout,'(" ",a)')  repeat('*',121)
       write(Uout,'(a)') &
         '   Step  Hamiltonian  Temperature  Potential    DKinetic     QKinetic     EBath        EBath_Cent     Date & Time'
-      write(Uout,'(" "a)')  repeat('*',121)
+      write(Uout,'(" ",a)')  repeat('*',121)
     close(Uout)
 
   end if
