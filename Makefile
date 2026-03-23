@@ -1,7 +1,7 @@
 PROG = pimd.exe
 SHELL   = /bin/bash
 OBJS    = $(SRCS:%.F90=%.o)
-OBJSF77 = $(SRCSF77:%.f=%.o)
+# OBJSF77 = $(SRCSF77:%.f=%.o)
 DEP     = $(OBJS:.o=.d)
 SRCS   += $(SRC_LAMMPS)
 OBJS   += $(OBJ_LAMMPS)
@@ -73,7 +73,6 @@ Ham_Temp.F90                       \
 Ham_Temp_Classical.F90             \
 Nhc_Integrate.F90                  \
 update_pos_vel.F90                 \
-RandomG.F90                        \
 Force_Gaussian_classical.F90       \
 Force_MOPAC_MPI.F90                \
 Force_Classical.F90                \
@@ -110,21 +109,20 @@ exit.F90                           \
 # GasDev.F90                         \
 # Main_MPI.F90                       \
 # Vupdate_Ref.F90                    \
+# RandomG.F90                        \
+# dlarnv.f   \
+# dlaruv.f   \
 
-
-SRCSF77 =  \
-dlarnv.f   \
-dlaruv.f   \
 
 
 all: $(PROG)
 	@echo -e '\e[34m Noraml termination!!!\e[m\n'
 
-$(PROG): $(OBJS) $(OBJSF77)
+$(PROG): $(OBJS)
 ifeq ($(HOSTNAME),genkai)
-	$(FC) $(LIBS) $(OBJS) $(OBJSF77) -o $(PROG)
+	$(FC) $(LIBS) $(OBJS) -o $(PROG)
 else
-	$(FC) $(FCOPT) $(OBJS) $(OBJSF77) -o $(PROG)
+	$(FC) $(FCOPT) $(OBJS) -o $(PROG)
 endif
 
 
@@ -160,5 +158,4 @@ clean:
 
 
 re: clean all
-
 

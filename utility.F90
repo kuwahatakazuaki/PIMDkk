@@ -1,5 +1,5 @@
 module utility
-  use Parameters, only : Ferr, pi
+  use Parameters, only : Ferr, pi, Iseeds
   implicit none
 
   interface fill_gaussian_random
@@ -34,48 +34,24 @@ contains
     gset   = amp * dsin(2.d0 * pi * u2)
     has_saved = .true.
   end function gasdev
-!  real(8) function gasdev()
-!    implicit none
-!    real(8) :: v1,v2,rsq,gset,fac
-!    Integer :: iset
-!    save iset, gset
-!    data iset /0/
-!
-!    if (iset==0) Then
-!       do
-!         call random_number(v1)
-!         v1 = 2.d0 * v1 - 1.d0
-!         call random_number(v2)
-!         v2 = 2.d0 * v2 - 1.d0
-!
-!         rsq = v1*v1 + v2*v2
-!         if (rsq < 1.d0 .and. rsq  > 0.d0) Then
-!            fac  = dsqrt(-2.d0*dlog(rsq)/rsq)
-!            gset   = v1 * fac
-!            gasdev = v2 * fac
-!            exit
-!         end if
-!       end do
-!       iset   = 1
-!    else
-!       gasdev = gset
-!       iset   = 0
-!    end if
-!    return
-!  end function gasdev
 
-  subroutine set_random_seed(Irand)
-    integer :: Irand, i
-    integer :: Nseeds
+  subroutine set_random_seed(Lfixed_random)
+    integer :: i, Nseeds
     integer, allocatable :: seeds(:)
+    logical, intent(in) :: Lfixed_random
 
     call random_seed(size=Nseeds)
     if ( .not. allocated(seeds) ) allocate(seeds(Nseeds))
 
-    if ( Irand == 0 ) then
-    do i = 1, Nseeds
-      call system_clock(count=seeds(i))
-    end do
+    if ( Lfixed_random .eqv. .True. ) then
+      do i = 1, Nseeds
+        seeds(i) = abs( Iseeds(1) + 37*i )
+      end do
+    else
+      do i = 1, Nseeds
+        call system_clock(count=seeds(i))
+        seeds(i) = seeds(i) + 37*i
+      end do
     end if
     call random_seed(put=seeds(:))
   end subroutine set_random_seed
