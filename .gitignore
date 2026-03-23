@@ -37,3 +37,9 @@ tags
 log*
 .DS_Store
 
+# Test directories
+AGENTS.md
+Tests
+
+
+

@@ -1,24 +1,21 @@
 subroutine Init_Velocity
   use Parameters
-  use utility, only: gasdev
+  use utility, only: fill_gaussian_random
   implicit none
-  real(8) :: vsigma
-  integer :: Imode, Iatom, Idim
+  real(8), allocatable :: sigma(:,:), sigma3(:,:,:)
+  !real(8), allocatable :: z(:,:,:)
 !
-!     /*  vsigma: standard deviation of Maxwell distribution  */
+!     /*  sigma: standard deviation of Maxwell distribution  */
 !
-  do Imode = 1, Nbead
-    do Iatom = 1, Natom
-      vsigma = dsqrt(1.d0/beta/fictmass(Iatom,Imode))
-      !vur(1,Iatom,Imode) = vsigma*gasdev()
-      !vur(2,Iatom,Imode) = vsigma*gasdev()
-      !vur(3,Iatom,Imode) = vsigma*gasdev()
-      do Idim = 1, Ndim
-        vur(Idim,Iatom,Imode) = vsigma*gasdev()
-      end do
-    enddo
-  enddo
+  allocate(sigma(Natom,Nbead), sigma3(Ndim,Natom,Nbead))
+  !allocate(z(Ndim,Natom,Nbead))
+
+  sigma(:,:) = dsqrt(1.d0/beta/fictmass(:,:))
+  sigma3(:,:,:) = spread(sigma, dim=1, ncopies=Ndim)
+  call fill_gaussian_random(vur)
+  vur(:,:,:) = sigma3(:,:,:) * vur(:,:,:)
 
   call Remove_TnR_All
+  deallocate(sigma, sigma3)
   return
 end subroutine Init_Velocity

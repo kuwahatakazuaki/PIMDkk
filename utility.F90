@@ -1,42 +1,68 @@
 module utility
-  use Parameters, only : Ferr
+  use Parameters, only : Ferr, pi
   implicit none
+
+  interface fill_gaussian_random
+    module procedure fill_gaussian_random_1d
+    module procedure fill_gaussian_random_2d
+    module procedure fill_gaussian_random_3d
+  end interface fill_gaussian_random
 
 contains
 
 ! +++ Random Generator +++
   real(8) function gasdev()
     implicit none
-    real(8) :: R_Number,v1,v2,rsq,gset,fac!,gasd
-    Integer          :: iset
-    save iset, gset
-    data iset /0/
+    real(8), save :: gset = 0.d0
+    logical, save :: has_saved = .false.
+    real(8) :: u1, u2, amp
 
-    if (iset==0) Then
-       do
-         call RandomG(1,R_Number)
-         v1  = 2.d0 * R_Number - 1.d0
-         call RandomG(1,R_Number)
-         v2  = 2.d0 * R_Number - 1.d0
-
-         !v1  = 2.d0 * ranf1() - 1.d0
-         !v2  = 2.d0 * ranf1() - 1.d0
-
-         rsq = v1*v1 + v2*v2
-         if (rsq < 1.d0 .and. rsq  > 0.d0) Then
-            fac  = dsqrt(-2.d0*dlog(rsq)/rsq)
-            gset   = v1 * fac
-            gasdev = v2 * fac
-            exit
-         end if
-       end do
-       iset   = 1
-    else
-       gasdev = gset
-       iset   = 0
+    if (has_saved) then
+      gasdev = gset
+      has_saved = .false.
+      return
     end if
-    return
+
+    call random_number(u1)
+    call random_number(u2)
+
+    ! Avoid log(0) when the generator returns an exact zero.
+    u1 = max(u1, tiny(1.0d0))
+
+    amp = dsqrt(-2.d0 * dlog(u1))
+    gasdev = amp * dcos(2.d0 * pi * u2)
+    gset   = amp * dsin(2.d0 * pi * u2)
+    has_saved = .true.
   end function gasdev
+!  real(8) function gasdev()
+!    implicit none
+!    real(8) :: v1,v2,rsq,gset,fac
+!    Integer :: iset
+!    save iset, gset
+!    data iset /0/
+!
+!    if (iset==0) Then
+!       do
+!         call random_number(v1)
+!         v1 = 2.d0 * v1 - 1.d0
+!         call random_number(v2)
+!         v2 = 2.d0 * v2 - 1.d0
+!
+!         rsq = v1*v1 + v2*v2
+!         if (rsq < 1.d0 .and. rsq  > 0.d0) Then
+!            fac  = dsqrt(-2.d0*dlog(rsq)/rsq)
+!            gset   = v1 * fac
+!            gasdev = v2 * fac
+!            exit
+!         end if
+!       end do
+!       iset   = 1
+!    else
+!       gasdev = gset
+!       iset   = 0
+!    end if
+!    return
+!  end function gasdev
 
   subroutine set_random_seed(Irand)
     integer :: Irand, i
@@ -57,6 +83,49 @@ contains
   real(8) function ranf1()
     call random_number(ranf1)
   end function ranf1
+
+  subroutine fill_gaussian_random_1d(z)
+    real(8), intent(out) :: z(:)
+    real(8), allocatable :: u1(:), u2(:)
+    real(8), parameter :: umin = 1.d-16
+    real(8), parameter :: twopi = 2.d0 * pi
+
+    allocate(u1(size(z,1)), u2(size(z,1)))
+    call random_number(u1)
+    call random_number(u2)
+    where (u1 < umin) u1 = umin
+    z(:) = dsqrt(-2.d0*dlog(u1(:))) * dcos(twopi*u2(:))
+    deallocate(u1, u2)
+  end subroutine fill_gaussian_random_1d
+
+  subroutine fill_gaussian_random_2d(z)
+    real(8), intent(out) :: z(:,:)
+    real(8), allocatable :: u1(:,:), u2(:,:)
+    real(8), parameter :: umin = 1.d-16
+    real(8), parameter :: twopi = 2.d0 * pi
+
+    allocate(u1(size(z,1),size(z,2)), u2(size(z,1),size(z,2)))
+    call random_number(u1)
+    call random_number(u2)
+    where (u1 < umin) u1 = umin
+    z(:,:) = dsqrt(-2.d0*dlog(u1(:,:))) * dcos(twopi*u2(:,:))
+    deallocate(u1, u2)
+  end subroutine fill_gaussian_random_2d
+
+  subroutine fill_gaussian_random_3d(z)
+    real(8), intent(out) :: z(:,:,:)
+    real(8), allocatable :: u1(:,:,:), u2(:,:,:)
+    real(8), parameter :: umin = 1.d-16
+    real(8), parameter :: twopi = 2.d0 * pi
+
+    allocate(u1(size(z,1),size(z,2),size(z,3)))
+    allocate(u2(size(z,1),size(z,2),size(z,3)))
+    call random_number(u1)
+    call random_number(u2)
+    where (u1 < umin) u1 = umin
+    z(:,:,:) = dsqrt(-2.d0*dlog(u1(:,:,:))) * dcos(twopi*u2(:,:,:))
+    deallocate(u1, u2)
+  end subroutine fill_gaussian_random_3d
 ! +++ Random Generator +++
 
 !--------------------------------------------------------------------!
@@ -431,5 +500,3 @@ end module utility
   !    end if
   !  end do
   !end function lowerchr
-
-
