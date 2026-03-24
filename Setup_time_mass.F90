@@ -2,11 +2,9 @@ subroutine Setup_time_mass
   use Parameters
   use utility,    only: set_random_seed
   implicit none
-  double precision :: rndnumber
   integer :: Inhc, Icolor, Imode
 
 !YK Initiate Random Number Generator
-  !Call RandomG(0,rndnumber)
   call set_random_seed(Lfixed_random = .True.)
 
 !     /*   for multiple time step   */

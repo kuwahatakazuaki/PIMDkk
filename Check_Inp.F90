@@ -22,10 +22,7 @@ subroutine Check_Inp
       write(Uout,9999) ' +++++ Length of Centr NHC ', Nnhc
       write(Uout,9995) ' +++++ Flag for Restart    ', Lrestart
       write(Uout,9999) ' +++++ Flag for Force Calc ', Iforce
-      write(Uout,9999) ' +++++ Seed for Random No.1', Iseeds(1)
-      write(Uout,9999) ' +++++ Seed for Random No.2', Iseeds(2)
-      write(Uout,9999) ' +++++ Seed for Random No.3', Iseeds(3)
-      write(Uout,9999) ' +++++ Seed for Random No.4', Iseeds(4)
+      write(Uout,9999) ' +++++ Seed for Random    ', Iseed
       write(Uout,9997) ' +++++ Address of Result   ', trim(dir_result)
       write(Uout,9997) ' +++++ Address of Scratch  ', trim(dir_scr)
       write(Uout,*)
@@ -66,5 +63,4 @@ subroutine Check_Inp
 9995 Format(A26,L12)
 9994 Format(A26,ES12.4)
 end subroutine Check_Inp
-
 

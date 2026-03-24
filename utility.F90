@@ -1,5 +1,5 @@
 module utility
-  use Parameters, only : Ferr, pi, Iseeds
+  use Parameters, only : Ferr, pi, Iseed
   implicit none
 
   interface fill_gaussian_random
@@ -45,7 +45,7 @@ contains
 
     if ( Lfixed_random .eqv. .True. ) then
       do i = 1, Nseeds
-        seeds(i) = abs( Iseeds(1) + 37*i )
+        seeds(i) = abs( Iseed + 37*i )
       end do
     else
       do i = 1, Nseeds

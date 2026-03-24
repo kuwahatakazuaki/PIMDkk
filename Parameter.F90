@@ -43,7 +43,7 @@ module Parameters
   integer              :: Irestep = 0
   integer              :: Nproc, MyRank
   integer              :: Iforce    ! Type of force
-  integer              :: Iseeds(4) ! Random Number Generator Seed
+  integer              :: Iseed     ! Random Number Generator Seed
   integer              :: Ista, Iend, laddress
   integer, allocatable :: listeach(:),listeachtmp(:) !,ireqa(:,:),ireqb(:,:)
 
@@ -110,4 +110,3 @@ end module Struct_
 
 !!YK If additional basis sets for g03 or g09 calculations are necessary
 !    Integer                       :: NGenGau
-

@@ -3,7 +3,7 @@ subroutine read_parameter
   use Parameters
   use utility, only: program_abort, makedir
   implicit none
-  integer :: i, j, Uin, ios, access
+  integer :: j, Uin, ios, access
   character(len=100) :: line
 
   open(newunit=Uin,file=Finp,status='old',iostat=ios)
@@ -44,10 +44,7 @@ subroutine read_parameter
       elseif (index(line,"$Lsave_hfcc")     == 1) then; read(Uin,*) Lsave_hfcc
       elseif (index(line,"$Lsave_energy")   == 1) then; read(Uin,*) Lsave_energy
       elseif (index(line,"$Lrestart")       == 1) then; read(Uin,*) Lrestart
-      elseif (index(line,"$seed")           == 1) then
-        do i = 1, 4
-          read(Uin,*) Iseeds(i)
-        end do
+      elseif (index(line,"$seed")           == 1) then; read(Uin,*) Iseed
       elseif (index(line,"$address_result") == 1) then; read(uin,'(a)') dir_result
       elseif (index(line,"$address_scr")    == 1) then; read(uin,'(a)') dir_scr
 
@@ -164,4 +161,3 @@ subroutine read_structure
   end if
 
 end subroutine read_structure
-
