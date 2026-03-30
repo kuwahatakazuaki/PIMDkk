@@ -8,7 +8,6 @@ end subroutine update_pos_nor
 subroutine update_pos_car
   use Parameters
   implicit none
-  !ur(:,:,:) = ur(:,:,:) + dt_ref*vur(:,:,:)
   r(:,:,:) = r(:,:,:) + dt_ref*vr(:,:,:)
   return
 end subroutine update_pos_car

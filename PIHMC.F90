@@ -24,7 +24,7 @@ subroutine PIHMC_normal
       call Init_Velocity
     end if
     call Broad3
-    call Temp_ctr
+    !call Temp_ctr
     call nmtrans_ur2r ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
     call Force_New_MPI
     if ( mod(istepsv,out_step) == 0 ) call print_result_qm
@@ -116,8 +116,6 @@ contains
         Naccept = Naccept + 1
       else
         temp_rand = ranf1()
-!print *, istepsv, bfactor, exp(-bfactor), temp_rand
-        !if ( exp(-bfactor) >= ranf1() ) then
         if ( exp(-bfactor) >= temp_rand ) then
           Naccept = Naccept + 1
         else
@@ -130,29 +128,38 @@ contains
       call recover_hmc
     end if
     ratio = dble(Naccept) / dble(Naccept+Nreject)
-!print *, istepsv, bfactor, Naccept, Nreject, ratio
     if (MyRank ==0 ) call Init_Velocity
     !call Broad_velocity
-    call Temp_ctr
+    !call Temp_ctr
     call getenergy_hmc
     call save_hmc
   end subroutine judge_hmc
 
   subroutine recover_hmc
+    r(:,:,:)         = r_old(:,:,:)
     ur(:,:,:)        = ur_old(:,:,:)
     vur(:,:,:)       = vur_old(:,:,:)
+    fr(:,:,:)        = fr_old(:,:,:)
     fur(:,:,:)       = fur_old(:,:,:)
     fur_ref(:,:,:)   = fur_ref_old(:,:,:)
     pot_bead(:)      = pot_old(:)
+    potential        = potential_old
+    dkinetic         = dkinetic_old
+    qkinetic         = qkinetic_old
     hamiltonian      = hamiltonian_old
   end subroutine recover_hmc
 
   subroutine save_hmc
+    r_old(:,:,:)       = r(:,:,:)
     ur_old(:,:,:)      = ur(:,:,:)
     vur_old(:,:,:)     = vur(:,:,:)
+    fr_old(:,:,:)      = fr(:,:,:)
     fur_old(:,:,:)     = fur(:,:,:)
     fur_ref_old(:,:,:) = fur_ref(:,:,:)
     pot_old(:)         = pot_bead(:)
+    potential_old      = potential
+    dkinetic_old       = dkinetic
+    qkinetic_old       = qkinetic
     hamiltonian_old    = hamiltonian
   end subroutine save_hmc
 

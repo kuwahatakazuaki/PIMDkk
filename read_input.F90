@@ -18,7 +18,6 @@ subroutine read_parameter
           call program_abort('ERROR!!: There is no "$end parameter"')
         end if
 
-      !if     (index(line,"$Natom" )         == 1) then; read(Uin,*) Natom
       if     (index(line,"$Ndim")           == 1) then; read(Uin,*) Ndim
       elseif (index(line,"$Nbead")          == 1) then; read(Uin,*) Nbead
       elseif (index(line,"$Nstep")          == 1) then; read(Uin,*) Nstep

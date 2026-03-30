@@ -85,12 +85,6 @@ Subroutine Force_MOPAC_MPI
 !Call Start_Send_Recv_MPI_tk
 
 
-!    potential=0.0D+00
-!    do imode=1,nbead
-!       potential=potential+pot_bead(imode)
-!    enddo
-!    potential=potential/dp
-
 return
 401 call program_abort('ERROR!!: We can not find "TOTAL ENERGY" in mopac.out')
 402 call program_abort('ERROR!!: We can not find "Atomic Force" in mopac.out')

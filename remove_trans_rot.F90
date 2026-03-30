@@ -1,10 +1,9 @@
-Subroutine Remove_TnR_All
-  Use Parameters
+subroutine Remove_TnR_All
+  use Parameters
   use utility, only: crossr_product, program_abort, calc_determinant33, calc_inv_mat33
-  Implicit None
+  implicit none
   real(8), parameter :: delta = 0.00001d0
-  real(8) :: detmat! ,gradx,grady,gradz
-  real(8) :: dinvmat(3,3)
+  real(8) :: dinvmat(3,3), detmat
   integer :: i, j
   real(8) :: sumvr(3), comr(3), gradr(3), totmas
   real(8) :: inertia(3,3), ang_vel(3), moment(3)
@@ -22,7 +21,7 @@ Subroutine Remove_TnR_All
     do i = 1, Natom
       sumvr(:) = sumvr(:) + vur(:,i,j)*fictmass(i,j)
       comr(:)  = comr(:)  + ur(:,i,j)*fictmass(i,j)
-    enddo
+    end do
     totmas = sum(fictmass(:,j))
     sumvr(:) = sumvr(:) / totmas
     comr(:)  = comr(:)  / totmas
@@ -34,7 +33,7 @@ Subroutine Remove_TnR_All
     inertia(:,:) = 0.0d0
     do i = 1, Natom
       inertia(:,:) = inertia(:,:) + calc_inertia(fictmass(i,j),ur(:,i,j)-comr(:))
-    enddo
+    end do
 !
 ! Obtain the Inverse Matrix of Momenta
 !
@@ -56,8 +55,7 @@ Subroutine Remove_TnR_All
     moment(:) = 0.0d0
     do i = 1, Natom
       moment(:) = moment(:) + fictmass(i,j) * crossr_product(ur(:,i,j)-comr(:), vur(:,i,j))
-      !moment(:) = moment(:) + fictmass(i,j) * outer_product(ur(:,i,j)-comr(:), vur(:,i,j))
-    enddo
+    end do
     ang_vel(:) = matmul(dinvmat,moment)
 
 !
@@ -68,16 +66,9 @@ Subroutine Remove_TnR_All
       vur(:,i,j) = vur(:,i,j) - sumvr(:)
       vur(:,i,j) &
         = vur(:,i,j) - crossr_product(ang_vel,ur(:,i,j)-comr(:))
-        != vur(:,i,j) - outer_product(ang_vel,ur(:,i,j)-comr(:))
-    enddo
+    end do
 
-!moment(:) = 0.0d0
-!do i = 1, Natom
-!  moment(:) = moment(:) + fictmass(i,j) * outer_product(ur(:,i,j)-comr(:), vur(:,i,j))
-!enddo
-!print *, moment(:)
-
-  enddo
+  end do
   return
 
 contains
@@ -100,4 +91,4 @@ contains
     L(3,2) = L(2,3)
   end function calc_inertia
 
-End Subroutine Remove_TnR_All
+end subroutine Remove_TnR_All

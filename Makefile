@@ -80,7 +80,7 @@ PI_NEW_MPI.F90                     \
 Classical.F90                      \
 print_ini.F90                      \
 Restart.F90                        \
-Remove_TnR_All.F90                 \
+remove_trans_rot.F90               \
 Virial_Estimator.F90               \
 Set_Deallocate.F90                 \
 Force_New_MPI.F90                  \
