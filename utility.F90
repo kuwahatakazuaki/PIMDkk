@@ -416,7 +416,23 @@ contains
     call system(command)
   end subroutine makedir
 
-
+  function calc_inertia(m,r) result(L)
+    real(8), intent(in) :: m,r(3)
+    real(8) :: L(3,3)
+    real(8) :: x, y, z
+    x = r(1)
+    y = r(2)
+    z = r(3)
+    L(1,1) = m * (y**2+z**2)
+    L(2,2) = m * (z**2+x**2)
+    L(3,3) = m * (x**2+y**2)
+    L(1,2) = (-1) * m*x*y
+    L(1,3) = (-1) * m*z*x
+    L(2,3) = (-1) * m*y*z
+    L(2,1) = L(1,2)
+    L(3,1) = L(1,3)
+    L(3,2) = L(2,3)
+  end function calc_inertia
   !subroutine get_inv_mat(mat,inv,n)
   !  integer :: n
   !  real(8), intent(in)  :: mat(n,n)
