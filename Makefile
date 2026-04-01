@@ -63,7 +63,6 @@ Init_Mass.F90                      \
 NM_Position.F90                    \
 Init_Velocity.F90                  \
 Init_Bath.F90                      \
-Init_Bath_Classical.F90            \
 Temp_ctr.F90                       \
 Kinetic_Energy.F90                 \
 NM_Trans.F90                       \
@@ -110,6 +109,7 @@ exit.F90                           \
 # Main_MPI.F90                       \
 # Vupdate_Ref.F90                    \
 # RandomG.F90                        \
+# Init_Bath_Classical.F90            \
 # dlarnv.f   \
 # dlaruv.f   \
 
@@ -158,4 +158,3 @@ clean:
 
 
 re: clean all
-

@@ -7,17 +7,21 @@ subroutine Init_Bath
 
 !     /*  massive Nose-Hoover chain  */
 !YK Remove the initial velocity for the centroid 
-  rbath(:,:,:,:) = 0.d0
-  vrbath(:,:,:,1) = 0.d0
+  if ( Isimulation /= 10 ) then
+    rbath(:,:,:,:) = 0.d0
+    vrbath(:,:,:,1) = 0.d0
 
-  do imode = 2, Nbead
-    vsigma = dsqrt(1.d0/beta/qmass(imode))
-    call fill_gaussian_random(vrbath(:,:,:,imode))
-    vrbath(:,:,:,imode) = vsigma * vrbath(:,:,:,imode)
-  enddo
+    do imode = 2, Nbead
+      vsigma = dsqrt(1.d0/beta/qmass(imode))
+      call fill_gaussian_random(vrbath(:,:,:,imode))
+      vrbath(:,:,:,imode) = vsigma * vrbath(:,:,:,imode)
+    enddo
+  end if
 
 !YK how about one NH chain?
   select case(Ncent)
+    case(0)
+      continue
     case(1)
       call fill_gaussian_random(vbc11)
       vbc11(:) = dsqrt(1.d0/beta/qmcent11(:)) * vbc11(:)

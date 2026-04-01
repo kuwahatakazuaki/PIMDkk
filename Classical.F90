@@ -8,25 +8,12 @@ subroutine Classical
   call Init_Mass
   call set_Iforce
 
-  !select case(Iforce)
-  !  case(1)
-  !    call Set_mopac
-  !  case(6)
-  !    call Set_Gaussian_MPI_tk
-  !  case(8)
-  !    call Set_VASP
-  !  case(21)
-  !    call set_nnp_araidai
-  !  case(22)
-  !    call set_nnp_matlantis
-  !end select
-
   if ( Lrestart .eqv. .True. ) then
     call restart_read_classical
   else
     call print_ini
     call Init_Velocity
-    call Init_Bath_Classical
+    call Init_Bath
     call Temp_ctr
     call Force_Classical
     if ( mod(istepsv,out_step) == 0 ) call print_result_qm
