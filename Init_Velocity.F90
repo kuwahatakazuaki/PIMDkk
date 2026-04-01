@@ -13,8 +13,7 @@ subroutine Init_Velocity
   call fill_gaussian_random(vur)
   vur(:,:,:) = sigma3(:,:,:) * vur(:,:,:)
 
-  call remove_trans_rot_beads
-  !call Remove_TnR_All
+  call remove_trans_rot_cent
   deallocate(sigma, sigma3)
   return
 end subroutine Init_Velocity

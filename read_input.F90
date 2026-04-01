@@ -74,6 +74,13 @@ subroutine read_parameter
     end do Search_Coords
 
     select case(Isimulation)
+      case(0:2)
+        if ( Nbead == 1 ) then
+          Isimulation = 10
+        end if
+    end select
+
+    select case(Isimulation)
       case(0)
         name_simulation = "PIMD"
       case(1)
@@ -87,10 +94,6 @@ subroutine read_parameter
       case(10)
         name_simulation = "CLMD"
     end select
-
-    if ( Nbead == 1 ) then
-      Isimulation = 10
-    end if
 
     if ( Isimulation == 1 .and. Ncent > 0 ) then
       call program_abort("You should be NVE for RPMD")
