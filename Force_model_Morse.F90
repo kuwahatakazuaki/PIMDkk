@@ -42,7 +42,7 @@ end subroutine Force_Double_Morse
 ! +++ Force_Harmonic +++
 ! ++++++++++++++++++++++
 subroutine Force_Harmonic
-  Use Parameters, &
+  use Parameters, &
     only: r, fr, Natom, Nbead, pot_bead, potential, &
           alabel, dp_inv, dir_result, istepsv, MyRank, &
           Lsave_force, physmass, dipoler, &
@@ -118,21 +118,23 @@ end subroutine Force_Harmonic
 ! +++ Force_model_Morse +++
 ! +++++++++++++++++++++++++
 subroutine Force_model_Morse
-  Use Parameters, & 
+  use Parameters, &
     only: r, fr, Natom, Nbead, pot_bead, potential, &
           alabel, dp_inv, dir_result, istepsv, &
           Lsave_force, AU2Ang, Ang2AU
   implicit none
   integer :: i, j
   integer :: Udis, Ucoor, Ufor, Uene, imode
-  real(8) :: f_two(3), power, dis !, Epoten
+  real(8) :: f_two(3), power, dis
   real(8) :: rij(3), temp
 
-  ! Parameters in Atomic unit
-  ! Hydrogen molecule
-    real(8), parameter :: r0    = 1.41014d0
-    real(8), parameter :: De    = 0.1745d0
-    real(8), parameter :: curvat = 1.0213d0
+  ! Parameters in atomic units for H2 X^1Sigma_g^+.
+  ! r0 is NIST WebBook r_e = 0.74144 Ang.
+  ! De and curvat are Morse-fit values derived from NIST omega_e = 4401.21 cm-1
+  ! and omega_e*x_e = 121.33 cm-1 using De = omega_e^2/(4*omega_e*x_e).
+    real(8), parameter :: r0     = 1.401118436971957d0
+    real(8), parameter :: De     = 0.181857687762878d0
+    real(8), parameter :: curvat = 1.007502956719422d0
 
   ! +++ Calculating Forcde which atom (i) feels from atom (j) +++
   fr(:,:,:) = 0.0d0
@@ -151,24 +153,24 @@ subroutine Force_model_Morse
   fr(:,:,:) = fr(:,:,:) * dp_inv
   ! +++ End Calculating Forcde which atom (i) feels from atom (j) +++
 
-  ! +++ Calculating enetemp +++
-  open(newunit=Udis,file=trim(dir_result)//'/distance.dat',status='unknown',position='append')
-    pot_bead(:) = 0.0d0
-    write(Udis,*) "# ", istepsv
-    do imode = 1, Nbead
-      do i = 1, Natom
-        do j = i+1, Natom
-          rij(:) = r(:,i,imode)-r(:,j,imode)
-          !dis = dsqrt( dot_product( rij(:),rij(:) ) )
-          dis = norm2(rij(:))
-          temp = 1 - exp(-curvat * (dis-r0))
-          pot_bead(imode) = pot_bead(imode) + De * temp * temp
-          write(Udis,*) dis * AU2Ang
-        end do
-      end do
-    end do
-  close(Udis)
-  ! +++ End Calculating enetemp +++
+  !! +++ Calculating enetemp +++
+  !open(newunit=Udis,file=trim(dir_result)//'/distance.dat',status='unknown',position='append')
+  !  pot_bead(:) = 0.0d0
+  !  write(Udis,*) "# ", istepsv
+  !  do imode = 1, Nbead
+  !    do i = 1, Natom
+  !      do j = i+1, Natom
+  !        rij(:) = r(:,i,imode)-r(:,j,imode)
+  !        !dis = dsqrt( dot_product( rij(:),rij(:) ) )
+  !        dis = norm2(rij(:))
+  !        temp = 1 - exp(-curvat * (dis-r0))
+  !        pot_bead(imode) = pot_bead(imode) + De * temp * temp
+  !        write(Udis,*) dis * AU2Ang
+  !      end do
+  !    end do
+  !  end do
+  !close(Udis)
+  !! +++ End Calculating enetemp +++
 
   9998 format(3E23.15)
   9999 format(a2,1x,E15.9,1x,E15.9,1x,E15.9)
@@ -177,4 +179,3 @@ end subroutine Force_model_Morse
 ! +++++++++++++++++++++++++++++
 ! +++ End Force_model_Morse +++
 ! +++++++++++++++++++++++++++++
-

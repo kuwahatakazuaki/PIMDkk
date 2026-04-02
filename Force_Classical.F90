@@ -6,16 +6,24 @@ Subroutine Force_Classical
   r(:,:,1) = ur(:,:,1)
 
   select case(Iforce)
+
+! === Start Ab initio calculation ===
     case(1)
       call Force_MOPAC
     case(6)
       call Force_Gaussian_classical
     case(8)
       call Force_VASP_cl
+! === End Ab initio calculation ===
+
+! === Start model calculation ===
+    case(11)
+      call Force_model_Morse
     case(15)
       call Force_Harmonic
     case(16)
       call Force_Double_Morse
+! === End model calculation ===
 
     case(21)
       call force_nnp_araidai

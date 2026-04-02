@@ -15,13 +15,13 @@ subroutine Ham_Temp
 !   Be careful, we use f not du/dr
 !
 
-  virial = 0.0d0
-  do j = 1, Nbead
-    do i = 1, Natom
-      virial = virial + dot_product( fr(:,i,j) , r(:,i,j) )
-    end do
-  end do
-  !PV  = (dkinetic + virial)/3.0d0 * AUtoJ / dble(nbead)
+!  virial = 0.0d0
+!  do j = 1, Nbead
+!    do i = 1, Natom
+!      virial = virial + dot_product( fr(:,i,j) , r(:,i,j) )
+!    end do
+!  end do
+!  !PV  = (dkinetic + virial)/3.0d0 * AUtoJ / dble(nbead)
 
 !
 !   /*  quantum kinetic energy (harmonic interaction):  *

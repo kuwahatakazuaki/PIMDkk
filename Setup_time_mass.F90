@@ -4,7 +4,6 @@ subroutine Setup_time_mass
   implicit none
   integer :: Inhc, Icolor, Imode
 
-!YK Initiate Random Number Generator
   call set_random_seed(Lfixed_random = .True.)
 
 !     /*   for multiple time step   */
