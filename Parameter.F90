@@ -16,7 +16,8 @@ module Parameters
   real(8), parameter :: kcalPmol2AU = 1.0d0/AU2kcalPmol
   integer, parameter :: LINELEN = 120
 
-  integer              :: Natom, Nbead, Nstep, Isimulation, Ndof, Ndim = 3
+  integer              :: Natom, Nbead, Nstep, Isimulation, Ndim = 3
+  integer              :: Ndof    ! dof : degree of freedom
   integer              :: Nref, Nys, Nnhc, out_step = 1
   real(8), allocatable :: r(:,:,:), fr(:,:,:), vr(:,:,:), ur(:,:,:), vur(:,:,:)
   real(8), allocatable :: fur(:,:,:), fur_ref(:,:,:)

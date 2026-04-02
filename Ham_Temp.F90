@@ -3,12 +3,12 @@ subroutine Ham_Temp
   use utility, only: norm_seq
   implicit none
   real(8) :: qdummy, factqk
-  integer :: i, j, k, Iatom, Imode, inhc!, icolor
+  integer :: i, j, k, Iatom, Imode, inhc
   real(8) :: get_kinetic_ene
 
   dkinetic = get_kinetic_ene()
-  temp = 2.d0*dkinetic*AU2K/dble(Ndim*Natom*Nbead)
-  !temp = 2.d0*dkinetic*AU2K/dble(3*Natom*Nbead)
+  temp = 2.d0*dkinetic*AU2K/dble(Ndof)
+  !temp = 2.d0*dkinetic*AU2K/dble(Ndim*Natom*Nbead)
 
 !
 !   pressure (PV) from virial and kinetic energy 

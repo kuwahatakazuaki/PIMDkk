@@ -14,22 +14,22 @@ subroutine Calc_Constant
   select case(Ndim)
     case(3)
 
-      !if ( Natom >= 3 ) then
-      !  Ndof = 3*Natom - 6
-      !else if ( Natom == 2 ) then
-      !  Ndof = 3*Natom - 5
-      !else if ( Natom == 1 ) then
-      !  Ndof = 3*Natom
-      !end if
-      Ndof = 3*Natom
+      if ( Natom >= 3 ) then
+        Ndof = 3*Natom*Nbead - 6
+      else if ( Natom == 2 ) then
+        Ndof = 3*Natom*Nbead - 5
+      else if ( Natom == 1 ) then
+        Ndof = 3*Natom*Nbead
+      end if
+      !Ndof = 3*Natom
 
     case(1)
 
       if ( Natom >= 2 ) then
         !Ndof = Natom
-        Ndof = Natom - 1
+        Ndof = Natom*Nbead - 1
       else if ( Natom == 1 ) then
-        Ndof = Natom
+        Ndof = Natom*Nbead
       end if
 
     case default
@@ -37,7 +37,8 @@ subroutine Calc_Constant
 
   end select
 
-  gnkt = dble(Ndof)/beta
+  !gnkt = dble(Ndof)/beta
+  gnkt = dble(Ndim*Natom)/beta
   gkt = 1.d0/beta
 
   !gnkt = 3.d0*dble(Natom)/beta

@@ -6,7 +6,8 @@ Subroutine Ham_Temp_Classical
   real(8) :: get_kinetic_ene
 
   dkinetic = get_kinetic_ene()
-  temp = 2.d0*dkinetic*AU2K/dble(Ndim*Natom*Nbead)
+  temp = 2.d0*dkinetic*AU2K/dble(Ndof)
+  !temp = 2.d0*dkinetic*AU2K/dble(Ndim*Natom*Nbead)
   !temp = 2.d0*dkinetic*AU2K/dble(3*Natom*Nbead)
 
 !

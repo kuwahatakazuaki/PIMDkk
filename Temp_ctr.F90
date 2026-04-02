@@ -5,8 +5,8 @@ subroutine Temp_ctr
   real(8) :: get_kinetic_ene
 
   dkinetic = get_kinetic_ene()
-  tempi = 2.d0*dkinetic*AU2K/dble(Ndim*Natom*Nbead)
-  !tempi = 2.d0*dkinetic*AU2K/dble(3*Natom*Nbead)
+  tempi = 2.d0*dkinetic*AU2K/dble(Ndof)
+  !tempi = 2.d0*dkinetic*AU2K/dble(Ndim*Natom*Nbead)
 
   temp_scale = dsqrt(temperature/tempi)
   vur(:,:,:) = vur(:,:,:) * temp_scale
