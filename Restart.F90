@@ -82,19 +82,20 @@ subroutine restart_read
   return
 end subroutine restart_read
 
-subroutine Restart_Write(istep)
+subroutine restart_write(istep)
   use Parameters
   implicit none
   integer :: Istep, Uout
   integer :: i, j, Inhc
+  logical :: ex_restart
+  character(len=256) :: frestart, frestart1, frestart_tmp
 
   if ( MyRank == 0 ) then
-    if (istep > out_step) then
-      !call system('cat '//trim(dir_result)//'/restart.dat >'//trim(dir_result)//'/restart1.dat')
-      call system('cp '//trim(dir_result)//'/restart.dat '//trim(dir_result)//'/restart1.dat')
-    end if
+    frestart     = trim(dir_result)//'/restart.dat'
+    frestart1    = trim(dir_result)//'/restart1.dat'
+    frestart_tmp = trim(dir_result)//'/restart.tmp'
 
-    open(newunit=Uout, file=trim(dir_result)//'/restart.dat', status = 'unknown')
+    open(newunit=Uout, file=trim(frestart_tmp), status='replace')
       write(Uout,'(i10)') Istep
       do j = 1, Nbead
         do i = 1, Natom
@@ -161,10 +162,66 @@ subroutine Restart_Write(istep)
           enddo
       end select
     close(Uout)
+
+    inquire(file=trim(frestart), exist=ex_restart)
+    if (ex_restart .and. istep > out_step) then
+      call system('mv -f "'//trim(frestart)//'" "'//trim(frestart1)//'"')
+    end if
+    call system('mv -f "'//trim(frestart_tmp)//'" "'//trim(frestart)//'"')
   end if
 
 return
-end subroutine Restart_Write
+end subroutine restart_write
+
+
+subroutine restart_write_bin(istep)
+  use Parameters
+  implicit none
+  integer :: Istep, Uout
+  integer :: i, j, Inhc
+  logical :: ex_restart
+  character(len=256) :: frestart, frestart1, frestart_tmp
+
+  if ( MyRank == 0 ) then
+    frestart     = trim(dir_result)//'/restart.dat'
+    frestart1    = trim(dir_result)//'/restart1.dat'
+    frestart_tmp = trim(dir_result)//'/restart.tmp'
+
+    !open(newunit=Uout, file=trim(frestart_tmp), status='replace')
+    open(newunit=Uout, file=trim(frestart_tmp), &
+       form='unformatted', access='stream', status='replace')
+      write(Uout) Istep
+      write(Uout) ur
+      write(Uout) vur * spread(sqrt(fictmass), dim=1, ncopies=3)
+      write(Uout) fur
+
+      if (allocated(rbath)) then
+        write(Uout) rbath
+        write(Uout) vrbath
+        write(Uout) frbath
+      end if
+
+      select case(Ncent)
+        case(1)
+          write(Uout) rbc11
+          write(Uout) vbc11
+          write(Uout) fbc11
+        case(3)
+          write(Uout) rbc31
+          write(Uout) vrbc31
+          write(Uout) frbc31
+      end select
+    close(Uout)
+
+    inquire(file=trim(frestart), exist=ex_restart)
+    if (ex_restart .and. istep > out_step) then
+      call system('mv -f "'//trim(frestart)//'" "'//trim(frestart1)//'"')
+    end if
+    call system('mv -f "'//trim(frestart_tmp)//'" "'//trim(frestart)//'"')
+  end if
+
+return
+end subroutine restart_write_bin
 
 
 !subroutine restart_read_Classical
@@ -213,7 +270,7 @@ end subroutine Restart_Write
 !return
 !end subroutine restart_read_Classical
 
-!subroutine Restart_Write_Classical(istep)
+!subroutine restart_write_Classical(istep)
 !  use Parameters
 !  implicit none
 !  integer :: Istep, Uout
@@ -260,5 +317,5 @@ end subroutine Restart_Write
 !  close(Uout)
 !
 !return
-!end subroutine Restart_Write_Classical
+!end subroutine restart_write_Classical
 

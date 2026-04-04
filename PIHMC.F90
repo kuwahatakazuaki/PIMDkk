@@ -69,7 +69,7 @@ subroutine PIHMC_normal
       call Ham_Temp
       call print_ham(istepsv)
       call print_pihmc(istepsv)
-      if ( mod(istepsv,out_step)==0 ) call Restart_Write(istepsv)
+      if ( mod(istepsv,out_step)==0 ) call restart_write(istepsv)
 
       if (mod(istepsv,10) == 0) then
         call exit_program

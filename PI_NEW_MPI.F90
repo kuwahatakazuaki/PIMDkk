@@ -85,7 +85,7 @@ subroutine PI_NEW_MPI
 
       call print_ham(istepsv)
       !if (MyRank == 0) Then
-        if ( mod(istepsv,out_step)==0 ) call Restart_Write(istepsv)
+        if ( mod(istepsv,out_step)==0 ) call restart_write(istepsv)
       !end if
 
       if (mod(istepsv,10) == 0) then
