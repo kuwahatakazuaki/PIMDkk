@@ -2,81 +2,83 @@ subroutine restart_read
   use Parameters
   implicit none
   integer :: Uinp
-  integer :: i, j, inhc
+  integer :: i, j, Inhc
   real(8) :: pur(3)
 
-if ( MyRank == 0 ) then
-  open(newunit=Uinp, file=trim(dir_result)//'/restart.dat', status = 'unknown')
-    read(Uinp,*) Irestep
-    do j = 1, Nbead
-      do i = 1, Natom
-        read(Uinp,*) ur(:,i,j)
-      end do
-    end do
-
-    do j = 1, Nbead
-      do i = 1, Natom
-        read(Uinp,*) pur(:)
-        vur(:,i,j) = pur(:) / sqrt(fictmass(i,j))
-      end do
-    end do
-
-    do j = 1, Nbead
-      do i = 1, Natom
-        read(Uinp,*) fur(:,i,j)
-      end do
-    end do
-
-    do j = 1, Nbead
-      do inhc = 1, Nnhc
+  if ( MyRank == 0 ) then
+    open(newunit=Uinp, file=trim(dir_result)//'/restart.dat', status = 'unknown')
+      read(Uinp,*) Irestep
+      do j = 1, Nbead
         do i = 1, Natom
-          read(Uinp,*) rbath(:,i,inhc,j)
-        enddo
-      enddo
-    enddo
+          read(Uinp,*) ur(:,i,j)
+        end do
+      end do
 
-    do j = 1, Nbead
-      do inhc  = 1, Nnhc
+      do j = 1, Nbead
         do i = 1, Natom
-          read(Uinp,*) vrbath(:,i,inhc,j)
-        enddo
-      enddo
-    enddo
+          read(Uinp,*) pur(:)
+          vur(:,i,j) = pur(:) / sqrt(fictmass(i,j))
+        end do
+      end do
 
-    do j = 1, Nbead
-      do inhc  = 1, Nnhc
+      do j = 1, Nbead
         do i = 1, Natom
-          read(Uinp,*) frbath(:,i,inhc,j)
-        enddo
-      enddo
-    enddo
+          read(Uinp,*) fur(:,i,j)
+        end do
+      end do
 
-    select case(Ncent)
-      case(0)
-        continue
-      case(1)
-        do inhc=1,Nnhc
-          read(Uinp,*) rbc11(inhc),vbc11(inhc),fbc11(inhc)
-        enddo
-      case(3)
-        do inhc=1,Nnhc
-          do i=1,Natom
-            read(Uinp,*) rbc31(:,i,inhc)
+      if ( allocated(rbath) ) then
+        do j = 1, Nbead
+          do Inhc = 1, Nnhc
+            do i = 1, Natom
+              read(Uinp,*) rbath(:,i,Inhc,j)
+            enddo
           enddo
         enddo
-        do inhc=1,Nnhc
-          do i=1,Natom
-            read(Uinp,*) vrbc31(:,i,inhc)
+
+        do j = 1, Nbead
+          do Inhc  = 1, Nnhc
+            do i = 1, Natom
+              read(Uinp,*) vrbath(:,i,Inhc,j)
+            enddo
           enddo
         enddo
-        do inhc=1,Nnhc
-          do i=1,Natom
-            read(Uinp,*) frbc31(:,i,inhc)
+
+        do j = 1, Nbead
+          do Inhc  = 1, Nnhc
+            do i = 1, Natom
+              read(Uinp,*) frbath(:,i,Inhc,j)
+            enddo
           enddo
         enddo
-    end select
-  close(Uinp)
-end if
+      end if
+
+      select case(Ncent)
+        case(0)
+          continue
+        case(1)
+          do Inhc=1,Nnhc
+            read(Uinp,*) rbc11(Inhc),vbc11(Inhc),fbc11(Inhc)
+          enddo
+        case(3)
+          do Inhc=1,Nnhc
+            do i=1,Natom
+              read(Uinp,*) rbc31(:,i,Inhc)
+            enddo
+          enddo
+          do Inhc=1,Nnhc
+            do i=1,Natom
+              read(Uinp,*) vrbc31(:,i,Inhc)
+            enddo
+          enddo
+          do Inhc=1,Nnhc
+            do i=1,Natom
+              read(Uinp,*) frbc31(:,i,Inhc)
+            enddo
+          enddo
+      end select
+    close(Uinp)
+  end if
   return
 end subroutine restart_read
 
@@ -84,176 +86,179 @@ subroutine Restart_Write(istep)
   use Parameters
   implicit none
   integer :: Istep, Uout
-  integer :: i, j, inhc
+  integer :: i, j, Inhc
 
-if ( MyRank == 0 ) then
-  if (istep > out_step) then
-    call system('cat '//trim(dir_result)//'/restart.dat >'//trim(dir_result)//'/restart1.dat')
+  if ( MyRank == 0 ) then
+    if (istep > out_step) then
+      !call system('cat '//trim(dir_result)//'/restart.dat >'//trim(dir_result)//'/restart1.dat')
+      call system('cp '//trim(dir_result)//'/restart.dat '//trim(dir_result)//'/restart1.dat')
+    end if
+
+    open(newunit=Uout, file=trim(dir_result)//'/restart.dat', status = 'unknown')
+      write(Uout,'(i10)') Istep
+      do j = 1, Nbead
+        do i = 1, Natom
+          write(Uout,*) ur(:,i,j)
+        end do
+      end do
+
+      do j = 1, Nbead
+        do i = 1, Natom
+          write(Uout,*) vur(:,i,j) * sqrt(fictmass(i,j))
+        end do
+      end do
+
+      do j = 1, Nbead
+        do i = 1, Natom
+          write(Uout,*) fur(:,i,j)
+        end do
+      end do
+
+      if ( allocated(rbath) ) then
+        do j = 1, Nbead
+          do Inhc = 1, Nnhc
+            do i = 1, Natom
+              write(Uout,*) rbath(:,i,Inhc,j)
+            enddo
+          enddo
+        enddo
+        do j = 1, Nbead
+          do Inhc  = 1, Nnhc
+            do i = 1, Natom
+              write(Uout,*) vrbath(:,i,Inhc,j)
+            enddo
+          enddo
+        enddo
+        do j = 1, Nbead
+          do Inhc  = 1, Nnhc
+            do i = 1, Natom
+              write(Uout,*) frbath(:,i,Inhc,j)
+            enddo
+          enddo
+        enddo
+      end if
+
+      select case(Ncent)
+        case(1)
+          do Inhc=1,Nnhc
+            write(Uout,*) rbc11(Inhc),vbc11(Inhc),fbc11(Inhc)
+          enddo
+        case(3)
+          do Inhc=1,Nnhc
+            do i=1,Natom
+              write(Uout,*) rbc31(:,i,Inhc)
+            enddo
+          enddo
+          do Inhc=1,Nnhc
+            do i=1,Natom
+              write(Uout,*) vrbc31(:,i,Inhc)
+            enddo
+          enddo
+          do Inhc=1,Nnhc
+            do i=1,Natom
+              write(Uout,*) frbc31(:,i,Inhc)
+            enddo
+          enddo
+      end select
+    close(Uout)
   end if
-
-  open(newunit=Uout, file=trim(dir_result)//'/restart.dat', status = 'unknown')
-    write(Uout,'(i10)') Istep
-    do j = 1, Nbead
-      do i = 1, Natom
-        write(Uout,*) ur(:,i,j)
-      end do
-    end do
-
-    do j = 1, Nbead
-      do i = 1, Natom
-        write(Uout,*) vur(:,i,j) * sqrt(fictmass(i,j))
-      end do
-    end do
-
-    do j = 1, Nbead
-      do i = 1, Natom
-        write(Uout,*) fur(:,i,j)
-      end do
-    end do
-
-    do j = 1, Nbead
-      do inhc = 1, Nnhc
-        do i = 1, Natom
-          write(Uout,*) rbath(:,i,inhc,j)
-        enddo
-      enddo
-    enddo
-    do j = 1, Nbead
-      do inhc  = 1, Nnhc
-        do i = 1, Natom
-          write(Uout,*) vrbath(:,i,inhc,j)
-        enddo
-      enddo
-    enddo
-    do j = 1, Nbead
-      do inhc  = 1, Nnhc
-        do i = 1, Natom
-          write(Uout,*) frbath(:,i,inhc,j)
-        enddo
-      enddo
-    enddo
-
-    select case(Ncent)
-      case(1)
-        do inhc=1,Nnhc
-          write(Uout,*) rbc11(inhc),vbc11(inhc),fbc11(inhc)
-        enddo
-      case(3)
-        do inhc=1,Nnhc
-          do i=1,Natom
-            write(Uout,*) rbc31(:,i,inhc)
-          enddo
-        enddo
-        do inhc=1,Nnhc
-          do i=1,Natom
-            write(Uout,*) vrbc31(:,i,inhc)
-          enddo
-        enddo
-        do inhc=1,Nnhc
-          do i=1,Natom
-            write(Uout,*) frbc31(:,i,inhc)
-          enddo
-        enddo
-    end select
-  close(Uout)
-end if
 
 return
 end subroutine Restart_Write
 
 
-subroutine restart_read_Classical
-  use Parameters
-  implicit none
-  integer :: Uinp
-  integer :: i, j, inhc
-  real(8) :: pur(3)
+!subroutine restart_read_Classical
+!  use Parameters
+!  implicit none
+!  integer :: Uinp
+!  integer :: i, j, Inhc
+!  real(8) :: pur(3)
+!
+!  open(newunit=Uinp, file=trim(dir_result)//'/restart.dat', status = 'unknown')
+!    read(Uinp,*) Irestep
+!    do i = 1, Natom
+!      read(Uinp,*) ur(:,i,1)
+!    end do
+!    do i = 1, Natom
+!      read(Uinp,*) pur(:)
+!      vur(:,i,1) = pur(:) / sqrt(fictmass(i,1))
+!    end do
+!    do i = 1, Natom
+!      read(Uinp,*) fur(:,i,1)
+!    end do
+!
+!    select case(Ncent)
+!      case(1)
+!        do Inhc=1,Nnhc
+!          read(Uinp,*) rbc11(Inhc),vbc11(Inhc),fbc11(Inhc)
+!        enddo
+!      case(3)
+!        do Inhc=1,Nnhc
+!          do i=1,Natom
+!            read(Uinp,*) rbc31(:,i,Inhc)
+!          enddo
+!        enddo
+!        do Inhc=1,Nnhc
+!          do i=1,Natom
+!            read(Uinp,*) vrbc31(:,i,Inhc)
+!          enddo
+!        enddo
+!        do Inhc=1,Nnhc
+!          do i=1,Natom
+!            read(Uinp,*) frbc31(:,i,Inhc)
+!          enddo
+!        enddo
+!    end select
+!  close(Uinp)
+!return
+!end subroutine restart_read_Classical
 
-  open(newunit=Uinp, file=trim(dir_result)//'/restart.dat', status = 'unknown')
-    read(Uinp,*) Irestep
-    do i = 1, Natom
-      read(Uinp,*) ur(:,i,1)
-    end do
-    do i = 1, Natom
-      read(Uinp,*) pur(:)
-      vur(:,i,1) = pur(:) / sqrt(fictmass(i,1))
-    end do
-    do i = 1, Natom
-      read(Uinp,*) fur(:,i,1)
-    end do
-
-    select case(Ncent)
-      case(1)
-        do inhc=1,Nnhc
-          read(Uinp,*) rbc11(inhc),vbc11(inhc),fbc11(inhc)
-        enddo
-      case(3)
-        do inhc=1,Nnhc
-          do i=1,Natom
-            read(Uinp,*) rbc31(:,i,inhc)
-          enddo
-        enddo
-        do inhc=1,Nnhc
-          do i=1,Natom
-            read(Uinp,*) vrbc31(:,i,inhc)
-          enddo
-        enddo
-        do inhc=1,Nnhc
-          do i=1,Natom
-            read(Uinp,*) frbc31(:,i,inhc)
-          enddo
-        enddo
-    end select
-  close(Uinp)
-return
-end subroutine restart_read_Classical
-
-subroutine Restart_Write_Classical(istep)
-  use Parameters
-  implicit none
-  integer :: Istep, Uout
-  integer :: i, j, inhc
-
-  if (istep > out_step) call system('cp '//trim(dir_result)//'/restart.dat '//trim(dir_result)//'/restart1.dat')
-
-  open(newunit=Uout, file=trim(dir_result)//'/restart.dat', status = 'unknown')
-    write(Uout,'(i10)') Istep
-    do i = 1, Natom
-      write(Uout,*) ur(:,i,1)
-    end do
-    do i = 1, Natom
-      write(Uout,*) vur(:,i,1) * sqrt(fictmass(i,1))
-    end do
-    do i = 1, Natom
-      write(Uout,*) fur(:,i,1)
-    end do
-
-    select case(Ncent)
-      case(1)
-        do inhc=1,Nnhc
-          write(Uout,*) rbc11(inhc),vbc11(inhc),fbc11(inhc)
-        enddo
-      case(3)
-        do inhc=1,Nnhc
-          do i=1,Natom
-            write(Uout,*) rbc31(:,i,inhc)
-          enddo
-        enddo
-
-        do inhc=1,Nnhc
-          do i=1,Natom
-            write(Uout,*) vrbc31(:,i,inhc)
-          enddo
-        enddo
-
-        do inhc=1,Nnhc
-          do i=1,Natom
-            write(Uout,*) frbc31(:,i,inhc)
-          enddo
-        enddo
-    end select
-  close(Uout)
-
-return
-end subroutine Restart_Write_Classical
+!subroutine Restart_Write_Classical(istep)
+!  use Parameters
+!  implicit none
+!  integer :: Istep, Uout
+!  integer :: i, j, Inhc
+!
+!  if (istep > out_step) call system('cp '//trim(dir_result)//'/restart.dat '//trim(dir_result)//'/restart1.dat')
+!
+!  open(newunit=Uout, file=trim(dir_result)//'/restart.dat', status = 'unknown')
+!    write(Uout,'(i10)') Istep
+!    do i = 1, Natom
+!      write(Uout,*) ur(:,i,1)
+!    end do
+!    do i = 1, Natom
+!      write(Uout,*) vur(:,i,1) * sqrt(fictmass(i,1))
+!    end do
+!    do i = 1, Natom
+!      write(Uout,*) fur(:,i,1)
+!    end do
+!
+!    select case(Ncent)
+!      case(1)
+!        do Inhc=1,Nnhc
+!          write(Uout,*) rbc11(Inhc),vbc11(Inhc),fbc11(Inhc)
+!        enddo
+!      case(3)
+!        do Inhc=1,Nnhc
+!          do i=1,Natom
+!            write(Uout,*) rbc31(:,i,Inhc)
+!          enddo
+!        enddo
+!
+!        do Inhc=1,Nnhc
+!          do i=1,Natom
+!            write(Uout,*) vrbc31(:,i,Inhc)
+!          enddo
+!        enddo
+!
+!        do Inhc=1,Nnhc
+!          do i=1,Natom
+!            write(Uout,*) frbc31(:,i,Inhc)
+!          enddo
+!        enddo
+!    end select
+!  close(Uout)
+!
+!return
+!end subroutine Restart_Write_Classical
 

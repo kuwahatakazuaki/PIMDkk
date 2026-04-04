@@ -89,7 +89,7 @@ Force_Gaussian_MPI_tk.F90          \
 print_ham.F90                      \
 Force_model_Morse.F90              \
 Force_VASP_MPI.F90                 \
-print_result_qm.F90                \
+print_result.F90                   \
 calc_umbrella.F90                  \
 force_siesta.F90                   \
 Set_mopac.F90                      \

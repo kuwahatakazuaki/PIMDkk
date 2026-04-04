@@ -9,14 +9,15 @@ subroutine Classical
   call set_Iforce
 
   if ( Lrestart .eqv. .True. ) then
-    call restart_read_classical
+    !call restart_read_classical
+    call restart_read
   else
     call print_ini
     call Init_Velocity
     call Init_Bath
     call Temp_ctr
     call Force_Classical
-    if ( mod(istepsv,out_step) == 0 ) call print_result_qm
+    if ( mod(istepsv,out_step) == 0 ) call print_result
     call Ham_Temp_Classical
     call print_ham(Irestep)
   end if
@@ -33,7 +34,7 @@ subroutine Classical
     call update_vel_nor
     call update_pos_nor
     call Force_Classical
-    if ( mod(istepsv,out_step) == 0 ) call print_result_qm
+    if ( mod(istepsv,out_step) == 0 ) call print_result
     call update_vel_nor
     select case(Ncent)
       case(0)
@@ -45,7 +46,8 @@ subroutine Classical
     end select
     call Ham_Temp_Classical
     call print_ham(istepsv)
-    if ( mod(istepsv,out_step)==0 ) call Restart_Write_Classical(istepsv)
+    !if ( mod(istepsv,out_step)==0 ) call Restart_Write_Classical(istepsv)
+    if ( mod(istepsv,out_step)==0 ) call Restart_Write(istepsv)
 
     if (mod(istepsv,10) == 0) then
       call exit_program

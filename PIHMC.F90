@@ -27,7 +27,7 @@ subroutine PIHMC_normal
     !call Temp_ctr
     call nmtrans_ur2r ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
     call Force_New_MPI
-    if ( mod(istepsv,out_step) == 0 ) call print_result_qm
+    if ( mod(istepsv,out_step) == 0 ) call print_result
     call nmtrans_fr2fur     !call Getfnm  ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i)
 
     !if ( MyRank == 0 ) then
@@ -65,7 +65,7 @@ subroutine PIHMC_normal
       call getenergy_hmc
       call judge_hmc
 
-      if ( mod(istepsv,out_step) == 0 ) call print_result_qm
+      if ( mod(istepsv,out_step) == 0 ) call print_result
       call Ham_Temp
       call print_ham(istepsv)
       call print_pihmc(istepsv)

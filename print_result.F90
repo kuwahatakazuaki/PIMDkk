@@ -1,4 +1,4 @@
-subroutine print_result_qm
+subroutine print_result
   use Parameters
   use utility, only: program_abort
   implicit none
@@ -103,4 +103,4 @@ end if
 9995 format(4E23.15)
 
 return
-end subroutine print_result_qm
+end subroutine print_result
