@@ -40,7 +40,7 @@ Subroutine Force_Classical
       call program_abort('ERROR!!! Wrong "Iforce" option')
   end select
 
-  if (Iumb > 0) call calc_umbrella
+  !if (Iumb > 0) call calc_umbrella
 
   fur(:,:,1)=fr(:,:,1)
 

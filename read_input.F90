@@ -47,11 +47,11 @@ subroutine read_parameter
       elseif (index(line,"$address_result") == 1) then; read(uin,'(a)') dir_result
       elseif (index(line,"$address_scr")    == 1) then; read(uin,'(a)') dir_scr
 
-      elseif (index(line,"$Iumb")           == 1) then; read(Uin,*) Iumb
-      elseif (index(line,"$umb_cons")       == 1) then; read(Uin,*) umb_cons
-      elseif (index(line,"$umb_atom1")      == 1) then; read(Uin,*) umb_atom1
-      elseif (index(line,"$umb_atom2")      == 1) then; read(Uin,*) umb_atom2
-      elseif (index(line,"$umb_atom3")      == 1) then; read(Uin,*) umb_atom3
+      elseif (index(line,"$Icons")          == 1) then; read(Uin,*) Icons
+      !elseif (index(line,"$umb_cons")       == 1) then; read(Uin,*) umb_cons
+      elseif (index(line,"$cons_atom1")     == 1) then; read(Uin,*) cons_atom1
+      elseif (index(line,"$cons_atom2")     == 1) then; read(Uin,*) cons_atom2
+      elseif (index(line,"$cons_atom3")     == 1) then; read(Uin,*) cons_atom3
 
       elseif (index(line,"$end parameter")  == 1) then; exit
       end if

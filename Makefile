@@ -90,7 +90,6 @@ print_ham.F90                      \
 Force_model_Morse.F90              \
 Force_VASP_MPI.F90                 \
 print_result.F90                   \
-calc_umbrella.F90                  \
 force_siesta.F90                   \
 Set_mopac.F90                      \
 Set_VASP.F90                       \
@@ -106,10 +105,9 @@ exit.F90                           \
 # LammpsCalculator.F90               \
 # force_LAMMPS.F90                   \
 # GasDev.F90                         \
-# Main_MPI.F90                       \
-# Vupdate_Ref.F90                    \
 # RandomG.F90                        \
 # Init_Bath_Classical.F90            \
+# calc_umbrella.F90                  \
 # dlarnv.f   \
 # dlaruv.f   \
 

@@ -27,13 +27,13 @@ subroutine Check_Inp
       write(Uout,9997) ' +++++ Address of Scratch  ', trim(dir_scr)
       write(Uout,*)
 
-      if ( Iumb > 0 ) then
+      if ( Icons > 0 ) then
         write(Uout,'(a)')' +++++ Umbrella sampling +++++   '
-        write(Uout,9999) ' +++++ Iumb                      ', Iumb
-        write(Uout,9994) ' +++++ umb_cons                  ', umb_cons
-        write(Uout,9999) ' +++++ umb_atom1                 ', umb_atom1
-        write(Uout,9999) ' +++++ umb_atom2                 ', umb_atom2
-        write(Uout,9999) ' +++++ umb_atom3                 ', umb_atom3
+        write(Uout,9999) ' +++++ Icons                     ', Icons
+        !write(Uout,9994) ' +++++ umb_cons                  ', umb_cons
+        write(Uout,9999) ' +++++ cons_atom1                ', cons_atom1
+        write(Uout,9999) ' +++++ cons_atom2                ', cons_atom2
+        write(Uout,9999) ' +++++ cons_atom3                ', cons_atom3
         write(Uout,*)
       end if
 

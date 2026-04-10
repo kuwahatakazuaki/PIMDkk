@@ -74,9 +74,9 @@ module Parameters
   character (Len=20) :: version = "g16"
   real(8), allocatable :: pressure(:)
   real(8) :: virial, PV
-  integer :: Iumb = 0
-  integer :: umb_atom1 = 0, umb_atom2 = 0, umb_atom3 = 0
-  real(8) :: umb_cons = 1d-5, umb_pot
+  !integer :: Iumb = 0
+  !integer :: umb_atom1 = 0, umb_atom2 = 0, umb_atom3 = 0
+  !real(8) :: umb_cons = 1d-5, umb_pot
 ! End Kuwahata 2020/10/06
 
 ! Parameters for PIHMC

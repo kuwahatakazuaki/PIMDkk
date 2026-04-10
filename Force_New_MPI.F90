@@ -56,7 +56,7 @@ subroutine Force_New_MPI
       call program_abort('ERROR!!! Wrong "Iforce" option')
   end select
 
-  if (Iumb > 0) call calc_umbrella
+  !if (Iumb > 0) call calc_umbrella
 
 #ifdef _mpi_
   call MyMPI_gather_fr
