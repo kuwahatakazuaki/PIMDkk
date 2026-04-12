@@ -49,12 +49,15 @@ subroutine PIHMC_normal
       do Idyn = 1, Ndyn
 
         call update_vel_nor
-        do iref=1, Nref   ! Nref = 5
-          call update_vel_ref_nor
-          call update_pos_nor
-          call getforce_ref_nor
-          call update_vel_ref_nor
-        end do
+
+        !do iref=1, Nref   ! Nref = 5
+        !  call update_vel_ref_nor
+        !  call update_pos_nor
+        !  call getforce_ref_nor
+        !  call update_vel_ref_nor
+        !end do
+        call update_pos_vel_analy
+
         call nmtrans_ur2r       ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
         call Force_New_MPI      ! Obtaining fx
         call nmtrans_fr2fur     ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i) !call Getfnm
@@ -98,9 +101,11 @@ contains
     integer, intent(in) :: Istep
     integer :: Uout
   if ( MyRank == 0 ) then
+  if ( mod(Istep,out_step) == 0 ) then
     open(newunit=Uout,file=trim(dir_result)//'/pihmc.out',position='append')
       write(Uout,*) Istep, ratio
     close(Uout)
+  end if
   end if
   end subroutine print_pihmc
 
