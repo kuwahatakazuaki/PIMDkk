@@ -11,7 +11,8 @@ Subroutine Force_Classical
     case(1)
       call Force_MOPAC
     case(6)
-      call Force_Gaussian_classical
+      !call Force_Gaussian_classical
+      call Force_Gaussian
     case(8)
       call Force_VASP_cl
 ! === End Ab initio calculation ===

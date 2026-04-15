@@ -1,4 +1,4 @@
-subroutine Set_Gaussian_MPI_tk
+subroutine Set_Gaussian
   use Parameters
   use utility, only: program_abort
   implicit none
@@ -71,5 +71,5 @@ contains
     print *, 'Please use "g0xrun_p" template'
   end subroutine err_set_g0xrun
 
-end subroutine Set_Gaussian_MPI_tk
+end subroutine Set_Gaussian
 

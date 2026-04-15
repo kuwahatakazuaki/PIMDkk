@@ -72,7 +72,6 @@ Ham_Temp.F90                       \
 Ham_Temp_Classical.F90             \
 Nhc_Integrate.F90                  \
 update_pos_vel.F90                 \
-Force_Gaussian_classical.F90       \
 Force_MOPAC_MPI.F90                \
 Force_Classical.F90                \
 PI_NEW_MPI.F90                     \
@@ -85,7 +84,7 @@ Set_Deallocate.F90                 \
 Force_New_MPI.F90                  \
 set_pallarel.F90                   \
 Set_Gaussian_MPI_tk.F90            \
-Force_Gaussian_MPI_tk.F90          \
+Force_Gaussian.F90                 \
 print_ham.F90                      \
 Force_model_Morse.F90              \
 Force_VASP_MPI.F90                 \
@@ -100,6 +99,7 @@ constrain.F90                      \
 PIHMC.F90                          \
 exit.F90                           \
 
+# Force_Gaussian_classical.F90       \
 # Set_siesta.F90                     \
 # LammpsInterface.F90                \
 # LammpsCalculator.F90               \

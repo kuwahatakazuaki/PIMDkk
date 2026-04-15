@@ -17,7 +17,7 @@ subroutine Force_New_MPI
     case(1)
       call Force_MOPAC_MPI
     case(6)
-      call Force_Gaussian_MPI_tk
+      call Force_Gaussian
     case(8)
       call Force_VASP_MPI
     case(9)

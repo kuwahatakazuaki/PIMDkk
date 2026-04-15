@@ -7,7 +7,7 @@ subroutine set_Iforce
     case(1)
       call Set_mopac
     case(6)
-      call Set_Gaussian_MPI_tk  ! Set for chk, rwf, etc.
+      call Set_Gaussian  ! Set for chk, rwf, etc.
     case(8)
       call Set_VASP
     case(9)

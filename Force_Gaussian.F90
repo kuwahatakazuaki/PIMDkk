@@ -1,11 +1,11 @@
-subroutine Force_Gaussian_MPI_tk
+subroutine Force_Gaussian
   use Parameters
   use utility, only: program_abort, read_val_next, search_line
   implicit none
 
   character(len=:), allocatable :: key1, key2, key3, key4, key5, key6
   character(len=120) :: line
-  integer            :: iline, imode, iatom
+  integer            :: iline, Imode, Iatom
   Double Precision   :: enetemp
   integer :: i,j,k, Uinp
   character :: dummyC(10)
@@ -26,20 +26,21 @@ subroutine Force_Gaussian_MPI_tk
   end if
 
 !  Call Start_Recv_Send_MPI_tk  ! Gather r (Coordinate)
+! address0   : Scr
+! addresstmp : Scr/000??
 
-  do imode=ista,iend
-    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
+  do Imode = Ista, Iend
+
+    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') Imode,'/'
+
 
     call system('cat '//trim(addresstmp)//'gauss.tmp1 > '//trim(addresstmp)//'gauss.com')
-
-!    open(Uinp,file=trim(addresstmp)//'gauss.xyz',status='unknown')
     open(newunit=Uinp,file=trim(addresstmp)//'gauss.com',status='old',position='append')
-      do iatom = 1, Natom
-        write(Uinp,*) alabel(iatom),r(:,iatom,imode)*AU2Ang
+      do Iatom = 1, Natom
+        write(Uinp,*) alabel(Iatom), r(:,Iatom,Imode)*AU2Ang
       end do
       write(Uinp,*)
     close(Uinp)
-
 
     !If(NGenGau==1) Then
     !   call system('cat '//trim(addresstmp)//'gauss.bss >> '//trim(addresstmp)//'gauss.com')
@@ -47,7 +48,7 @@ subroutine Force_Gaussian_MPI_tk
 
 ! Udagawa Start 2021.05.24 --->
     if(istepsv == 0 .OR. ( (Lrestart .eqv. .True. ) .AND. istepsv == Irestep+1)) then
-      call system ('sed -e "s/[Gg][Uu][Ee][Ss][Ss]=[Rr][Ee][Aa][Dd]//g" '//trim(addresstmp)//'gauss.com  &
+      call system ('sed -e "s/[Gg][Uu][Ee][Ss][Ss]=[Rr][Ee][Aa][Dd]//g" '//trim(addresstmp)//'gauss.com &
         & > '//trim(addresstmp)//'gauss.com1')
       call system ('mv '//trim(addresstmp)//'gauss.com1 '//trim(addresstmp)//'gauss.com')
     end if
@@ -73,7 +74,7 @@ subroutine Force_Gaussian_MPI_tk
     read(line(38:60),*) enetemp ! For MP2
 101 continue
 
-    pot_bead(imode) = enetemp
+    pot_bead(Imode) = enetemp
     rewind(Uinp)
 !  +++ End Reading "SCF Done" +++
 
@@ -82,7 +83,7 @@ subroutine Force_Gaussian_MPI_tk
       call search_line(Uinp,key4,line)
       read(Uinp,'()')
       do i = 1, Natom
-        read(Uinp,*) dummyC(1:2), charge(i,imode)
+        read(Uinp,*) dummyC(1:2), charge(i,Imode)
       end do
     end if
 !  +++ End Reading "Mulliken charge" +++
@@ -90,9 +91,9 @@ subroutine Force_Gaussian_MPI_tk
 !  +++ Reading "Dipole moment" +++
     if ( Lsave_dipole .eqv. .True. ) then
       call search_line(Uinp,key3,line)
-      read(Uinp,*) dummyC(1), dipoler(1,imode), &
-                     dummyC(2), dipoler(2,imode), &
-                     dummyC(3), dipoler(3,imode)
+      read(Uinp,*) dummyC(1), dipoler(1,Imode), &
+                     dummyC(2), dipoler(2,Imode), &
+                     dummyC(3), dipoler(3,Imode)
     end if
 !  +++ End Reading "Dipole moment" +++
 
@@ -100,9 +101,9 @@ subroutine Force_Gaussian_MPI_tk
     if( Lsave_hfcc .eqv. .True. ) then
       call search_line(Uinp,key5,line)
       read(Uinp,'()')
-      do iatom=1,natom
+      do Iatom=1,natom
         Read(Uinp,'(a)') line
-        Read(line(36:49),*) hfcc(iatom,imode)
+        Read(line(36:49),*) hfcc(Iatom,Imode)
       enddo
     endif
 !  +++ End Reading "Isotropic Fermi" +++
@@ -111,7 +112,7 @@ subroutine Force_Gaussian_MPI_tk
     call search_line(Uinp,key2,line)
     read(Uinp,'()')
     do i = 1, Natom
-      read(Uinp,*) dummyC(1:2), fr(:,i,imode)
+      read(Uinp,*) dummyC(1:2), fr(:,i,Imode)
     end do
 !  +++ End Reading "Atomic Force" +++
 
@@ -131,5 +132,5 @@ return
 
 !contains
 
-end subroutine
+end subroutine Force_Gaussian
 
