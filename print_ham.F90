@@ -18,13 +18,13 @@ contains
   subroutine print_ham_qm
     if ( mod(Istep,out_step) == 0 ) then
       open(newunit=Uout,file=trim(dir_result)//'/ham.dat',status='unknown',form='formatted',position='append')
-        write(Uout,1001) Istep, hamiltonian, temp, potential,dkinetic,qkinetic,ebath,ebath_cent, E_Virial
+        write(Uout,1001) Istep, hamiltonian, temp_inst, potential,dkinetic,qkinetic,ebath,ebath_cent, E_Virial
       close(Uout)
     end if
 
     if (mod(Istep,100)==0) Then
       open(newunit=Uout,file=Fout,status='old',position='append')
-      write(Uout,1002) Istep, hamiltonian, temp, potential,dkinetic,qkinetic,ebath,ebath_cent, get_time()
+      write(Uout,1002) Istep, hamiltonian, temp_inst, potential,dkinetic,qkinetic,ebath,ebath_cent, get_time()
       close(Uout)
     end if
 
@@ -36,13 +36,13 @@ contains
   subroutine print_ham_cl
     if ( mod(Istep,out_step) == 0 ) then
       open(newunit=Uout,file=trim(dir_result)//'/ham.dat',status='unknown',form='formatted',position='append')
-        write(Uout,2001) Istep, hamiltonian, temp, potential, dkinetic, ebath_cent
+        write(Uout,2001) Istep, hamiltonian, temp_inst, potential, dkinetic, ebath_cent
       close(Uout)
     end if
 
     If(mod(Istep,100)==0) Then
       open(newunit=Uout,file=Fout,status='old',position='append')
-        write(Uout,2002)  Istep, hamiltonian, temp, potential, dkinetic, ebath_cent, get_time()
+        write(Uout,2002)  Istep, hamiltonian, temp_inst, potential, dkinetic, ebath_cent, get_time()
       close(Uout)
     EndIf
 
@@ -63,13 +63,13 @@ end subroutine print_ham
 !
 !  if ( mod(Istep,out_step) == 0 ) then
 !    open(newunit=Uout,file=trim(dir_result)//'/ham.dat',status='unknown',form='formatted',position='append')
-!      write(Uout,1001) Istep, hamiltonian, temp, potential,dkinetic,qkinetic,ebath,ebath_cent, E_Virial
+!      write(Uout,1001) Istep, hamiltonian, temp_inst, potential,dkinetic,qkinetic,ebath,ebath_cent, E_Virial
 !    close(Uout)
 !  end if
 !
 !  if (mod(Istep,100)==0) Then
 !    open(newunit=Uout,file=Fout,status='old',position='append')
-!    write(Uout,1002) Istep, hamiltonian, temp, potential,dkinetic,qkinetic,ebath,ebath_cent, get_time()
+!    write(Uout,1002) Istep, hamiltonian, temp_inst, potential,dkinetic,qkinetic,ebath,ebath_cent, get_time()
 !    close(Uout)
 !  end if
 !
@@ -80,4 +80,3 @@ end subroutine print_ham
 !1002 format(i7,7e13.5,a20)
 !return
 !end subroutine Print_Ham_tk
-

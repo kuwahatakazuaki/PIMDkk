@@ -8,9 +8,9 @@ $temperature
 300.0
 $Nstep
 1000
-$dt
+$dt               # Time stpe (fs)
 0.1
-$Isimulation      # 0:PIMD, 1:RPMD, 2:CMD (For classical, just set Nbead=1)
+$Isimulation      # 0:PIMD, 1:RPMD, 2:CMD, 3:PIHMC, 10:CLMD (For classical, just set Nbead=1)
 0
 $out_step         # Output per out_step
 1

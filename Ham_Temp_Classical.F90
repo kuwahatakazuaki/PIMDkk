@@ -6,9 +6,8 @@ Subroutine Ham_Temp_Classical
   real(8) :: get_kinetic_ene
 
   dkinetic = get_kinetic_ene()
-  temp = 2.d0*dkinetic*AU2K/dble(Ndof)
-  !temp = 2.d0*dkinetic*AU2K/dble(Ndim*Natom*Nbead)
-  !temp = 2.d0*dkinetic*AU2K/dble(3*Natom*Nbead)
+  temp_inst = 2.d0*dkinetic*AU2K/dble(Ndof)
+  !temp_inst = 2.d0*dkinetic*AU2K/dble(Ndim*Natom*Nbead)
 
 !
 !   /*  calculate the total hamiltonian  */
@@ -39,12 +38,5 @@ Subroutine Ham_Temp_Classical
   end select
   hamiltonian = hamiltonian + ebath_cent
 
-!     /*  total pseudo-hamiltonian  */
- !100  Continue
-!YK include new centroid thermostat energies
-!    hamiltonian = hamiltonian + ebath_cent
-!YK
-
   return
 end subroutine Ham_Temp_Classical
-

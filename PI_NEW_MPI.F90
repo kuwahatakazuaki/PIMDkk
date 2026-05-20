@@ -28,10 +28,8 @@ subroutine PI_NEW_MPI
     call nmtrans_fr2fur     !call Getfnm  ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i)
     !if (Icons > 0 .and. MyRank == 0) call add_constrain
 
-    !if ( MyRank == 0 ) then
     call Ham_Temp
     call print_ham(Irestep)
-    !end if
   end if
 
   call getforce_ref_nor

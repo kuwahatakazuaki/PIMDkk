@@ -7,8 +7,8 @@ subroutine Ham_Temp
   real(8) :: get_kinetic_ene
 
   dkinetic = get_kinetic_ene()
-  temp = 2.d0*dkinetic*AU2K/dble(Ndof)
-  !temp = 2.d0*dkinetic*AU2K/dble(Ndim*Natom*Nbead)
+  temp_inst = 2.d0*dkinetic*AU2K/dble(Ndof)
+  !temp_inst = 2.d0*dkinetic*AU2K/dble(Ndim*Natom*Nbead)
 
 !
 !   pressure (PV) from virial and kinetic energy 

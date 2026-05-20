@@ -21,12 +21,10 @@ subroutine Calc_Constant
       else if ( Natom == 1 ) then
         Ndof = 3*Natom*Nbead
       end if
-      !Ndof = 3*Natom
 
     case(1)
 
       if ( Natom >= 2 ) then
-        !Ndof = Natom
         Ndof = Natom*Nbead - 1
       else if ( Natom == 1 ) then
         Ndof = Natom*Nbead
@@ -41,9 +39,6 @@ subroutine Calc_Constant
   gnkt = dble(Ndim*Natom)/beta
   gkt = 1.d0/beta
 
-  !gnkt = 3.d0*dble(Natom)/beta
-  !gkt = 1.d0/beta
-
   address0=trim(dir_scr)//'/'
   laddress=len_trim(dir_scr)+1
   addresstmp=trim(trim(dir_scr)//'/')
@@ -54,7 +49,6 @@ subroutine Calc_Constant
     dp = dble(Nbead)
     dp_inv = 1.0d0/dp
     omega_p2 = dp/(beta*beta)
-!    omega2 = omega_system*omega_system/dp
     omega2 = omega_system*omega_system
 
   return

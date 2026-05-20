@@ -36,7 +36,7 @@ module Parameters
   real(8)              :: gkt, gnkt, dp_inv, E_Virial
   real(8)              :: ebath, ebath_cent, dkinetic, qkinetic
   real(8)              :: beta, temperature, dt, dt_ref
-  real(8)              :: potential, hamiltonian, temp
+  real(8)              :: potential, hamiltonian, temp_inst
   real(8)              :: freq1 = 10.0d0
   real(8)              :: lattice(3,3)
 

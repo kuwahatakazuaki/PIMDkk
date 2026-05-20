@@ -9,7 +9,6 @@ subroutine NM_Position
   real(8) :: usigma
   integer :: i, j
 
-
   if ( Lrandom_coor .eqv. .True. ) then
     do j = 2, Nbead
       do i = 1, Natom

@@ -2,7 +2,6 @@ subroutine nmtrans_ur2r
 !      r(i) = r(i) + sum_j tnm(i,j)*u(j)
   use Parameters
   integer :: i, j, xyz
-  !r(:,:,:) = 0.0d0
   do i = 1, Natom
     !do j = 1, Nbead
     !  do xyz = 1, Ndim

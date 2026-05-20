@@ -3,11 +3,11 @@ subroutine nhc_Integrate_Cent
   use utility, only: norm_seq
   implicit none
   Double Precision :: skin, scale, dt_ys, vfact, pvfact
-  integer :: i, iys, iatom, Inhc
+  integer :: i, iys, Iatom, Inhc
 
   skin = 0.d0
-  do iatom = 1, Natom
-    skin = skin + fictmass(iatom,1) * norm_seq( vur(:,iatom,1) )
+  do Iatom = 1, Natom
+    skin = skin + fictmass(Iatom,1) * norm_seq( vur(:,Iatom,1) )
   enddo
 
   scale = 1.d0
@@ -65,72 +65,72 @@ subroutine nhc_Integrate_Cent
 end subroutine nhc_Integrate_Cent
 
 
-subroutine nhc_integrate_cent3
+subroutine nhc_Integrate_Cent3
   Use Parameters
   Implicit None
   Double Precision  :: skin, scale, dt_ys, vfact, pvfact
   real(8) :: vrfact(3), pvrfact(3), dkinr(3)!, scaler(3)
-  integer :: i, iys, iatom, Inhc
+  integer :: i, iys, Iatom, Inhc
 
 !  /*  start multiple time step integration  */
   do iys = 1, Nys
 !  /*  set time increment at this loop  */
     dt_ys = dt*ysweight(iys)
-    do iatom = 1, Natom
+    do Iatom = 1, Natom
 
 !  /*  calculate kinetic energy of centroid coordiates  */
 !  /*  for each atom                                    */
 
-      dkinr(:) = fictmass(iatom,1)*vur(:,iatom,1)*vur(:,iatom,1)
+      dkinr(:) = fictmass(Iatom,1)*vur(:,Iatom,1)*vur(:,Iatom,1)
 
 !  /* update the force */
 
-      frbc31(:,iatom,1) = (dkinr(:) - gkt)/qmcent31(1)
+      frbc31(:,Iatom,1) = (dkinr(:) - gkt)/qmcent31(1)
 
       do Inhc = 2, Nnhc
-        frbc31(:,iatom,Inhc) &
-          = (qmcent31(Inhc-1)*vrbc31(:,iatom,Inhc-1)*vrbc31(:,iatom,Inhc-1) - gkt)/qmcent31(Inhc)
+        frbc31(:,Iatom,Inhc) &
+          = (qmcent31(Inhc-1)*vrbc31(:,Iatom,Inhc-1)*vrbc31(:,Iatom,Inhc-1) - gkt)/qmcent31(Inhc)
       enddo
 
 !  /* update the thermostat velocities */
 
-      vrbc31(:,iatom,Nnhc) = vrbc31(:,iatom,Nnhc) + 0.25d0*frbc31(:,iatom,Nnhc)*dt_ys
+      vrbc31(:,Iatom,Nnhc) = vrbc31(:,Iatom,Nnhc) + 0.25d0*frbc31(:,Iatom,Nnhc)*dt_ys
 
       do Inhc = 1, Nnhc-1
-        vrfact = dexp( -0.125d0*vrbc31(:,iatom,Nnhc-Inhc+1)*dt_ys )
-        vrbc31(:,iatom,Nnhc-Inhc) &
-          = vrbc31(:,iatom,Nnhc-Inhc)*vrfact*vrfact + 0.25d0*frbc31(:,iatom,Nnhc-Inhc)*vrfact*dt_ys
+        vrfact = dexp( -0.125d0*vrbc31(:,Iatom,Nnhc-Inhc+1)*dt_ys )
+        vrbc31(:,Iatom,Nnhc-Inhc) &
+          = vrbc31(:,Iatom,Nnhc-Inhc)*vrfact*vrfact + 0.25d0*frbc31(:,Iatom,Nnhc-Inhc)*vrfact*dt_ys
       enddo
 
 !  /* update the particle velocities */
 
-      pvrfact(:) = dexp(-0.5d0*vrbc31(:,iatom,1)*dt_ys)
+      pvrfact(:) = dexp(-0.5d0*vrbc31(:,Iatom,1)*dt_ys)
 
 !  /* update the force */
-      frbc31(:,iatom,1)=(pvrfact(:)*pvrfact(:)*dkinr(:) - gkt)/qmcent31(1)
+      frbc31(:,Iatom,1)=(pvrfact(:)*pvrfact(:)*dkinr(:) - gkt)/qmcent31(1)
 
 !  /* update the thermostat position */
       do Inhc = 1, Nnhc
-        rbc31(:,iatom,Inhc) = rbc31(:,iatom,Inhc) + 0.5d0*vrbc31(:,iatom,Inhc)*dt_ys
+        rbc31(:,Iatom,Inhc) = rbc31(:,Iatom,Inhc) + 0.5d0*vrbc31(:,Iatom,Inhc)*dt_ys
       enddo
 
 !  /* update the thermostat velocities */
       do Inhc = 1, Nnhc-1
-        vrfact(:) = dexp(-0.125d0*vrbc31(:,iatom,Inhc+1)*dt_ys)
+        vrfact(:) = dexp(-0.125d0*vrbc31(:,Iatom,Inhc+1)*dt_ys)
 
-        vrbc31(:,iatom,Inhc) &
-          = vrbc31(:,iatom,Inhc)*vrfact(:)*vrfact(:) + 0.25d0*frbc31(:,iatom,Inhc)*vrfact*dt_ys
+        vrbc31(:,Iatom,Inhc) &
+          = vrbc31(:,Iatom,Inhc)*vrfact(:)*vrfact(:) + 0.25d0*frbc31(:,Iatom,Inhc)*vrfact*dt_ys
 
-        frbc31(:,iatom,Inhc+1) &
-          = (qmcent31(Inhc)*vrbc31(:,iatom,Inhc)*vrbc31(:,iatom,Inhc) - gkt)/qmcent31(Inhc+1) 
+        frbc31(:,Iatom,Inhc+1) &
+          = (qmcent31(Inhc)*vrbc31(:,Iatom,Inhc)*vrbc31(:,Iatom,Inhc) - gkt)/qmcent31(Inhc+1) 
       enddo
 
-      vrbc31(:,iatom,Nnhc) = vrbc31(:,iatom,Nnhc) + 0.25d0*frbc31(:,iatom,Nnhc)*dt_ys
+      vrbc31(:,Iatom,Nnhc) = vrbc31(:,Iatom,Nnhc) + 0.25d0*frbc31(:,Iatom,Nnhc)*dt_ys
 
 !  /* update the paricle velocities */
-      vur(:,iatom,1) = vur(:,iatom,1)*pvrfact(:)
+      vur(:,Iatom,1) = vur(:,Iatom,1)*pvrfact(:)
     enddo
   enddo
 
 return
-end subroutine nhc_integrate_cent3
+end subroutine nhc_Integrate_Cent3

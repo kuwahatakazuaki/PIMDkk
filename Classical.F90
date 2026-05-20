@@ -46,7 +46,6 @@ subroutine Classical
     end select
     call Ham_Temp_Classical
     call print_ham(istepsv)
-    !if ( mod(istepsv,out_step)==0 ) call restart_write_Classical(istepsv)
     if ( mod(istepsv,out_step)==0 ) call restart_write(istepsv)
 
     if (mod(istepsv,10) == 0) then

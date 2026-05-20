@@ -30,7 +30,6 @@ subroutine Check_Inp
       if ( Icons > 0 ) then
         write(Uout,'(a)')' +++++ Umbrella sampling +++++   '
         write(Uout,9999) ' +++++ Icons                     ', Icons
-        !write(Uout,9994) ' +++++ umb_cons                  ', umb_cons
         write(Uout,9999) ' +++++ cons_atom1                ', cons_atom1
         write(Uout,9999) ' +++++ cons_atom2                ', cons_atom2
         write(Uout,9999) ' +++++ cons_atom3                ', cons_atom3
@@ -38,7 +37,7 @@ subroutine Check_Inp
       end if
 
       !if ( Lrestart .eqv. .False. ) then
-        write(Uout,*) ' +++++ Atomic Label, Mass, and Coords +++++'
+        write(Uout,*) ' +++++ Atom, Mass, Coordnate(x,y,z) +++++++'
         if ( Langstrom .eqv. .True. ) then
           do Iatom = 1, Natom
             write(Uout,9996) alabel(iatom), PhysMass(iatom)/amu2AU, ur(:,Iatom,1)*AU2Ang
