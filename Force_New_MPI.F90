@@ -19,7 +19,7 @@ subroutine Force_New_MPI
     case(6)
       call Force_Gaussian
     case(8)
-      call Force_VASP_MPI
+      call Force_VASP
     case(9)
       call force_siesta
     !case(10)

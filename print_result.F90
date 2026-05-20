@@ -34,26 +34,18 @@ if (MyRank==0) then
     close(Uhfc)
   end if
 
-  if ( Iforce == 8 ) then
-    open(newunit=Upre,file=trim(dir_result)//'/pressure.dat',status='unknown',form='formatted',position='append')
-      write(Upre,'("#", I10)') istepsv
-      do imode=1,nbead
-        write(Upre,'(F7.2)') pressure(imode)
-      end do
-    close(Upre)
+  !if ( Iforce == 8 ) then
+  !  open(newunit=Upre,file=trim(dir_result)//'/pressure.dat',status='unknown',form='formatted',position='append')
+  !    write(Upre,'("#", I10)') istepsv
+  !    do imode=1,nbead
+  !      write(Upre,'(F7.2)') pressure(imode)
+  !    end do
+  !  close(Upre)
 
-    open(newunit=Upre,file=trim(dir_result)//'/PV.dat',status='unknown',form='formatted',position='append')
-      write(Upre,*) istepsv, PV
-    close(Upre)
-  end if
-
-!  open(igetxyz,file=trim(dir_result)//'/cent.xyz',status='unknown',form='formatted',position='append')
-!    write(igetxyz,'(I5)') natom
-!    write(igetxyz,'(I10)') istepsv
-!    do iatom=1,natom
-!      write(igetxyz,9999) alabel(iatom),ux(iatom,1)*bohr_inv,uy(iatom,1)*bohr_inv,uz(iatom,1)*bohr_inv
-!    end do
-!  close(igetxyz)
+  !  open(newunit=Upre,file=trim(dir_result)//'/PV.dat',status='unknown',form='formatted',position='append')
+  !    write(Upre,*) istepsv, PV
+  !  close(Upre)
+  !end if
 
   open(Ucoor,file=trim(dir_result)//'/coor.xyz',status='unknown',form='formatted',position='append')
     write(Ucoor,'(I5)') natom*nbead

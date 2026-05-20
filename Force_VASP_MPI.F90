@@ -1,4 +1,4 @@
-subroutine Force_VASP_MPI
+subroutine Force_VASP
   use Parameters
   use utility, only: program_abort, read_val_next, search_line
   implicit none
@@ -10,8 +10,6 @@ subroutine Force_VASP_MPI
   integer :: iline, Imode, Iatom !, igauss = 20
   integer :: Uout, Uinp
   real(8) :: enetemp, dummy
-  !real(8), parameter :: ev_to_hartree  = 1.0 / 27.21138505
-  !real(8), parameter :: eVAng_HartBohr = 0.5291772108 / 27.21138505
   key1  = ('energy  without entropy')
   key2  = ('TOTAL-FORCE')
   key3  = ('external pressure')
@@ -28,7 +26,6 @@ subroutine Force_VASP_MPI
     open(newunit=Uout,file=trim(addresstmp)//'POSCAR',status='old',position='append')
       do Iatom=1,natom
         write(Uout,*) r(:,Iatom,Imode)*AU2Ang
-        !write(Uout,9999) r(:,Iatom,Imode)*AU2Ang
       enddo
       write(Uout,*)
     close(Uout)
@@ -67,7 +64,6 @@ subroutine Force_VASP_MPI
         if(iline > 0) exit
       enddo
       read(line(32:45),*) enetemp
-      !enetemp = enetemp * ev_to_hartree
       pot_bead(Imode) = enetemp * eV2AU
 ! +++ End Reading "energy  without entropy" +++
 
@@ -87,7 +83,7 @@ return
 401 print *, 'ERROR!!: We can not find "energy  without entropy" in VASP output'; stop
 402 print *, 'ERROR!!: We can not find "TOTAL-FORCE" in VASP output'; stop
 403 print *, 'ERROR!!: We can not find "external pressure" in VASP output'; stop
-end subroutine
+end subroutine Force_VASP
 
 
 
