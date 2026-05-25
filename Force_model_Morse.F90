@@ -121,12 +121,13 @@ subroutine Force_model_Morse
   use Parameters, &
     only: r, fr, Natom, Nbead, pot_bead, potential, &
           alabel, dp_inv, dir_result, istepsv, &
-          Lsave_force, AU2Ang, Ang2AU
+          Lsave_force, AU2Ang, Ang2AU, Ndim
+  use utility, only: program_abort
   implicit none
   integer :: i, j
   integer :: Udis, Ucoor, Ufor, Uene, imode
-  real(8) :: f_two(3), power, dis
-  real(8) :: rij(3), temp
+  real(8) :: f_two(Ndim), power, dis
+  real(8) :: rij(Ndim), temp
 
   ! Parameters in atomic units for H2 X^1Sigma_g^+.
   ! r0 is NIST WebBook r_e = 0.74144 Ang.
@@ -135,15 +136,22 @@ subroutine Force_model_Morse
     real(8), parameter :: r0     = 1.401118436971957d0
     real(8), parameter :: De     = 0.181857687762878d0
     real(8), parameter :: curvat = 1.007502956719422d0
+    real(8), parameter :: min_dis = 1.0d-12
 
   ! +++ Calculating Forcde which atom (i) feels from atom (j) +++
   fr(:,:,:) = 0.0d0
+  pot_bead(:) = 0.0d0
   do imode = 1, Nbead
     do i = 1, Natom
       do j = i+1, Natom
         rij(:) = r(:,i,imode)-r(:,j,imode)
         dis = dsqrt( dot_product( rij(:),rij(:) ) )
+        if ( dis <= min_dis ) then
+          call program_abort('ERROR!!: Zero distance in Force_model_Morse')
+        end if
         power = -curvat * (dis-r0)
+        temp = 1.0d0 - exp(power)
+        pot_bead(imode) = pot_bead(imode) + De * temp * temp
         f_two(:) = 2 * curvat * De * exp(power) * (exp(power) - 1) * (rij(:))/dis
         fr(:,i,imode) = fr(:,i,imode) + f_two(:)
         fr(:,j,imode) = fr(:,j,imode) - f_two(:)
@@ -152,25 +160,6 @@ subroutine Force_model_Morse
   end do
   fr(:,:,:) = fr(:,:,:) * dp_inv
   ! +++ End Calculating Forcde which atom (i) feels from atom (j) +++
-
-  !! +++ Calculating enetemp +++
-  !open(newunit=Udis,file=trim(dir_result)//'/distance.dat',status='unknown',position='append')
-  !  pot_bead(:) = 0.0d0
-  !  write(Udis,*) "# ", istepsv
-  !  do imode = 1, Nbead
-  !    do i = 1, Natom
-  !      do j = i+1, Natom
-  !        rij(:) = r(:,i,imode)-r(:,j,imode)
-  !        !dis = dsqrt( dot_product( rij(:),rij(:) ) )
-  !        dis = norm2(rij(:))
-  !        temp = 1 - exp(-curvat * (dis-r0))
-  !        pot_bead(imode) = pot_bead(imode) + De * temp * temp
-  !        write(Udis,*) dis * AU2Ang
-  !      end do
-  !    end do
-  !  end do
-  !close(Udis)
-  !! +++ End Calculating enetemp +++
 
   9998 format(3E23.15)
   9999 format(a2,1x,E15.9,1x,E15.9,1x,E15.9)

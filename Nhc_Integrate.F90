@@ -1,11 +1,11 @@
-Subroutine Nhc_Integrate
-  Use Parameters
+subroutine Nhc_Integrate
+  use Parameters
   use utility, only: norm_seq
-  Implicit None
+  implicit none
 
-  Integer           :: iys, i
-  real(8) :: dkinr(3), pvrfact(3), vrfact(3)!, scaler(3)
-  Double Precision  :: dt_ys
+  integer           :: iys, i
+  real(8) :: dkinr(Ndim), pvrfact(Ndim), vrfact(Ndim)!, scaler(3)
+  real(8) :: dt_ys
   integer :: iatom, imode, inhc
 
   do iys = 1, nys
@@ -73,5 +73,5 @@ Subroutine Nhc_Integrate
     enddo
   enddo
 
-  Return
-End Subroutine
+  return
+end subroutine Nhc_Integrate

@@ -67,9 +67,9 @@ end subroutine nhc_Integrate_Cent
 
 subroutine nhc_Integrate_Cent3
   Use Parameters
-  Implicit None
-  Double Precision  :: skin, scale, dt_ys, vfact, pvfact
-  real(8) :: vrfact(3), pvrfact(3), dkinr(3)!, scaler(3)
+  implicit none
+  real(8) :: skin, scale, dt_ys, vfact, pvfact
+  real(8) :: vrfact(Ndim), pvrfact(Ndim), dkinr(Ndim)!, scaler(3)
   integer :: i, iys, Iatom, Inhc
 
 !  /*  start multiple time step integration  */
