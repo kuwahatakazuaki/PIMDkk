@@ -53,6 +53,19 @@ $Nnhc
 $gamma
 1.0
 
+$Icons            # Constraint type, 0:off, 1:bead-average bond distance
+0
+$cons_atom1       # First constrained atom index
+1
+$cons_atom2       # Second constrained atom index
+2
+$cons_atom3       # Reserved for future constraint types; unused for Icons=1
+3
+$cons_val         # Target bead-average distance in Angstrom
+1.0d0
+$cons_strength    # Harmonic force constant in Hartree/bohr^2
+5.0d0
+
 $Lexit            # Exit the program (True of False)
 .F.
 $end parameter
@@ -89,16 +102,3 @@ $umb_atom2
 3
 $umb_cons
 1d-5
-
-$Icons            # 1:bond
-0
-$cons_atom1
-1
-$cons_atom2
-2
-$cons_atom3
-3
-$cons_val
-1.0d0
-$cons_strenght
-5.0d0

@@ -10,6 +10,7 @@ subroutine getforce_ref_nor
       fur_ref(:,i,j) = -dnmmass(i,j)*omega_p2*ur(:,i,j)
     end do
   end do
+  if ( Icons > 0 ) call add_constrain
 
 return
 end subroutine getforce_ref_nor

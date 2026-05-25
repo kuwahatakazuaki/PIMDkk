@@ -37,7 +37,12 @@ subroutine Ham_Temp
 !
 !   /*  calculate the total hamiltonian  */
 !
-    hamiltonian = dkinetic + potential + qkinetic
+    ! Add the harmonic constraint energy only when constraints are enabled.
+    if ( Icons > 0 ) then
+      hamiltonian = dkinetic + potential + potential_cons + qkinetic
+    else
+      hamiltonian = dkinetic + potential + qkinetic
+    end if
 !
 !   /*  sum bath variables  */
 !

@@ -2,7 +2,7 @@ subroutine print_ini
   use Parameters
   use utility, only: program_abort
   implicit none
-  integer :: i, Uham, Uchar, Uhfc, Uout, Udip
+  integer :: i, Uham, Uchar, Uhfc, Uout, Udip, Ucon
 
 if (MyRank == 0) then
 
@@ -67,8 +67,13 @@ if (MyRank == 0) then
     close(Udip)
   endif
 
+  if ( Icons > 0 ) then
+    open(newunit=Ucon,file=trim(dir_result)//'/constraint.dat',status='replace',form='formatted',position='append')
+      write(Ucon,'(a)') '# step time_fs scons_ave_ang cons_val_ang potential_cons_au fcons_cv_au_bohr'
+    close(Ucon)
+  end if
+
 end if
 
 return
 end subroutine print_ini
-

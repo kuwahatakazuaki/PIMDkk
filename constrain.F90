@@ -1,12 +1,61 @@
-subroutine  add_constrain
+subroutine add_constrain
   use Parameters, &
-    only: r, fr, ur, Natom, Nbead,  pot_bead, potential, myrank, &
-          alabel, dp_inv, dir_result, istepsv, Iforce, &
-          AU2Ang, K2AU, Ang2AU, &
-          Icons, cons_strenght, cons_val, &
-          atom1 => cons_atom1, atom2  => cons_atom2, atom3 => cons_atom3
-  real(8) :: dis2, uij(3)
-  uij(:) = ur(:,atom1,1) - ur(:,atom2,1)
+    only: r, fur_ref, tnm, Ndim, Natom, Nbead, dp_inv, Ang2AU, &
+          Icons, cons_strength, cons_val, potential_cons, scons_ave, &
+          fcons_cv, atom1 => cons_atom1, atom2 => cons_atom2
+  use utility, only: program_abort
+  implicit none
+  integer :: imode, iatom
+  real(8) :: dr, r0_cons, k_cons
+  real(8) :: rij(Ndim), fij(Ndim)
+  real(8), allocatable :: dist(:)
+  real(8), allocatable :: fcart_cons(:,:,:)
+  real(8), parameter :: tiny_dist = 1.0d-12
+
+  potential_cons = 0.0d0
+  scons_ave = 0.0d0
+  fcons_cv = 0.0d0
+  if ( Icons == 0 ) return
+
+  call nmtrans_ur2r
+
+  select case(Icons)
+    case(1)
+      allocate( dist(Nbead) )
+      allocate( fcart_cons(Ndim,Natom,Nbead) )
+      fcart_cons(:,:,:) = 0.0d0
+      r0_cons = cons_val * Ang2AU
+      k_cons = cons_strength
+
+      do imode = 1, Nbead
+        rij(:) = r(:,atom1,imode) - r(:,atom2,imode)
+        dist(imode) = norm2(rij(:))
+        if ( dist(imode) < tiny_dist ) then
+          call program_abort('ERROR!!: constrained atom distance is too small')
+        end if
+        scons_ave = scons_ave + dist(imode)
+      end do
+      scons_ave = scons_ave * dp_inv
+
+      dr = scons_ave - r0_cons
+      potential_cons = 0.5d0 * k_cons * dr * dr
+      fcons_cv = k_cons * dr
+
+      do imode = 1, Nbead
+        rij(:) = r(:,atom1,imode) - r(:,atom2,imode)
+        fij(:) = -fcons_cv * dp_inv * rij(:) / dist(imode)
+        fcart_cons(:,atom1,imode) = fcart_cons(:,atom1,imode) + fij(:)
+        fcart_cons(:,atom2,imode) = fcart_cons(:,atom2,imode) - fij(:)
+      end do
+
+      do iatom = 1, Natom
+        fur_ref(:,iatom,:) = fur_ref(:,iatom,:) + matmul(fcart_cons(:,iatom,:), tnm)
+      end do
+      deallocate( dist )
+      deallocate( fcart_cons )
+    case default
+      call program_abort('ERROR!!: unsupported Icons option in add_constrain')
+  end select
 
 end subroutine add_constrain
 
@@ -52,4 +101,3 @@ end subroutine add_constrain
 !
 !return
 !end subroutine calc_umbrella
-

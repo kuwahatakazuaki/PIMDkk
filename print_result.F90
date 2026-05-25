@@ -3,7 +3,7 @@ subroutine print_result
   use utility, only: program_abort
   implicit none
   integer :: i,j,k, imode, iatom
-  integer :: Upre, Udip, Uchar, Uhfc, Ucoor, Ufor, Uene
+  integer :: Upre, Udip, Uchar, Uhfc, Ucoor, Ufor, Uene, Ucon
 
 if (MyRank==0) then
 
@@ -77,6 +77,13 @@ if (MyRank==0) then
     close(Uene)
   end if
 
+  if ( Icons > 0 ) then
+    open(newunit=Ucon,file=trim(dir_result)//'/constraint.dat',status='unknown',form='formatted',position='append')
+      write(Ucon,8009) istepsv, dble(istepsv) * dt / fs2AU, scons_ave * AU2Ang, &
+                       cons_val, potential_cons, fcons_cv
+    close(Ucon)
+  end if
+
 end if
 
 
@@ -92,6 +99,7 @@ end if
 8006 format(F0.10)     ! Potential
 8007 format(100F10.6)  ! Charge
 8008 format(4F10.5)    ! Dipole
+8009 format(I10,5E23.15)
 9995 format(4E23.15)
 
 return

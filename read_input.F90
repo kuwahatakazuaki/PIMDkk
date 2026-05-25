@@ -52,6 +52,8 @@ subroutine read_parameter
       elseif (index(line,"$cons_atom1")     == 1) then; read(Uin,*) cons_atom1
       elseif (index(line,"$cons_atom2")     == 1) then; read(Uin,*) cons_atom2
       elseif (index(line,"$cons_atom3")     == 1) then; read(Uin,*) cons_atom3
+      elseif (index(line,"$cons_val")       == 1) then; read(Uin,*) cons_val
+      elseif (index(line,"$cons_strength")  == 1) then; read(Uin,*) cons_strength
 
       elseif (index(line,"$end parameter")  == 1) then; exit
       end if

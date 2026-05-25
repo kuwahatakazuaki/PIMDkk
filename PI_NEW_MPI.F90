@@ -13,6 +13,7 @@ subroutine PI_NEW_MPI
   if ( Lrestart .eqv. .True. ) then
     call restart_read
     call Broad3
+    call getforce_ref_nor
   else
     call print_ini
     call NM_Position
@@ -27,12 +28,12 @@ subroutine PI_NEW_MPI
     if ( mod(istepsv,out_step) == 0 ) call print_result
     call nmtrans_fr2fur     !call Getfnm  ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i)
     !if (Icons > 0 .and. MyRank == 0) call add_constrain
+    call getforce_ref_nor
 
     call Ham_Temp
     call print_ham(Irestep)
   end if
 
-  call getforce_ref_nor
   if ( MyRank == 0 ) then
 
     main_loop: &
@@ -82,9 +83,7 @@ subroutine PI_NEW_MPI
       call Ham_Temp
 
       call print_ham(istepsv)
-      !if (MyRank == 0) Then
-        if ( mod(istepsv,out_step)==0 ) call restart_write(istepsv)
-      !end if
+      if ( mod(istepsv,out_step)==0 ) call restart_write(istepsv)
 
       if (mod(istepsv,10) == 0) then
         call exit_program
