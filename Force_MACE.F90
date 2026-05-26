@@ -194,9 +194,9 @@ subroutine Set_MACE
 
   character(len=256) :: python_dir, model_path
   character(len=512) :: helper_path
-  integer :: ios, unit_lattice, unit_out
+  integer :: unit_out
   integer :: access
-  real(8) :: scale, vec(3,3)
+  real(8) :: lattice_norm
 
   call get_mace_paths(python_dir, model_path)
   helper_path = trim(python_dir)//'/mace_function.py'
@@ -211,29 +211,9 @@ subroutine Set_MACE
     call program_abort('ERROR!!! There is no MACE model: '//trim(model_path))
   end if
 
-  lattice(:,:) = 0.0d0
-  lattice(1,1) = 1.0d0
-  lattice(2,2) = 1.0d0
-  lattice(3,3) = 1.0d0
-
-  if (Lperiodic .eqv. .true.) then
-    open(newunit=unit_lattice, file='LATTICE', status='old', action='read', iostat=ios)
-    if (ios /= 0) then
-      call program_abort('ERROR!!! Lperiodic is true, but there is no LATTICE file')
-    end if
-
-    read(unit_lattice, *, iostat=ios)
-    read(unit_lattice, *, iostat=ios) scale
-    if (ios /= 0) call program_abort('ERROR!!! Failed to read LATTICE scale')
-    read(unit_lattice, *, iostat=ios) vec(1,:)
-    if (ios /= 0) call program_abort('ERROR!!! Failed to read LATTICE vector 1')
-    read(unit_lattice, *, iostat=ios) vec(2,:)
-    if (ios /= 0) call program_abort('ERROR!!! Failed to read LATTICE vector 2')
-    read(unit_lattice, *, iostat=ios) vec(3,:)
-    if (ios /= 0) call program_abort('ERROR!!! Failed to read LATTICE vector 3')
-    close(unit_lattice)
-
-    lattice(:,:) = scale * vec(:,:)
+  lattice_norm = sum(abs(lattice(:,:)))
+  if (Lperiodic .eqv. .true. .and. lattice_norm < 1.0d-12) then
+    call program_abort('ERROR!!! Invalid $lattice for MACE periodic calculation')
   end if
 
   call initialize_mace_interface()
@@ -243,6 +223,10 @@ subroutine Set_MACE
       write(unit_out,'(a)') ' +++++ MACE force field +++++'
       write(unit_out,'(a,a)') ' +++++ MACE Python dir ', trim(python_dir)
       write(unit_out,'(a,a)') ' +++++ MACE model      ', trim(model_path)
+      write(unit_out,'(a)') ' +++++ MACE lattice (Angstrom)'
+      write(unit_out,'(3F16.8)') lattice(1,:)
+      write(unit_out,'(3F16.8)') lattice(2,:)
+      write(unit_out,'(3F16.8)') lattice(3,:)
       write(unit_out,*)
     close(unit_out)
   end if

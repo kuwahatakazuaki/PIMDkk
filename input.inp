@@ -32,6 +32,11 @@ $Lrandom_coor     # Random intial coordinate (True of False)
 .T.
 $Lperiodic        # Periodic boundary condition (True of False)
 .F.
+$lattice
+17.0    0.0    0.0
+ 0.0   17.0    0.0
+ 0.0    0.0   17.0
+
 $Lsave_charge     # Save charge (True of False)
 .F.
 $Lsave_hfcc       # Save HFCC (True of False)

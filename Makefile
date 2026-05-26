@@ -2,12 +2,24 @@ PROG = pimd.exe
 SHELL   = /bin/bash
 OBJS    = $(SRCS:%.F90=%.o)
 DEP     = $(OBJS:.o=.d)
-SRCS   += $(SRC_LAMMPS)
-OBJS   += $(OBJ_LAMMPS)
+SRCS   += $(SRC_LAMMPS) $(SRC_MACE)
+OBJS   += $(OBJ_LAMMPS) $(OBJ_MACE)
 FCOPT  += $(DFLAG)
 DIR_LAMMPS = LAMMPS
+MACE ?= False
+
+ifeq ($(MACE),True)
+SRC_MACE = fortran_mace_isoc.F90 Force_MACE.F90
+OBJ_MACE = $(SRC_MACE:%.F90=%.o)
 PYINC = $(shell python3-config --includes)
 PYLIB = $(shell python3-config --embed --ldflags)
+DFLAG += -D_MACE_
+else
+SRC_MACE =
+OBJ_MACE =
+PYINC =
+PYLIB =
+endif
 # GFLAG   =  -JModule -IModule
 # MPI  = True
 
@@ -52,8 +64,6 @@ Parameter.F90                      \
 utility.F90                        \
 mod_model_force.F90                \
 mpi_module.F90                     \
-fortran_mace_isoc.F90              \
-Force_MACE.F90                     \
 main.F90                           \
 Broad.F90                          \
 read_input.F90                     \
@@ -102,15 +112,9 @@ constrain.F90                      \
 PIHMC.F90                          \
 exit.F90                           \
 
-# Force_Gaussian_classical.F90       \
-# Set_siesta.F90                     \
 # LammpsInterface.F90                \
 # LammpsCalculator.F90               \
 # force_LAMMPS.F90                   \
-# GasDev.F90                         \
-# RandomG.F90                        \
-# Init_Bath_Classical.F90            \
-# calc_umbrella.F90                  \
 # dlarnv.f   \
 # dlaruv.f   \
 
@@ -143,8 +147,6 @@ else
 endif
 	@echo
 
-# .SUFFIXES: .f .o
-# .f.o:
 %.o:%.f
 	@echo "<< Compiling >>" $<
 	$(FC) $(FCOPT) -c -o $*.o $*.f

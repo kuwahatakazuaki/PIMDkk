@@ -6,6 +6,11 @@ subroutine read_parameter
   integer :: j, Uin, ios, access
   character(len=100) :: line
 
+  lattice(:,:) = 0.0d0
+  lattice(1,1) = 1.0d0
+  lattice(2,2) = 1.0d0
+  lattice(3,3) = 1.0d0
+
   open(newunit=Uin,file=Finp,status='old',iostat=ios)
     if ( ios /= 0) then
       call program_abort('ERROR!!: There is no input file of "input.inp"')
@@ -36,6 +41,10 @@ subroutine read_parameter
       elseif (index(line,"$Langstrom")      == 1) then; read(Uin,*) Langstrom
       elseif (index(line,"$Lrandom_coor")   == 1) then; read(Uin,*) Lrandom_coor
       elseif (index(line,"$Lperiodic")      == 1) then; read(Uin,*) Lperiodic
+      elseif (index(line,"$lattice")        == 1) then
+        read(Uin,*) lattice(1,:)
+        read(Uin,*) lattice(2,:)
+        read(Uin,*) lattice(3,:)
       elseif (index(line,"$Lsave_force")    == 1) then; read(Uin,*) Lsave_force
       elseif (index(line,"$Lsave_npa")      == 1) then; read(Uin,*) Lsave_npa
       elseif (index(line,"$Lsave_charge")   == 1) then; read(Uin,*) Lsave_charge
@@ -48,7 +57,6 @@ subroutine read_parameter
       elseif (index(line,"$address_scr")    == 1) then; read(uin,'(a)') dir_scr
 
       elseif (index(line,"$Icons")          == 1) then; read(Uin,*) Icons
-      !elseif (index(line,"$umb_cons")       == 1) then; read(Uin,*) umb_cons
       elseif (index(line,"$cons_atom1")     == 1) then; read(Uin,*) cons_atom1
       elseif (index(line,"$cons_atom2")     == 1) then; read(Uin,*) cons_atom2
       elseif (index(line,"$cons_atom3")     == 1) then; read(Uin,*) cons_atom3

@@ -44,8 +44,10 @@ subroutine Force_New_MPI
       call force_nnp_araidai
     case(22)
       call force_nnp_matlantis
+#ifdef _MACE_
     case(25)
       call Force_MACE
+#endif
     !case(23)
     !  call force_nnp_aenet
 #ifdef _LAMMPS_

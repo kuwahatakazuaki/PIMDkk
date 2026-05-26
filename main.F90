@@ -43,7 +43,9 @@ program Path_Integral
       call program_abort('ERROR!!! Wrong "Simulation" option')
   end select
 
+#ifdef _MACE_
   if (Iforce == 25) call Finalize_MACE
+#endif
   call Set_Deallocate
   call print_end
 #ifdef _mpi_
