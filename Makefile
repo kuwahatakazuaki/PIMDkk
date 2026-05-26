@@ -1,12 +1,13 @@
 PROG = pimd.exe
 SHELL   = /bin/bash
 OBJS    = $(SRCS:%.F90=%.o)
-# OBJSF77 = $(SRCSF77:%.f=%.o)
 DEP     = $(OBJS:.o=.d)
 SRCS   += $(SRC_LAMMPS)
 OBJS   += $(OBJ_LAMMPS)
 FCOPT  += $(DFLAG)
 DIR_LAMMPS = LAMMPS
+PYINC = $(shell python3-config --includes)
+PYLIB = $(shell python3-config --embed --ldflags)
 # GFLAG   =  -JModule -IModule
 # MPI  = True
 
@@ -51,6 +52,8 @@ Parameter.F90                      \
 utility.F90                        \
 mod_model_force.F90                \
 mpi_module.F90                     \
+fortran_mace_isoc.F90              \
+Force_MACE.F90                     \
 main.F90                           \
 Broad.F90                          \
 read_input.F90                     \
@@ -118,9 +121,9 @@ all: $(PROG)
 
 $(PROG): $(OBJS)
 ifeq ($(HOSTNAME),genkai)
-	$(FC) $(LIBS) $(OBJS) -o $(PROG)
+	$(FC) $(LIBS) $(OBJS) -o $(PROG) $(PYLIB)
 else
-	$(FC) $(FCOPT) $(OBJS) -o $(PROG)
+	$(FC) $(FCOPT) $(OBJS) -o $(PROG) $(PYLIB)
 endif
 
 
@@ -134,9 +137,9 @@ install: $(PROG)
 %.o:%.F90
 	@echo "<< Compiling >>" $<
 ifeq ($(HOSTNAME),genkai)
-	$(FC) $(FCOPT) $(DFLAG) $(INCS) -c -o $*.o $*.F90
+	$(FC) $(FCOPT) $(DFLAG) $(INCS) $(PYINC) -c -o $*.o $*.F90
 else
-	$(FC) $(FCOPT) $(DFLAG) -c -o $*.o $*.F90
+	$(FC) $(FCOPT) $(DFLAG) $(PYINC) -c -o $*.o $*.F90
 endif
 	@echo
 

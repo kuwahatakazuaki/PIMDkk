@@ -18,6 +18,8 @@ subroutine set_Iforce
       call set_nnp_araidai
     case(22)
       call set_nnp_matlantis
+    case(25)
+      call Set_MACE
 #ifdef _LAMMPS_
     case(24)
       call set_LAMMPS

@@ -29,6 +29,8 @@ Subroutine Force_Classical
       call force_nnp_araidai
     case(22)
       call force_nnp_matlantis
+    case(25)
+      call Force_MACE
 #ifdef _LAMMPS_
     case(24)
       call force_LAMMPS
