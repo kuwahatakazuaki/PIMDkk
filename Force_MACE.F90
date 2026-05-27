@@ -194,7 +194,6 @@ subroutine Set_MACE
 
   character(len=256) :: python_dir, model_path
   character(len=512) :: helper_path
-  integer :: unit_out
   integer :: access
   real(8) :: lattice_norm
 
@@ -218,19 +217,6 @@ subroutine Set_MACE
 
   call initialize_mace_interface()
 
-  if (MyRank == 0) then
-    open(newunit=unit_out, file=Fout, status='old', position='append')
-      write(unit_out,'(a)') ' +++++ MACE force field +++++'
-      write(unit_out,'(a,a)') ' +++++ MACE Python dir ', trim(python_dir)
-      write(unit_out,'(a,a)') ' +++++ MACE model      ', trim(model_path)
-      write(unit_out,'(a)') ' +++++ MACE lattice (Angstrom)'
-      write(unit_out,'(3F16.8)') lattice(1,:)
-      write(unit_out,'(3F16.8)') lattice(2,:)
-      write(unit_out,'(3F16.8)') lattice(3,:)
-      write(unit_out,*)
-    close(unit_out)
-  end if
-
   return
 end subroutine Set_MACE
 
@@ -245,7 +231,6 @@ subroutine Force_MACE
   implicit none
 
   integer :: iatom, idir, imode
-  integer :: bead_start, bead_end
   integer(c_long) :: atomic_numbers(Natom)
   real(c_double) :: positions(Natom, 3)
   real(c_double) :: cell(3, 3)
@@ -265,15 +250,7 @@ subroutine Force_MACE
   fr(:,:,:) = 0.0d0
   pot_bead(:) = 0.0d0
 
-#ifdef _mpi_
-  bead_start = Ista
-  bead_end = Iend
-#else
-  bead_start = 1
-  bead_end = Nbead
-#endif
-
-  do imode = bead_start, bead_end
+  do imode = Ista, Iend
     do iatom = 1, Natom
       do idir = 1, 3
         positions(iatom, idir) = r(idir, iatom, imode) * AU2Ang

@@ -6,10 +6,14 @@ SRCS   += $(SRC_LAMMPS) $(SRC_MACE)
 OBJS   += $(OBJ_LAMMPS) $(OBJ_MACE)
 FCOPT  += $(DFLAG)
 DIR_LAMMPS = LAMMPS
-MACE ?= False
+DIR_MACE = MACE
+MACE ?= True
+# MACE ?= False
+# GFLAG   =  -JModule -IModule
+# MPI  = True
 
 ifeq ($(MACE),True)
-SRC_MACE = fortran_mace_isoc.F90 Force_MACE.F90
+SRC_MACE = $(DIR_MACE)/fortran_mace_isoc.F90 Force_MACE.F90
 OBJ_MACE = $(SRC_MACE:%.F90=%.o)
 PYINC = $(shell python3-config --includes)
 PYLIB = $(shell python3-config --embed --ldflags)
@@ -20,8 +24,6 @@ OBJ_MACE =
 PYINC =
 PYLIB =
 endif
-# GFLAG   =  -JModule -IModule
-# MPI  = True
 
 
 #ifeq ($(HOSTNAME),genkai)
@@ -152,11 +154,15 @@ endif
 	$(FC) $(FCOPT) -c -o $*.o $*.f
 	@echo
 
+Force_MACE.o: $(DIR_MACE)/fortran_mace_isoc.o
+Check_Inp.o: Force_MACE.o
+
 -include $(DEP)
 
 clean: 
 	rm -rf *.o $(PROG) *.mod *exe *.d
 	rm -rf $(DIR_LAMMPS)/*.o
+	rm -rf $(DIR_MACE)/*.o
 #	del *.o $(program) *.mod 
 
 

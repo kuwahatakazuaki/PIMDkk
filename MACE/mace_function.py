@@ -90,8 +90,6 @@ def calculate_energy_and_forces(atomic_numbers, positions, model_path, cell=None
         atoms.cell = np.array(cell, dtype=float)
         atoms.pbc = pbc
 
-    _ensure_mace_compatibility()
-
     calculator = _get_calculator(model_path, positions)
 
     # Attach the calculator to the atoms
@@ -119,12 +117,8 @@ def _get_calculator(model_path, positions):
         if callable(post_patch):
             for model in getattr(calculator, "models", []):
                 post_patch(model)
-    except Exception as exc:  # pragma: no cover - fallback path for environments without MACE support
-        warnings.warn(
-            f"Falling back to zero energy/forces because MACE model could not be loaded: {exc}",
-            RuntimeWarning,
-        )
-        return _ZeroCalculator(positions)
+    except Exception as exc:
+        raise RuntimeError(f"MACE model could not be loaded: {model_path}") from exc
 
     _CALCULATOR_CACHE[cache_key] = calculator
     return calculator

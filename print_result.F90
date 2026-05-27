@@ -4,6 +4,7 @@ subroutine print_result
   implicit none
   integer :: i,j,k, imode, iatom
   integer :: Upre, Udip, Uchar, Uhfc, Ucoor, Ufor, Uene, Ucon
+  character(len=5) :: pbc_xyz
 
 if (MyRank==0) then
 
@@ -48,8 +49,13 @@ if (MyRank==0) then
   !end if
 
   open(Ucoor,file=trim(dir_result)//'/coor.xyz',status='unknown',form='formatted',position='append')
+    if (Lperiodic .eqv. .True.) then
+      pbc_xyz = 'T T T'
+    else
+      pbc_xyz = 'F F F'
+    end if
     write(Ucoor,'(I5)') natom*nbead
-    write(Ucoor,'(I10)') istepsv
+    write(Ucoor,'(a,a,a,i0)') 'Properties=species:S:1:pos:R:3 pbc="', pbc_xyz, '" step=', istepsv
     do imode=1,nbead
       do iatom=1,natom
         write(Ucoor,9999) alabel(iatom),r(:,iatom,imode)*AU2Ang

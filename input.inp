@@ -18,7 +18,7 @@ $Ncent            # Method of Centroid NHC, 0: NVE, 3: NVT
 3
 $Lrestart
 .F.
-$Iforce           # 1:MOPAC, 6:Gaussian, 8:VASP, 9:SIESTA, 15:Harmonic, 16:Double Morse, 25:MACE, 31:Water(SPC/F2)
+$Iforce           # 1:MOPAC, 6:Gaussian, 8:VASP, 9:SIESTA, 25:MACE, 31:Water(SPC/F2)
 31
 $address_result   # Result directory
 ./Result
@@ -29,7 +29,7 @@ $seed             # random number seed, Need only one integer
 $Langstrom        # Coordinate in Angstrom (True of False)
 .T.
 $Lrandom_coor     # Random intial coordinate (True of False)
-.T.
+.F.
 $Lperiodic        # Periodic boundary condition (True of False)
 .F.
 $lattice

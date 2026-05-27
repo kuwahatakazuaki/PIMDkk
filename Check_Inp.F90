@@ -1,7 +1,13 @@
 subroutine Check_Inp
   use Parameters
+#ifdef _MACE_
+  use mace_force_config, only: get_mace_paths
+#endif
   implicit none
   integer :: Iatom, Uout
+#ifdef _MACE_
+  character(len=256) :: mace_python_dir, mace_model_path
+#endif
 
   if ( MyRank == 0 ) then
     open(newunit=Uout,file=Fout,status='old',position='append')
@@ -20,12 +26,27 @@ subroutine Check_Inp
       write(Uout,9998) ' +++++ Output step (fs)    ', dt / fs2AU * out_step
       write(Uout,9999) ' +++++ Method of Centr NHC ', Ncent
       write(Uout,9999) ' +++++ Length of Centr NHC ', Nnhc
-      write(Uout,9995) ' +++++ Flag for Restart    ', Lrestart
       write(Uout,9999) ' +++++ Flag for Force Calc ', Iforce
       write(Uout,9999) ' +++++ Seed for Random    ', Iseed
       write(Uout,9997) ' +++++ Address of Result   ', trim(dir_result)
       write(Uout,9997) ' +++++ Address of Scratch  ', trim(dir_scr)
+      write(Uout,9995) ' +++++ Flag for Restart    ', Lrestart
+      write(Uout,9995) ' +++++ Flag for Periodic   ', Lperiodic
+      write(Uout,'(a)') ' +++++ lattice (Angstrom)'
+      write(Uout,'(3F16.8)') lattice(1,:)
+      write(Uout,'(3F16.8)') lattice(2,:)
+      write(Uout,'(3F16.8)') lattice(3,:)
       write(Uout,*)
+
+#ifdef _MACE_
+      if ( Iforce == 25 ) then
+        call get_mace_paths(mace_python_dir, mace_model_path)
+        write(Uout,'(a)') ' +++++ MACE force field +++++'
+        write(Uout,'(a,a)') ' +++++ MACE Python dir ', trim(mace_python_dir)
+        write(Uout,'(a,a)') ' +++++ MACE model      ', trim(mace_model_path)
+        write(Uout,*)
+      end if
+#endif
 
       if ( Icons > 0 ) then
         write(Uout,'(a)')' +++++ Umbrella sampling +++++   '
@@ -62,4 +83,3 @@ subroutine Check_Inp
 9995 Format(A26,L12)
 9994 Format(A26,ES12.4)
 end subroutine Check_Inp
-

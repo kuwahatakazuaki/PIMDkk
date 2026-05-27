@@ -5,6 +5,7 @@ subroutine Classical
   integer :: iref, Uout
 
   call Setup_time_mass
+  call set_pallarel
   call Init_Mass
   call set_Iforce
 
