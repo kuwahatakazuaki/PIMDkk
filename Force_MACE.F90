@@ -5,41 +5,100 @@ module mace_force_config
   use utility, only: lowerchr, program_abort
   implicit none
   private
-  public :: get_mace_paths
+  public :: get_mace_model_path
   public :: initialize_mace_interface
   public :: finalize_mace_interface
   public :: symbol_to_atomic_number
+  public :: mace_python_dir
+  public :: mace_helper_path
 
-  character(len=256), save :: mace_python_dir = './MACE'
-  character(len=256), save :: mace_model_path = './MACE/small_mace_model.model'
+  character(len=1024), save :: mace_python_dir = './MACE'
+  character(len=1024), save :: mace_helper_path = './MACE/mace_function.py'
+  character(len=1024), save :: mace_model_path = './MACE/small_mace_model.model'
   logical, save :: mace_ready = .false.
+  logical, save :: mace_paths_ready = .false.
 
 contains
 
-  subroutine get_mace_paths(python_dir, model_path)
-    character(len=*), intent(out) :: python_dir
+  subroutine resolve_mace_paths()
+    character(len=1024) :: exe_path
+    character(len=1024) :: exe_dir
+    character(len=8192) :: path_env
+    character(len=1024) :: path_dir
+    character(len=2048) :: candidate
+    integer :: exe_len, arg_status, slash_pos
+    integer :: env_len, env_status, env_last
+    integer :: start_pos, colon_pos
+    integer :: access
+
+    if (mace_paths_ready) return
+
+    exe_path = ''
+    exe_dir = '.'
+    call get_command_argument(0, exe_path, length=exe_len, status=arg_status)
+    if (arg_status == 0 .and. exe_len > 0) then
+      slash_pos = scan(trim(exe_path), '/', back=.true.)
+      if (slash_pos > 0) then
+        if (slash_pos == 1) then
+          exe_dir = '/'
+        else
+          exe_dir = exe_path(:slash_pos-1)
+        end if
+      else
+        ! argv[0] can be just "pimd.exe" when launched through PATH.
+        call get_environment_variable('PATH', path_env, &
+             length=env_len, status=env_status)
+        if ((env_status == 0 .or. env_status == -1) .and. env_len > 0) then
+          env_last = min(env_len, len(path_env))
+          start_pos = 1
+          do
+            colon_pos = index(path_env(start_pos:env_last), ':')
+            if (colon_pos == 0) then
+              path_dir = path_env(start_pos:env_last)
+            else if (colon_pos == 1) then
+              path_dir = '.'
+            else
+              path_dir = path_env(start_pos:start_pos+colon_pos-2)
+            end if
+
+            candidate = trim(path_dir)//'/'//trim(exe_path)
+            if (access(trim(candidate), ' ') == 0) then
+              exe_dir = trim(path_dir)
+              exit
+            end if
+
+            if (colon_pos == 0) exit
+            start_pos = start_pos + colon_pos
+            if (start_pos > env_last) exit
+          end do
+        end if
+      end if
+    end if
+
+    mace_python_dir = trim(exe_dir)//'/MACE'
+    mace_helper_path = trim(mace_python_dir)//'/mace_function.py'
+    mace_model_path = trim(mace_python_dir)//'/small_mace_model.model'
+    mace_paths_ready = .true.
+  end subroutine resolve_mace_paths
+
+  subroutine get_mace_model_path(model_path)
     character(len=*), intent(out) :: model_path
     integer :: env_len, env_status
 
-    call get_environment_variable('MACE_PYTHON_DIR', mace_python_dir, &
-         length=env_len, status=env_status)
-    if (env_status /= 0) mace_python_dir = './MACE'
+    call resolve_mace_paths()
 
     call get_environment_variable('MACE_MODEL', mace_model_path, &
          length=env_len, status=env_status)
-    if (env_status /= 0) mace_model_path = './MACE/small_mace_model.model'
+    if (env_status /= 0) mace_model_path = trim(mace_python_dir)//'/small_mace_model.model'
 
-    python_dir = trim(mace_python_dir)
     model_path = trim(mace_model_path)
-  end subroutine get_mace_paths
+  end subroutine get_mace_model_path
 
   subroutine initialize_mace_interface()
-    character(len=256) :: python_dir, model_path
-
     if (mace_ready) return
 
-    call get_mace_paths(python_dir, model_path)
-    call mace_initialize(trim(python_dir))
+    call resolve_mace_paths()
+    call mace_initialize(mace_python_dir)
     mace_ready = .true.
   end subroutine initialize_mace_interface
 
@@ -188,26 +247,27 @@ end module mace_force_config
 
 subroutine Set_MACE
   use Parameters, only: Lperiodic, lattice, Fout, MyRank
-  use mace_force_config, only: get_mace_paths, initialize_mace_interface
+  use mace_force_config, only: mace_python_dir, mace_helper_path, &
+                               get_mace_model_path, initialize_mace_interface
   use utility, only: program_abort
   implicit none
 
-  character(len=256) :: python_dir, model_path
-  character(len=512) :: helper_path
+  character(len=256) :: model_path
   integer :: access
   real(8) :: lattice_norm
 
-  call get_mace_paths(python_dir, model_path)
-  helper_path = trim(python_dir)//'/mace_function.py'
+  call get_mace_model_path(model_path)
 
-  if (access(trim(python_dir), ' ') /= 0) then
-    call program_abort('ERROR!!! There is no MACE directory: '//trim(python_dir))
+  if (access(mace_python_dir, ' ') /= 0) then
+    call program_abort('ERROR!!! There is no MACE directory: '//mace_python_dir)
   end if
-  if (access(trim(helper_path), ' ') /= 0) then
-    call program_abort('ERROR!!! There is no MACE Python helper: '//trim(helper_path))
+  if (access(mace_helper_path, ' ') /= 0) then
+    call program_abort('ERROR!!! There is no MACE Python helper: '//mace_helper_path)
   end if
   if (access(trim(model_path), ' ') /= 0) then
-    call program_abort('ERROR!!! There is no MACE model: '//trim(model_path))
+    call program_abort('ERROR!!! There is no MACE model: '//trim(model_path)// &
+                       char(10)//'Please set MACE_MODEL, e.g. '// &
+                       'export MACE_MODEL="/path/to/your/model.model"')
   end if
 
   lattice_norm = sum(abs(lattice(:,:)))
@@ -225,8 +285,8 @@ subroutine Force_MACE
   use Parameters, &
     only: Natom, Nbead, Ista, Iend, r, fr, pot_bead, alabel, &
           AU2Ang, eV2AU, eVAng2AU, dp_inv, Lperiodic, lattice
-  use mace_force_config, only: get_mace_paths, initialize_mace_interface, &
-                               symbol_to_atomic_number
+  use mace_force_config, only: get_mace_model_path, &
+                               initialize_mace_interface, symbol_to_atomic_number
   use python_mace_interface, only: mace_calculate_energy_and_forces
   implicit none
 
@@ -236,10 +296,10 @@ subroutine Force_MACE
   real(c_double) :: cell(3, 3)
   real(c_double) :: energy
   real(c_double) :: forces(Natom, 3)
-  character(len=256) :: python_dir, model_path
+  character(len=256) :: model_path
 
   call initialize_mace_interface()
-  call get_mace_paths(python_dir, model_path)
+  call get_mace_model_path(model_path)
 
   do iatom = 1, Natom
     atomic_numbers(iatom) = symbol_to_atomic_number(alabel(iatom))

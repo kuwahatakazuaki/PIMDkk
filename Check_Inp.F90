@@ -1,12 +1,12 @@
 subroutine Check_Inp
   use Parameters
 #ifdef _MACE_
-  use mace_force_config, only: get_mace_paths
+  use mace_force_config, only: get_mace_model_path
 #endif
   implicit none
   integer :: Iatom, Uout
 #ifdef _MACE_
-  character(len=256) :: mace_python_dir, mace_model_path
+  character(len=256) :: mace_model_path
 #endif
 
   if ( MyRank == 0 ) then
@@ -40,9 +40,8 @@ subroutine Check_Inp
 
 #ifdef _MACE_
       if ( Iforce == 25 ) then
-        call get_mace_paths(mace_python_dir, mace_model_path)
+        call get_mace_model_path(mace_model_path)
         write(Uout,'(a)') ' +++++ MACE force field +++++'
-        write(Uout,'(a,a)') ' +++++ MACE Python dir ', trim(mace_python_dir)
         write(Uout,'(a,a)') ' +++++ MACE model      ', trim(mace_model_path)
         write(Uout,*)
       end if

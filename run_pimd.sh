@@ -8,6 +8,8 @@ dir_scratch=`grep -A1 "address_scr" $input |tail -1`
 Lrestart=`grep -A1 "Lrestart" $input |tail -1`
 simulation=`grep -A1 "Simulation" $input |tail -1`
 
+# Set the MACE model when using MACE.
+export MACE_MODEL="./medium.MACE.model"
 export TIME="User: %U, System: %S, Elapsed: %E
 CPU: %P, Resident size: %M KB
 Share Text: %X, Unshare Data: %D Kb
@@ -38,10 +40,8 @@ else
 fi
 echo " +++ Nproc is $Nproc +++"
 
-# nohup mpirun -np $Nproc $pimddir/pimd.exe > $output  &
-nohup $pimddir/pimd.exe > $output &
+# mpirun -np $Nproc $pimddir/pimd.exe > $output  &
+$pimddir/pimd.exe > $output
 
 exit 0
-
-
 
