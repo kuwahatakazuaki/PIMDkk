@@ -1,10 +1,6 @@
-PROG = pimd.exe
 SHELL   = /bin/bash
 OBJS    = $(SRCS:%.F90=%.o)
-DEP     = $(OBJS:.o=.d)
-SRCS   += $(SRC_LAMMPS) $(SRC_MACE)
-OBJS   += $(OBJ_LAMMPS) $(OBJ_MACE)
-FCOPT  += $(DFLAG)
+OBJS   += $(OBJ_LAMMPS)
 DIR_LAMMPS = LAMMPS
 DIR_MACE = MACE
 MACE ?= True
@@ -54,8 +50,10 @@ FCOPT  = -O2 -pipe # -JModule
   ifeq ($(MPI),True)
   FC     = mpif90
   DFLAG += -D_mpi_
+  PROG = pimd_mpi.exe
   else
   FC     = gfortran
+  PROG = pimd.exe
   endif
 # ===== Other =====
 #endif
@@ -70,6 +68,7 @@ main.F90                           \
 Broad.F90                          \
 read_input.F90                     \
 Set_Allocate.F90                   \
+$(SRC_MACE)                        \
 Check_Inp.F90                      \
 Calc_Constant.F90                  \
 Setup_time_mass.F90                \
@@ -123,7 +122,7 @@ exit.F90                           \
 
 
 all: $(PROG)
-	@echo -e '\e[34m Noraml termination!!!\e[m\n'
+	@echo -e '\e[34m Normal termination!!!\e[m\n'
 
 $(PROG): $(OBJS)
 ifeq ($(HOSTNAME),genkai)
@@ -154,13 +153,8 @@ endif
 	$(FC) $(FCOPT) -c -o $*.o $*.f
 	@echo
 
-Force_MACE.o: $(DIR_MACE)/fortran_mace_isoc.o
-Check_Inp.o: Force_MACE.o
-
--include $(DEP)
-
 clean: 
-	rm -rf *.o $(PROG) *.mod *exe *.d
+	rm -rf *.o $(PROG) *.mod *exe
 	rm -rf $(DIR_LAMMPS)/*.o
 	rm -rf $(DIR_MACE)/*.o
 #	del *.o $(program) *.mod 
