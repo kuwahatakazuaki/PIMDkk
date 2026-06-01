@@ -1,8 +1,8 @@
 subroutine add_constrain
   use Parameters, &
     only: r, fur_ref, tnm, Ndim, Natom, Nbead, dp_inv, Ang2AU, &
-          Icons, cons_strength, cons_val, potential_cons, scons_ave, &
-          fcons_cv, atom1 => cons_atom1, atom2 => cons_atom2
+          Icons, cons_strength, cons_val, potential_cons, cons_cv_ave, &
+          dVdcons_cv, atom1 => cons_atom1, atom2 => cons_atom2
   use utility, only: program_abort
   implicit none
   integer :: imode, iatom
@@ -13,8 +13,8 @@ subroutine add_constrain
   real(8), parameter :: tiny_dist = 1.0d-12
 
   potential_cons = 0.0d0
-  scons_ave = 0.0d0
-  fcons_cv = 0.0d0
+  cons_cv_ave = 0.0d0
+  dVdcons_cv = 0.0d0
   if ( Icons == 0 ) return
 
   call nmtrans_ur2r
@@ -33,17 +33,17 @@ subroutine add_constrain
         if ( dist(imode) < tiny_dist ) then
           call program_abort('ERROR!!: constrained atom distance is too small')
         end if
-        scons_ave = scons_ave + dist(imode)
+        cons_cv_ave = cons_cv_ave + dist(imode)
       end do
-      scons_ave = scons_ave * dp_inv
+      cons_cv_ave = cons_cv_ave * dp_inv
 
-      dr = scons_ave - r0_cons
+      dr = cons_cv_ave - r0_cons
       potential_cons = 0.5d0 * k_cons * dr * dr
-      fcons_cv = k_cons * dr
+      dVdcons_cv = k_cons * dr
 
       do imode = 1, Nbead
         rij(:) = r(:,atom1,imode) - r(:,atom2,imode)
-        fij(:) = -fcons_cv * dp_inv * rij(:) / dist(imode)
+        fij(:) = -dVdcons_cv * dp_inv * rij(:) / dist(imode)
         fcart_cons(:,atom1,imode) = fcart_cons(:,atom1,imode) + fij(:)
         fcart_cons(:,atom2,imode) = fcart_cons(:,atom2,imode) - fij(:)
       end do

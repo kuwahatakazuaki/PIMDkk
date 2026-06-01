@@ -85,8 +85,8 @@ if (MyRank==0) then
 
   if ( Icons > 0 ) then
     open(newunit=Ucon,file=trim(dir_result)//'/constraint.dat',status='unknown',form='formatted',position='append')
-      write(Ucon,8009) istepsv, dble(istepsv) * dt / fs2AU, scons_ave * AU2Ang, &
-                       cons_val, potential_cons, fcons_cv
+      write(Ucon,8009) istepsv, dble(istepsv) * dt / fs2AU, cons_cv_ave * AU2Ang, &
+                       dVdcons_cv, potential_cons
     close(Ucon)
   end if
 
@@ -105,7 +105,7 @@ end if
 8006 format(F0.10)     ! Potential
 8007 format(100F10.6)  ! Charge
 8008 format(4F10.5)    ! Dipole
-8009 format(I10,5E23.15)
+8009 format(I7,4E15.7)
 9995 format(4E23.15)
 
 return

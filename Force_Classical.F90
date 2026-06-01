@@ -132,8 +132,9 @@ contains
 ! <--- Udagawa End 2021.05.24
     end if
 !  +++ End Reading "Dipole moment" +++
-     close(imopac+ID)
-       call system('rm -rf '//trim(addresstmp)//'mopac.*')
+    close(imopac+ID)
+    call system('rm -rf '//trim(addresstmp)//'mopac.*')
+
     enddo
 
     return

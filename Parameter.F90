@@ -91,7 +91,7 @@ module Parameters
 
   integer :: Icons = 0, cons_atom1, cons_atom2, cons_atom3
   real(8) :: cons_strength, cons_val
-  real(8) :: potential_cons = 0.0d0, scons_ave = 0.0d0, fcons_cv = 0.0d0
+  real(8) :: potential_cons = 0.0d0, cons_cv_ave = 0.0d0, dVdcons_cv = 0.0d0
 end module Parameters
 
 module Struct_

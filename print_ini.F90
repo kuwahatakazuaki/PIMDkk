@@ -69,7 +69,7 @@ if (MyRank == 0) then
 
   if ( Icons > 0 ) then
     open(newunit=Ucon,file=trim(dir_result)//'/constraint.dat',status='replace',form='formatted',position='append')
-      write(Ucon,'(a)') '# step time_fs scons_ave_ang cons_val_ang potential_cons_au fcons_cv_au_bohr'
+      write(Ucon,'(a)') '#  1step 2time_fs       3cons_cv       4dVdcons_cv 5potential_cons'
     close(Ucon)
   end if
 

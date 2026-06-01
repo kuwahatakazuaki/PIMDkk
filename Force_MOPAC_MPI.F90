@@ -21,7 +21,6 @@ Subroutine Force_MOPAC_MPI
 
 
     id=0
-  !Call Start_Recv_Send_MPI_tk
     do imode=ista,iend
       write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') imode,'/'
        call system('cp mopac.mop '//trim(addresstmp))
@@ -71,18 +70,13 @@ Subroutine Force_MOPAC_MPI
         read(imopac+id,*) line
       end do
       read(imopac+id,*) line, dipoler(:,imode)
-      !read(imopac+id,*) line, dipolex(imode), dipoley(imode), dipolez(imode),dipole(imode)
 ! <--- Udagawa End 2021.05.24
-!      read(imopac+id,*) dipolex(imode), dipoley(imode), dipolez(imode),dipole(imode)
-    end if
+      end if
 !  +++ End Reading "Dipole moment" +++
-
 
        close(imopac+ID)
        call system('rm -rf '//trim(addresstmp)//'mopac.*')
     enddo
-
-!Call Start_Send_Recv_MPI_tk
 
 
 return

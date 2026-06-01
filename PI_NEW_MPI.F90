@@ -25,10 +25,10 @@ subroutine PI_NEW_MPI
     call Temp_ctr
     call nmtrans_ur2r ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
     call Force_New_MPI
-    if ( mod(istepsv,out_step) == 0 ) call print_result
     call nmtrans_fr2fur     !call Getfnm  ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i)
     !if (Icons > 0 .and. MyRank == 0) call add_constrain
     call getforce_ref_nor
+    if ( mod(istepsv,out_step) == 0 ) call print_result
 
     call Ham_Temp
     call print_ham(Irestep)

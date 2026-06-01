@@ -48,11 +48,13 @@ subroutine Check_Inp
 #endif
 
       if ( Icons > 0 ) then
-        write(Uout,'(a)')' +++++ Umbrella sampling +++++   '
+        write(Uout,'(a)')' +++++ Harmonic constraint +++++'
         write(Uout,9999) ' +++++ Icons                     ', Icons
         write(Uout,9999) ' +++++ cons_atom1                ', cons_atom1
         write(Uout,9999) ' +++++ cons_atom2                ', cons_atom2
         write(Uout,9999) ' +++++ cons_atom3                ', cons_atom3
+        write(Uout,9998) ' +++++ cons_val (Angstrom)       ', cons_val
+        write(Uout,9994) ' +++++ cons_strength (Ha/bohr^2) ', cons_strength
         write(Uout,*)
       end if
 
@@ -80,5 +82,5 @@ subroutine Check_Inp
 !9997 Format(A26,A80)
 9996 Format(A4,1X,4F12.6)
 9995 Format(A26,L12)
-9994 Format(A26,ES12.4)
+9994 Format(A26,ES10.2)
 end subroutine Check_Inp
