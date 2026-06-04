@@ -1,9 +1,10 @@
-subroutine set_Iforce
+subroutine set_Iforce(Iforce_eval)
   use Parameters
   use utility, only: program_abort
   implicit none
+  integer, intent(in) :: Iforce_eval
 
-  select case(Iforce)
+  select case(Iforce_eval)
     case(1)
       call Set_mopac
     case(6)
@@ -18,15 +19,20 @@ subroutine set_Iforce
       call set_nnp_araidai
     case(22)
       call set_nnp_matlantis
-#ifdef _MACE_
-    case(25)
-      call Set_MACE
-#endif
 
 #ifdef _LAMMPS_
     case(24)
       call set_LAMMPS
 #endif
+
+#ifdef _MACE_
+    case(25)
+      call set_MACE
+#endif
+
+    case(26)
+      call set_aenet
+
   end select
 
   return
@@ -110,7 +116,6 @@ contains
 #endif
 
   subroutine Set_siesta
-    !use Parameters
     implicit none
     integer   :: i,j,k,imode
 

@@ -8,7 +8,7 @@ subroutine PI_NEW_MPI
   call set_pallarel
   call Normal_Mode
   call Init_Mass
-  call set_Iforce
+  call set_Iforce(Iforce)
 
   if ( Lrestart .eqv. .True. ) then
     call restart_read
@@ -24,7 +24,7 @@ subroutine PI_NEW_MPI
     call Broad3
     call Temp_ctr
     call nmtrans_ur2r ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
-    call Force_New_MPI
+    call Force_New_MPI(Iforce)
     call nmtrans_fr2fur     !call Getfnm  ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i)
     !if (Icons > 0 .and. MyRank == 0) call add_constrain
     call getforce_ref_nor
@@ -37,7 +37,7 @@ subroutine PI_NEW_MPI
   if ( MyRank == 0 ) then
 
     main_loop: &
-    do istepsv = Irestep+1, nstep
+    do istepsv = Irestep+1, Nstep
       select case(Ncent)
         case(0)
           continue
@@ -67,7 +67,7 @@ subroutine PI_NEW_MPI
       end if
 
       call nmtrans_ur2r       ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
-      call Force_New_MPI      ! Obtaining fx
+      call Force_New_MPI(Iforce)      ! Obtaining fx
       if ( mod(istepsv,out_step) == 0 ) call print_result
       call nmtrans_fr2fur     ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i) !call Getfnm
       call update_vel_nor
@@ -92,8 +92,8 @@ subroutine PI_NEW_MPI
     end do main_loop
 
   else
-    do istepsv = Irestep+1, nstep
-      call Force_New_MPI
+    do istepsv = Irestep+1, Nstep
+      call Force_New_MPI(Iforce)
     end do
   end if
 

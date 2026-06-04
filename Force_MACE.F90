@@ -245,7 +245,7 @@ contains
 
 end module mace_force_config
 
-subroutine Set_MACE
+subroutine set_MACE
   use Parameters, only: Lperiodic, lattice, Fout, MyRank
   use mace_force_config, only: mace_python_dir, mace_helper_path, &
                                get_mace_model_path, initialize_mace_interface

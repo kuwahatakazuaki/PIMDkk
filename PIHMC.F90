@@ -3,19 +3,18 @@ subroutine PIHMC_normal
   use utility, only: program_abort, ranf1
   implicit none
   integer :: iref, Uout
-  integer :: Idyn, Ndyn = 20
+  integer :: Idyn
 
   call Setup_time_mass
   call set_pallarel
   call Normal_Mode
   call Init_Mass
 
-  call set_Iforce
+  call set_Iforce(Iforce)
+  if ( Ldual ) call set_Iforce(dual_Iforce)
 
   if ( Lrestart .eqv. .True. ) then
-    !if (MyRank == 0) Then
     call restart_read
-    !end if
     call Broad3
   else
     call print_ini
@@ -24,16 +23,13 @@ subroutine PIHMC_normal
       call Init_Velocity
     end if
     call Broad3
-    !call Temp_ctr
     call nmtrans_ur2r ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
-    call Force_New_MPI
+    call Force_New_MPI(Iforce)
     if ( mod(istepsv,out_step) == 0 ) call print_result
     call nmtrans_fr2fur     !call Getfnm  ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i)
 
-    !if ( MyRank == 0 ) then
     call Ham_Temp
     call print_ham(Irestep)
-    !end if
   end if
 
   call getforce_ref_nor
@@ -43,13 +39,12 @@ subroutine PIHMC_normal
   if ( MyRank == 0 ) then
 
     loop_main: &
-    do istepsv = Irestep+1, nstep
+    do istepsv = Irestep+1, Nstep
 
       loop_dyn: &
       do Idyn = 1, Ndyn
 
         call update_vel_nor
-
         !do iref=1, Nref   ! Nref = 5
         !  call update_vel_ref_nor
         !  call update_pos_nor
@@ -59,7 +54,7 @@ subroutine PIHMC_normal
         call update_pos_vel_analy
 
         call nmtrans_ur2r       ! x(i) = x(i) + sum_j tnm(i,j)*u(j)
-        call Force_New_MPI      ! Obtaining fx
+        call Force_New_MPI(Iforce)      ! Obtaining fx
         call nmtrans_fr2fur     ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i) !call Getfnm
         call update_vel_nor
 
@@ -81,8 +76,8 @@ subroutine PIHMC_normal
     end do loop_main
 
   else
-    do istepsv = Irestep+1, nstep
-      call Force_New_MPI
+    do istepsv = Irestep+1, Nstep
+      call Force_New_MPI(Iforce)
     end do
   end if
 
@@ -134,8 +129,6 @@ contains
     end if
     ratio = dble(Naccept) / dble(Naccept+Nreject)
     if (MyRank ==0 ) call Init_Velocity
-    !call Broad_velocity
-    !call Temp_ctr
     call getenergy_hmc
     call save_hmc
   end subroutine judge_hmc
@@ -183,6 +176,11 @@ contains
       qkinetic = qkinetic + factqk * norm_seq( ur(:,Iatom,Imode) )
     end do
     end do
+
+    ! === Change HERE
+    if ( Ldual ) then
+    end if
+    ! === Change HERE
 
     hamiltonian = dkinetic + qkinetic + potential
   end subroutine getenergy_hmc

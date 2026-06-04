@@ -37,6 +37,14 @@ $lattice
  0.0   17.0    0.0
  0.0    0.0   17.0
 
+# Parameters for PIHMC (Isimulation=3)
+$Ndyn             # Number of MD steps per PIHMC trial trajectory
+20
+$Ldual            # Use different target potential for Metropolis test
+.F.
+$dual_Iforce      # Target force/potential for Metropolis test
+6
+
 $Lsave_charge     # Save charge (True of False)
 .F.
 $Lsave_hfcc       # Save HFCC (True of False)
@@ -64,9 +72,9 @@ $cons_atom1       # First constrained atom index
 1
 $cons_atom2       # Second constrained atom index
 2
-$cons_atom3       # Reserved for future constraint types; unused for Icons=1
+$cons_atom3       # Unused for Icons=1
 3
-$cons_val         # Target bead-average distance in Angstrom
+$cons_val         # Target distance in Angstrom
 1.0d0
 $cons_strength    # Harmonic force constant in Hartree/bohr^2
 5.0d0
@@ -95,15 +103,3 @@ O       -2.957497   -0.140358    0.028240
 H       -3.583174    0.466477    0.411941
 H       -2.291315   -0.301693    0.722959
 $end Coords
-
-
-$Iumb             # Umbrella sampling
-0
-$umb_atom1
-1
-$umb_atom2
-2
-$umb_atom2
-3
-$umb_cons
-1d-5

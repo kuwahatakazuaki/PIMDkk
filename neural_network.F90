@@ -135,7 +135,6 @@ end subroutine set_nnp_matlantis
 subroutine set_nnp_araidai
   use Parameters
   implicit none
-  Integer   :: i,j,k
   integer :: Imode
 
   do Imode = Ista, Iend
@@ -144,7 +143,7 @@ subroutine set_nnp_araidai
     call system('cp -r nnp_files '//trim(addresstmp))
     call system('cp training.data_1 '//trim(addresstmp))
     call system('cp n2training '//trim(addresstmp))
-  enddo
+  end do
 return
 end subroutine set_nnp_araidai
 
@@ -211,7 +210,58 @@ return
 9998 format(A, 3E17.9, x, A, 6E12.4)
 end subroutine force_nnp_araidai
 
+subroutine set_aenet
+  use Parameters
+  implicit none
+  integer :: Imode
+
+  do Imode = Ista, Iend
+! === change HERE ===
+    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') Imode,'/'
+    call system('mkdir -p '//trim(addresstmp))
+    call system('cp -r input_file '//trim(addresstmp))
+! === change HERE ===
+  end do
+end subroutine set_aenet
+
 subroutine force_nnp_aenet
+  use Parameters, &
+    only: pot_bead, r, fr, Natom, AU2Ang, eV2AU, dp_inv, alabel, &
+          addresstmp, address0, laddress, MyRank, Nbead, eVAng2AU, &
+          Lperiodic, Ista, Iend
+  use utility, only: program_abort
+  implicit none
+  character(len=:), allocatable :: key1, key2, key3, key4, key5, key6
+  character(len=120) :: line
+  character :: dummyC(10)
+  integer :: Uinp, Uout, Imode, Iatom, iline
+
+  key1  = ('keyword')
+
+  do Imode = Ista, Iend
+    write(addresstmp(laddress+1:laddress+6),'(i5.5,A1)') Imode,'/'
+! === change HERE ===
+    open(newunit=Uinp,file=trim(addresstmp)//'file_name')
+      do Iatom = 1, Natom
+        write(Uinp,*) alabel(Iatom), r(:,Iatom,Imode)*AU2Ang
+      end do
+    close(Uinp)
+
+    call system( trim(address0)//'run predict.x ' )
+
+    open(newunit=Uout,file=trim(addresstmp)//'file_name')
+    do
+      read(Uout,'(a)',end=101) line
+      iline=index(line,trim(key1))
+      if(iline > 0) exit
+    end do
+    do Iatom = 1, Natom
+      read(Uout,*) dummyC(1:2), fr(:,Iatom,Imode)
+    end do
+101 continue
+    close(Uout)
+! === change HERE ===
+  end do
 end subroutine force_nnp_aenet
 
 

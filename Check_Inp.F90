@@ -18,6 +18,9 @@ subroutine Check_Inp
       write(Uout,9999) ' +++++ Number of Dim       ', Ndim
       write(Uout,9999) ' +++++ Number of Beads     ', Nbead
       write(Uout,9999) ' +++++ Number of Steps     ', Nstep
+      if ( Isimulation == 3 ) then
+        write(Uout,9999) ' +++++ Number of HMC dyn   ', Ndyn
+      end if
 #ifdef _mpi_
       write(Uout,9999) ' +++++ Number of Nproc     ', Nproc
 #endif
@@ -27,6 +30,12 @@ subroutine Check_Inp
       write(Uout,9999) ' +++++ Method of Centr NHC ', Ncent
       write(Uout,9999) ' +++++ Length of Centr NHC ', Nnhc
       write(Uout,9999) ' +++++ Flag for Force Calc ', Iforce
+      if ( Isimulation == 3 ) then
+        write(Uout,9995) ' +++++ Flag for Dual HMC   ', Ldual
+        if ( Ldual ) then
+          write(Uout,9999) ' +++++ Target force calc   ', dual_Iforce
+        end if
+      end if
       write(Uout,9999) ' +++++ Seed for Random    ', Iseed
       write(Uout,9997) ' +++++ Address of Result   ', trim(dir_result)
       write(Uout,9997) ' +++++ Address of Scratch  ', trim(dir_scr)

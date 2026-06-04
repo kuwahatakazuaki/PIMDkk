@@ -46,7 +46,7 @@ module Parameters
   integer              :: Iforce    ! Type of force
   integer              :: Iseed     ! Random Number Generator Seed
   integer              :: Ista, Iend, laddress
-  integer, allocatable :: listeach(:),listeachtmp(:) !,ireqa(:,:),ireqb(:,:)
+  integer, allocatable :: listeach(:),listeachtmp(:)
 
   character(Len=2), allocatable :: alabel(:)
   character(len=8)     :: name_simulation
@@ -70,23 +70,20 @@ module Parameters
   logical :: Lrestart     = .False.
   logical :: Lrandom_coor = .False.
 
-! Kuwahata 2019/08/04 add some key parameters
   character (Len=20) :: version = "g16"
   real(8), allocatable :: pressure(:)
   real(8) :: virial, PV
-  !integer :: Iumb = 0
-  !integer :: umb_atom1 = 0, umb_atom2 = 0, umb_atom3 = 0
-  !real(8) :: umb_cons = 1d-5, umb_pot
-! End Kuwahata 2020/10/06
 
 ! Parameters for PIHMC
+  integer :: Ndyn = 20
   integer :: Naccept = 0, Nreject = 0
+  integer :: dual_Iforce = 0 ! Target force for dual-potential HMC
   real(8) :: ratio
-  real(8), allocatable :: &
-    r_old(:,:,:), fr_old(:,:,:), ur_old(:,:,:), vur_old(:,:,:)
+  real(8), allocatable :: r_old(:,:,:), fr_old(:,:,:), ur_old(:,:,:), vur_old(:,:,:)
   real(8), allocatable :: fur_old(:,:,:), fur_ref_old(:,:,:), pot_old(:)
   real(8)              :: dkinetic_old, qkinetic_old
   real(8)              :: potential_old, hamiltonian_old
+  logical :: Ldual = .False.
 ! Parameters for PIHMC
 
   integer :: Icons = 0, cons_atom1, cons_atom2, cons_atom3
@@ -109,6 +106,3 @@ module Struct_
      REAL(8) :: norm
   END TYPE force_
 end module Struct_
-
-!!YK If additional basis sets for g03 or g09 calculations are necessary
-!    Integer                       :: NGenGau

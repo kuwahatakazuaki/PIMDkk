@@ -7,7 +7,7 @@ subroutine Classical
   call Setup_time_mass
   call set_pallarel
   call Init_Mass
-  call set_Iforce
+  call set_Iforce(Iforce)
 
   if ( Lrestart .eqv. .True. ) then
     !call restart_read_classical

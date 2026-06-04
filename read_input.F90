@@ -26,6 +26,7 @@ subroutine read_parameter
       if     (index(line,"$Ndim")           == 1) then; read(Uin,*) Ndim
       elseif (index(line,"$Nbead")          == 1) then; read(Uin,*) Nbead
       elseif (index(line,"$Nstep")          == 1) then; read(Uin,*) Nstep
+      elseif (index(line,"$Ndyn")           == 1) then; read(Uin,*) Ndyn
       elseif (index(line,"$temperature")    == 1) then; read(Uin,*) temperature
       elseif (index(line,"$dt")             == 1) then; read(Uin,*) dt
       elseif (index(line,"$Isimulation")    == 1) then; read(Uin,*) Isimulation
@@ -36,6 +37,8 @@ subroutine read_parameter
       elseif (index(line,"$Ncent")          == 1) then; read(Uin,*) Ncent
       elseif (index(line,"$gamma")          == 1) then; read(Uin,*) gamma1
       elseif (index(line,"$Iforce")         == 1) then; read(Uin,*) Iforce
+      elseif (index(line,"$Ldual")          == 1) then; read(Uin,*) Ldual
+      elseif (index(line,"$dual_Iforce")    == 1) then; read(Uin,*) dual_Iforce
       elseif (index(line,"$freq1")          == 1) then; read(Uin,*) freq1
       elseif (index(line,"$version")        == 1) then; read(Uin,*) version
       elseif (index(line,"$Langstrom")      == 1) then; read(Uin,*) Langstrom
@@ -111,6 +114,14 @@ subroutine read_parameter
 
     if ( Ndim /= 1 .and. Ndim /= 3 ) then
       call program_abort("Ndim must be 1 or 3")
+    end if
+
+    if ( Isimulation == 3 .and. Ndyn <= 0 ) then
+      call program_abort("Ndyn must be positive for PIHMC")
+    end if
+
+    if ( Ldual .and. dual_Iforce <= 0 ) then
+      call program_abort("dual_Iforce must be set when Ldual is true")
     end if
 
     if ( access(trim(dir_result), ' ') /= 0 ) then

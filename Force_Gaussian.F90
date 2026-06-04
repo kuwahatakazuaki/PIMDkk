@@ -25,7 +25,6 @@ subroutine Force_Gaussian
     call program_abort('ERROR!!! wrong keyword of "version"')
   end if
 
-!  Call Start_Recv_Send_MPI_tk  ! Gather r (Coordinate)
 ! address0   : Scr
 ! addresstmp : Scr/000??
 

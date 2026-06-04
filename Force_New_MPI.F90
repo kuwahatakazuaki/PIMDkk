@@ -1,17 +1,18 @@
-subroutine Force_New_MPI
+subroutine Force_New_MPI(Iforce_eval)
   use Parameters
   use utility, only: program_abort
 #ifdef _mpi_
   use mpi_module, only: MyMPI_gather_fr, MyMPI_gather_others, MyMPI_scatter_r
 #endif
   implicit none
+  integer, intent(in) :: Iforce_eval
   integer :: i
 
 #ifdef _mpi_
   call MyMPI_scatter_r
 #endif
 
-  select case(Iforce)
+  select case(Iforce_eval)
 
 ! === Start Ab initio calculation ===
     case(1)
@@ -54,8 +55,9 @@ subroutine Force_New_MPI
     case(25)
       call Force_MACE
 #endif
-    !case(26)
-    !  call force_nnp_aenet
+    case(26)
+      call force_nnp_aenet
+
     case(31)
       call force_spcf
     case default
