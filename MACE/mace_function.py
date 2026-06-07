@@ -62,7 +62,7 @@ warnings.filterwarnings("ignore")
 os.environ['PYTHONWARNINGS'] = 'ignore'
 
 
-def calculate_energy_and_forces(atomic_numbers, positions, model_path, cell=None, pbc=True):
+def calculate_energy_and_forces(atomic_numbers, positions, model_path, cell=None, pbc=True, device="cpu"):
     """
     Calculate potential energy and forces of a molecule using MACE.
     
@@ -90,7 +90,7 @@ def calculate_energy_and_forces(atomic_numbers, positions, model_path, cell=None
         atoms.cell = np.array(cell, dtype=float)
         atoms.pbc = pbc
 
-    calculator = _get_calculator(model_path, positions)
+    calculator = _get_calculator(model_path, positions, device)
 
     # Attach the calculator to the atoms
     atoms.calc = calculator
@@ -102,13 +102,12 @@ def calculate_energy_and_forces(atomic_numbers, positions, model_path, cell=None
     return energy, forces
 
 
-def _get_calculator(model_path, positions):
-    cache_key = os.path.abspath(model_path)
+def _get_calculator(model_path, positions, device):
+    cache_key = (os.path.abspath(model_path), device)
     if cache_key in _CALCULATOR_CACHE:
         return _CALCULATOR_CACHE[cache_key]
 
     try:
-        device = "cuda" if torch.cuda.is_available() else "cpu"
         try:
             calculator = MACECalculator(model_paths=[model_path], device=device)
         except TypeError:

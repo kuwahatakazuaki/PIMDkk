@@ -41,6 +41,7 @@ subroutine read_parameter
       elseif (index(line,"$dual_Iforce")    == 1) then; read(Uin,*) dual_Iforce
       elseif (index(line,"$freq1")          == 1) then; read(Uin,*) freq1
       elseif (index(line,"$version")        == 1) then; read(Uin,*) version
+      elseif (index(line,"$device")         == 1) then; read(Uin,*) device
       elseif (index(line,"$Langstrom")      == 1) then; read(Uin,*) Langstrom
       elseif (index(line,"$Lrandom_coor")   == 1) then; read(Uin,*) Lrandom_coor
       elseif (index(line,"$Lperiodic")      == 1) then; read(Uin,*) Lperiodic

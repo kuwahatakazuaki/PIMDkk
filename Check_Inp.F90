@@ -52,6 +52,7 @@ subroutine Check_Inp
         call get_mace_model_path(mace_model_path)
         write(Uout,'(a)') ' +++++ MACE force field +++++'
         write(Uout,'(a,a)') ' +++++ MACE model      ', trim(mace_model_path)
+        write(Uout,'(a,a)') ' +++++ MACE device     ', trim(device)
         write(Uout,*)
       end if
 #endif

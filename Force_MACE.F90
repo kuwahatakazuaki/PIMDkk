@@ -251,7 +251,8 @@ subroutine Force_MACE
   use iso_c_binding, only: c_double, c_long
   use Parameters, &
     only: Natom, Nbead, Ista, Iend, r, fr, pot_bead, alabel, &
-          AU2Ang, eV2AU, eVAng2AU, dp_inv, Lperiodic, lattice
+          AU2Ang, eV2AU, eVAng2AU, dp_inv, Lperiodic, lattice, &
+          device
   use mace_force_config, only: get_mace_model_path, &
                                initialize_mace_interface, symbol_to_atomic_number
   use python_mace_interface, only: mace_calculate_energy_and_forces
@@ -286,7 +287,7 @@ subroutine Force_MACE
 
     call mace_calculate_energy_and_forces( &
          trim(model_path), Natom, atomic_numbers, positions, cell, &
-         energy, forces, pbc=Lperiodic)
+         energy, forces, pbc=Lperiodic, device=trim(device))
 
     pot_bead(imode) = energy * eV2AU
     do iatom = 1, Natom
@@ -302,8 +303,6 @@ end subroutine Force_MACE
 subroutine Finalize_MACE
   use mace_force_config, only: finalize_mace_interface
   implicit none
-
   call finalize_mace_interface()
-
   return
 end subroutine Finalize_MACE

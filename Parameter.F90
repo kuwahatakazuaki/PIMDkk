@@ -55,6 +55,7 @@ module Parameters
   character(len=7)     :: Ferr = "std.err"
   character(Len=80)    :: dir_result
   character(Len=80)    :: dir_scr
+  character(Len=16)    :: device = "cpu"
   Character(len=81)    :: address0
   Character(len=87)    :: addresstmp
 

@@ -213,7 +213,7 @@ contains
 
   subroutine mace_calculate_energy_and_forces( &
        model_path, n_atoms, atomic_numbers, positions, cell, energy, &
-       forces, extra_sys_path, pbc)
+       forces, extra_sys_path, pbc, device)
     implicit none
     character(len=*), intent(in) :: model_path
     integer, intent(in) :: n_atoms
@@ -224,6 +224,7 @@ contains
     real(c_double), intent(out) :: forces(n_atoms, 3)
     character(len=*), intent(in), optional :: extra_sys_path
     logical, intent(in), optional :: pbc
+    character(len=*), intent(in), optional :: device
 
     type(c_ptr) :: atomic_list_ptr, positions_list_ptr
     type(c_ptr) :: cell_list_ptr
@@ -234,8 +235,10 @@ contains
     type(c_ptr) :: empty_tuple_ptr
     type(c_ptr) :: py_model_path
     type(c_ptr) :: py_pbc
+    type(c_ptr) :: py_device
     integer :: i, j
     integer(c_ptrdiff_t) :: list_size
+    logical :: pbc_value
 
     if (.not. python_ready) then
       if (present(extra_sys_path)) then
@@ -297,7 +300,9 @@ contains
            'set cell row')
     end do
 
-    if (present(pbc)) then
+    if (present(device)) then
+      args_ptr = PyTuple_New(int(6, kind=c_size_t))
+    else if (present(pbc)) then
       args_ptr = PyTuple_New(int(5, kind=c_size_t))
     else
       args_ptr = PyTuple_New(int(4, kind=c_size_t))
@@ -317,12 +322,25 @@ contains
          PyTuple_SetItem(args_ptr, 3_c_ptrdiff_t, cell_list_ptr), &
          'set cell argument')
 
-    if (present(pbc)) then
-      py_pbc = PyBool_FromLong(merge(1_c_long, 0_c_long, pbc))
+    if (present(pbc) .or. present(device)) then
+      if (present(pbc)) then
+        pbc_value = pbc
+      else
+        pbc_value = .true.
+      end if
+      py_pbc = PyBool_FromLong(merge(1_c_long, 0_c_long, pbc_value))
       call ensure_ptr(py_pbc, 'convert pbc value')
       call ensure_ok( &
            PyTuple_SetItem(args_ptr, 4_c_ptrdiff_t, py_pbc), &
            'set pbc argument')
+    end if
+
+    if (present(device)) then
+      py_device = PyUnicode_FromString(to_c_chars(device))
+      call ensure_ptr(py_device, 'convert device')
+      call ensure_ok( &
+           PyTuple_SetItem(args_ptr, 5_c_ptrdiff_t, py_device), &
+           'set device argument')
     end if
 
     result_ptr = PyObject_CallObject(cached_func_ptr, args_ptr)
