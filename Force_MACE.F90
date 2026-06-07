@@ -1,6 +1,5 @@
 module mace_force_config
   use iso_c_binding, only: c_long
-  use Parameters, only: lattice, Lperiodic
   use python_mace_interface
   use utility, only: lowerchr, program_abort
   implicit none
@@ -21,63 +20,22 @@ module mace_force_config
 contains
 
   subroutine resolve_mace_paths()
-    character(len=1024) :: exe_path
-    character(len=1024) :: exe_dir
-    character(len=8192) :: path_env
-    character(len=1024) :: path_dir
-    character(len=2048) :: candidate
-    integer :: exe_len, arg_status, slash_pos
-    integer :: env_len, env_status, env_last
-    integer :: start_pos, colon_pos
-    integer :: access
+    integer :: env_len, env_status
 
     if (mace_paths_ready) return
 
-    exe_path = ''
-    exe_dir = '.'
-    call get_command_argument(0, exe_path, length=exe_len, status=arg_status)
-    if (arg_status == 0 .and. exe_len > 0) then
-      slash_pos = scan(trim(exe_path), '/', back=.true.)
-      if (slash_pos > 0) then
-        if (slash_pos == 1) then
-          exe_dir = '/'
-        else
-          exe_dir = exe_path(:slash_pos-1)
-        end if
-      else
-        ! argv[0] can be just "pimd.exe" when launched through PATH.
-        call get_environment_variable('PATH', path_env, &
-             length=env_len, status=env_status)
-        if ((env_status == 0 .or. env_status == -1) .and. env_len > 0) then
-          env_last = min(env_len, len(path_env))
-          start_pos = 1
-          do
-            colon_pos = index(path_env(start_pos:env_last), ':')
-            if (colon_pos == 0) then
-              path_dir = path_env(start_pos:env_last)
-            else if (colon_pos == 1) then
-              path_dir = '.'
-            else
-              path_dir = path_env(start_pos:start_pos+colon_pos-2)
-            end if
-
-            candidate = trim(path_dir)//'/'//trim(exe_path)
-            if (access(trim(candidate), ' ') == 0) then
-              exe_dir = trim(path_dir)
-              exit
-            end if
-
-            if (colon_pos == 0) exit
-            start_pos = start_pos + colon_pos
-            if (start_pos > env_last) exit
-          end do
-        end if
-      end if
+    call get_environment_variable('MACE_PYTHON_DIR', mace_python_dir, &
+         length=env_len, status=env_status)
+    if (env_status == -1) then
+      call program_abort('ERROR!!! MACE_PYTHON_DIR is too long')
+    end if
+    if (env_status /= 0 .or. env_len <= 0 .or. len_trim(mace_python_dir) == 0) then
+      call program_abort('ERROR!!! MACE_PYTHON_DIR is not set'//char(10)// &
+                         'Please set MACE_PYTHON_DIR, e.g. '// &
+                         'export MACE_PYTHON_DIR="/path/to/MACE"')
     end if
 
-    mace_python_dir = trim(exe_dir)//'/MACE'
     mace_helper_path = trim(mace_python_dir)//'/mace_function.py'
-    mace_model_path = trim(mace_python_dir)//'/small_mace_model.model'
     mace_paths_ready = .true.
   end subroutine resolve_mace_paths
 
@@ -87,9 +45,15 @@ contains
 
     call resolve_mace_paths()
 
-    call get_environment_variable('MACE_MODEL', mace_model_path, &
-         length=env_len, status=env_status)
-    if (env_status /= 0) mace_model_path = trim(mace_python_dir)//'/small_mace_model.model'
+    call get_environment_variable('MACE_MODEL', mace_model_path, length=env_len, status=env_status)
+    if (env_status == -1) then
+      call program_abort('ERROR!!! MACE_MODEL is too long')
+    end if
+    if (env_status /= 0 .or. env_len <= 0 .or. len_trim(mace_model_path) == 0) then
+      call program_abort('ERROR!!! MACE_MODEL is not set'//char(10)// &
+                         'Please set MACE_MODEL, e.g. '// &
+                         'export MACE_MODEL="/path/to/your/model.model"')
+    end if
 
     model_path = trim(mace_model_path)
   end subroutine get_mace_model_path
@@ -259,10 +223,13 @@ subroutine set_MACE
   call get_mace_model_path(model_path)
 
   if (access(mace_python_dir, ' ') /= 0) then
-    call program_abort('ERROR!!! There is no MACE directory: '//mace_python_dir)
+    call program_abort('ERROR!!! There is no MACE directory: '//trim(mace_python_dir)// &
+                       char(10)//'Please set MACE_PYTHON_DIR, e.g. '// &
+                       'export MACE_PYTHON_DIR="/path/to/MACE"')
   end if
   if (access(mace_helper_path, ' ') /= 0) then
-    call program_abort('ERROR!!! There is no MACE Python helper: '//mace_helper_path)
+    call program_abort('ERROR!!! There is no MACE Python helper: '//trim(mace_helper_path)// &
+                       char(10)//'MACE_PYTHON_DIR must contain mace_function.py')
   end if
   if (access(trim(model_path), ' ') /= 0) then
     call program_abort('ERROR!!! There is no MACE model: '//trim(model_path)// &

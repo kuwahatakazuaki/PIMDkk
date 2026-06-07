@@ -6,10 +6,12 @@ pimddir="/Users/kuwahatakazuaki/Desktop/PIMD/NewPIMD/bin"
 dir_result=`grep -A1 "address_result" $input |tail -1`
 dir_scratch=`grep -A1 "address_scr" $input |tail -1`
 Lrestart=`grep -A1 "Lrestart" $input |tail -1`
-simulation=`grep -A1 "Simulation" $input |tail -1`
+simulation=`grep -A1 "Isimulation" $input |tail -1`
 
 # Set the MACE model when using MACE.
-export MACE_MODEL="./medium.MACE.model"
+export MACE_PYTHON_DIR="$pimddir/MACE"
+export MACE_MODEL="$MACE_PYTHON_DIR/small_mace_model.model"
+
 export TIME="User: %U, System: %S, Elapsed: %E
 CPU: %P, Resident size: %M KB
 Share Text: %X, Unshare Data: %D Kb
