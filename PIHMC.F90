@@ -77,7 +77,9 @@ subroutine PIHMC_normal
 
   else
     do istepsv = Irestep+1, Nstep
-      call Force_New_MPI(Iforce)
+      do Idyn = 1, Ndyn
+        call Force_New_MPI(Iforce)
+      end do
     end do
   end if
 
