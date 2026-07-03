@@ -16,6 +16,10 @@ subroutine PIHMC_normal
   if ( Lrestart .eqv. .True. ) then
     call restart_read
     call Broad3
+    call nmtrans_ur2r
+    call Force_New_MPI(Iforce)
+    call nmtrans_fr2fur
+    call getenergy_hmc
   else
     call print_ini
     call NM_Position
