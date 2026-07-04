@@ -3,7 +3,9 @@ OBJS    = $(SRCS:%.F90=%.o)
 OBJS   += $(OBJ_LAMMPS)
 DIR_LAMMPS = LAMMPS
 DIR_MACE = MACE
+DIR_PFP = PFP
 MACE ?= True
+PFP ?= False   # MACE と違いデフォルト無効。有効化は明示的な PFP=True のみ (D1 の安全側フェイル)
 # MACE ?= False
 # GFLAG   =  -JModule -IModule
 # MPI  = True
@@ -11,12 +13,33 @@ MACE ?= True
 ifeq ($(MACE),True)
 SRC_MACE = $(DIR_MACE)/fortran_mace_isoc.F90 Force_MACE.F90
 OBJ_MACE = $(SRC_MACE:%.F90=%.o)
-PYINC = $(shell python3-config --includes)
-PYLIB = $(shell python3-config --embed --ldflags)
 DFLAG += -D_MACE_
 else
 SRC_MACE =
 OBJ_MACE =
+endif
+
+ifeq ($(PFP),True)
+SRC_PFP = $(DIR_PFP)/fortran_pfp_isoc.F90 Force_PFP.F90
+OBJ_PFP = $(SRC_PFP:%.F90=%.o)
+DFLAG += -D_PFP_
+else
+SRC_PFP =
+OBJ_PFP =
+endif
+
+# MACE か PFP のどちらかが有効なら Python 埋め込みビルドに必要なフラグを設定する
+ifeq ($(MACE),True)
+NEED_PYTHON = True
+endif
+ifeq ($(PFP),True)
+NEED_PYTHON = True
+endif
+
+ifeq ($(NEED_PYTHON),True)
+PYINC = $(shell python3-config --includes)
+PYLIB = $(shell python3-config --embed --ldflags)
+else
 PYINC =
 PYLIB =
 endif
@@ -70,6 +93,7 @@ Broad.F90                          \
 read_input.F90                     \
 Set_Allocate.F90                   \
 $(SRC_MACE)                        \
+$(SRC_PFP)                         \
 Check_Inp.F90                      \
 Calc_Constant.F90                  \
 Setup_time_mass.F90                \
@@ -154,10 +178,11 @@ endif
 	$(FC) $(FCOPT) -c -o $*.o $*.f
 	@echo
 
-clean: 
+clean:
 	rm -rf *.o $(PROG) *.mod *exe
 	rm -rf $(DIR_LAMMPS)/*.o
 	rm -rf $(DIR_MACE)/*.o
+	rm -rf $(DIR_PFP)/*.o
 #	del *.o $(program) *.mod 
 
 
