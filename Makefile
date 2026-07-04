@@ -62,6 +62,7 @@ FCOPT  = -O2 -pipe # -JModule
 SRCS  = \
 Parameter.F90                      \
 utility.F90                        \
+element_table.F90                  \
 mod_model_force.F90                \
 mpi_module.F90                     \
 main.F90                           \
