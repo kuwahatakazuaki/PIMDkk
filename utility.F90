@@ -167,6 +167,12 @@ contains
         + mat(1,3)*mat(2,1)*mat(3,2) - mat(1,3)*mat(2,2)*mat(3,1)
   end function calc_determinant33
 
+  function det3(mat) result(det)
+    real(8), intent(in) :: mat(3,3)
+    real(8) :: det
+    det = calc_determinant33(mat)
+  end function det3
+
   !function outer_product(a,b) result(vec)
   function crossr_product(a,b) result(vec)
     real(8), intent(in) :: a(3), b(3)

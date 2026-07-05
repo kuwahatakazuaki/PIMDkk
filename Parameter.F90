@@ -14,6 +14,8 @@ module Parameters
   real(8), parameter :: eVAng2AU  = eV2AU * AU2Ang
   real(8), parameter :: AU2kcalPmol = 627.509469d0 ! 1 Hartree = 627.509469 kcal/mol
   real(8), parameter :: kcalPmol2AU = 1.0d0/AU2kcalPmol
+  real(8), parameter :: bar2AU = 1.0d5/2.94210157d13
+  real(8), parameter :: kB2AU  = 1.0d8/2.94210157d13
   integer, parameter :: LINELEN = 120
 
   integer              :: Natom, Nbead, Nstep, Isimulation, Ndim = 3
@@ -31,12 +33,15 @@ module Parameters
   real(8), allocatable :: qmcent11(:), qmcent31(:)
   real(8), allocatable :: dipoler(:,:)
   real(8), allocatable :: charge(:,:), pot_bead(:), hfcc(:,:), nbo(:,:) ! Eenergy(:)
+  real(8), allocatable :: W_pot_bead(:)
   real(8)              :: gamma1 = 1.0d0, gamma2, omega_system
   real(8)              :: omega_p2, omega2
   real(8)              :: gkt, gnkt, dp_inv, E_Virial
   real(8)              :: ebath, ebath_cent, dkinetic, qkinetic
   real(8)              :: beta, temperature, dt, dt_ref
   real(8)              :: potential, hamiltonian, temp_inst
+  real(8)              :: vol, W_pot
+  real(8)              :: press_cv, press_prim, press_inst
   real(8)              :: freq1 = 10.0d0
   real(8)              :: lattice(3,3)
 

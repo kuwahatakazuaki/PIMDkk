@@ -41,6 +41,8 @@ subroutine Set_Allocate
   allocate( hfcc(Natom,Nbead))
   allocate( nbo(Natom,Nbead))
   allocate( pot_bead(Nbead))
+  allocate( W_pot_bead(Nbead))
+  W_pot_bead(:) = 0.0d0
 
   select case(Ncent)
     case(1)
@@ -59,4 +61,3 @@ subroutine Set_Allocate
 
   return
 end subroutine Set_Allocate
-

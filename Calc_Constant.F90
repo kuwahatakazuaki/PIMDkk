@@ -1,5 +1,6 @@
 subroutine Calc_Constant
   use Parameters
+  use utility, only: det3
   implicit none
   integer :: iatom
   real(8) :: omega_p, dp
@@ -10,6 +11,7 @@ subroutine Calc_Constant
   beta   = 1.d0/(temperature*K2AU)
   !! Frequency of the system
   omega_system = 2.d0*pi/(freq1*fs2AU)
+  vol = abs(det3(lattice)) * Ang2AU**3
 
   select case(Ndim)
     case(3)

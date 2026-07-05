@@ -14,6 +14,7 @@ Subroutine Set_Deallocate
   deallocate(hfcc)
   deallocate(nbo)
   deallocate(pot_bead)
+  deallocate(W_pot_bead)
 
   if ( Isimulation /= 10 ) then
     deallocate(fur_ref)
@@ -45,5 +46,4 @@ Subroutine Set_Deallocate
 
   return
 end subroutine Set_Deallocate
-
 
