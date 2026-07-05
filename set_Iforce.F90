@@ -32,6 +32,8 @@ subroutine set_Iforce(Iforce_eval)
 
     case(26)
       call set_aenet
+    case(32)
+      continue
 
   end select
 

@@ -12,6 +12,8 @@ subroutine Force_New_MPI(Iforce_eval)
   call MyMPI_scatter_r
 #endif
 
+  W_pot_bead(:) = 0.0d0
+
   select case(Iforce_eval)
 
 ! === Start Ab initio calculation ===
@@ -39,6 +41,8 @@ subroutine Force_New_MPI(Iforce_eval)
       call Force_Harmonic
     case(16)
       call Force_Double_Morse
+    case(32)
+      call Force_model_LJ_PBC
 ! === End model calculation ===
 
     case(21)

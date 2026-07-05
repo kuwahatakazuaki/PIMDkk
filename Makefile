@@ -127,6 +127,7 @@ Set_Gaussian_MPI_tk.F90            \
 Force_Gaussian.F90                 \
 print_ham.F90                      \
 Force_model_Morse.F90              \
+Force_model_LJ_PBC.F90             \
 Force_VASP_MPI.F90                 \
 print_result.F90                   \
 force_siesta.F90                   \

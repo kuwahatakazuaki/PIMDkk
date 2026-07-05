@@ -4,6 +4,7 @@ Subroutine Force_Classical
   implicit none
 
   r(:,:,1) = ur(:,:,1)
+  W_pot_bead(:) = 0.0d0
 
   select case(Iforce)
 
@@ -23,6 +24,8 @@ Subroutine Force_Classical
       call Force_Harmonic
     case(16)
       call Force_Double_Morse
+    case(32)
+      call Force_model_LJ_PBC
 ! === End model calculation ===
 
     case(21)

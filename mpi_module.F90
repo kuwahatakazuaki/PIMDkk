@@ -27,6 +27,13 @@ contains
       call MPI_Gather(pot_bead(Ista),MyNbead,MPI_DOUBLE_PRECISION, &
                       pot_bead(Ista),MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
     end if
+    if ( MyRank == 0 ) then
+      call MPI_Gather(MPI_IN_PLACE, MyNbead,MPI_DOUBLE_PRECISION, &
+                      W_pot_bead(Ista),MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+    else
+      call MPI_Gather(W_pot_bead(Ista),MyNbead,MPI_DOUBLE_PRECISION, &
+                      W_pot_bead(Ista),MyNbead,MPI_DOUBLE_PRECISION,0,MPI_COMM_WORLD,ierr)
+    end if
   end subroutine MyMPI_gather_fr
 
   subroutine MyMPI_gather_others
@@ -119,4 +126,3 @@ contains
 #endif
 
 end module mpi_module
-
