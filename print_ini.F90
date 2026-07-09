@@ -2,7 +2,7 @@ subroutine print_ini
   use Parameters
   use utility, only: program_abort
   implicit none
-  integer :: i, Uham, Uchar, Uhfc, Uout, Udip, Ucon
+  integer :: i, Uham, Uchar, Uhfc, Uout, Udip, Ucon, Upre
 
 if (MyRank == 0) then
 
@@ -71,6 +71,12 @@ if (MyRank == 0) then
     open(newunit=Ucon,file=trim(dir_result)//'/constraint.dat',status='replace',form='formatted',position='append')
       write(Ucon,'(a)') '#  1step 2time_fs       3cons_cv       4dVdcons_cv 5potential_cons'
     close(Ucon)
+  end if
+
+  if ( Lperiodic .and. Iforce == 32 ) then
+    open(newunit=Upre,file=trim(dir_result)//'/pressure.dat',status='replace',form='formatted',position='append')
+      write(Upre,'(a)') '# 1step 2time_fs 3P_cv_bar 4P_prim_bar 5P_inst_bar 6volume_A3 7a_A 8b_A 9c_A 10W_pot_au'
+    close(Upre)
   end if
 
 end if

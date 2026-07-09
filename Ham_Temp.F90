@@ -85,6 +85,7 @@ subroutine Ham_Temp
     hamiltonian = hamiltonian + ebath + ebath_cent
 
   call Virial_Estimator
+  if ( Lperiodic .and. Iforce == 32 ) call calc_internal_pressure
 
   return
 end subroutine Ham_Temp

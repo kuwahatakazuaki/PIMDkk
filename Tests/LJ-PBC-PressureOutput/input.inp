@@ -1,0 +1,66 @@
+$Ndim
+3
+$Nbead
+1
+$temperature
+100.0
+$Nstep
+2
+$dt
+0.1
+$Isimulation
+10
+$out_step
+1
+$Ncent
+1
+$Lrestart
+.F.
+$Iforce
+32
+$address_result
+./Result
+$address_scr
+./Scr
+$seed
+101
+$Langstrom
+.T.
+$Lrandom_coor
+.F.
+$Lperiodic
+.T.
+$lattice
+10.0 0.0 0.0
+0.0 10.0 0.0
+0.0 0.0 10.0
+$Lsave_charge
+.F.
+$Lsave_hfcc
+.F.
+$Lsave_dipole
+.F.
+$Lsave_force
+.F.
+$Lsave_energy
+.F.
+$version
+g16
+$Nref
+1
+$Nys
+1
+$Nnhc
+1
+$gamma
+1.0
+$Icons
+0
+$end parameter
+
+$Coords
+Ar 1.0 1.0 1.0
+Ar 3.0 1.0 1.0
+Ar 1.0 3.0 1.0
+Ar 1.0 1.0 3.0
+$end Coords

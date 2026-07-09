@@ -5,6 +5,7 @@ subroutine print_result
   integer :: i,j,k, imode, iatom
   integer :: Upre, Udip, Uchar, Uhfc, Ucoor, Ufor, Uene, Ucon
   character(len=5) :: pbc_xyz
+  real(8) :: cell_len(3)
 
 if (MyRank==0) then
 
@@ -35,18 +36,16 @@ if (MyRank==0) then
     close(Uhfc)
   end if
 
-  !if ( Iforce == 8 ) then
-  !  open(newunit=Upre,file=trim(dir_result)//'/pressure.dat',status='unknown',form='formatted',position='append')
-  !    write(Upre,'("#", I10)') istepsv
-  !    do imode=1,nbead
-  !      write(Upre,'(F7.2)') pressure(imode)
-  !    end do
-  !  close(Upre)
-
-  !  open(newunit=Upre,file=trim(dir_result)//'/PV.dat',status='unknown',form='formatted',position='append')
-  !    write(Upre,*) istepsv, PV
-  !  close(Upre)
-  !end if
+  if ( Lperiodic .and. Iforce == 32 ) then
+    do i = 1, 3
+      cell_len(i) = sqrt(sum(lattice(i,:)**2))
+    end do
+    open(newunit=Upre,file=trim(dir_result)//'/pressure.dat',status='unknown',form='formatted',position='append')
+      write(Upre,8010) istepsv, dble(istepsv) * dt / fs2AU, &
+                       press_cv / bar2AU, press_prim / bar2AU, press_inst / bar2AU, &
+                       vol * AU2Ang**3, cell_len(:), W_pot
+    close(Upre)
+  end if
 
   open(Ucoor,file=trim(dir_result)//'/coor.xyz',status='unknown',form='formatted',position='append')
     if (Lperiodic .eqv. .True.) then
@@ -55,7 +54,11 @@ if (MyRank==0) then
       pbc_xyz = 'F F F'
     end if
     write(Ucoor,'(I5)') natom*nbead
-    write(Ucoor,'(a,a,a,i0)') 'Properties=species:S:1:pos:R:3 pbc="', pbc_xyz, '" step=', istepsv
+    if (Lperiodic .eqv. .True.) then
+      write(Ucoor,8011) lattice(1,:), lattice(2,:), lattice(3,:), pbc_xyz, istepsv
+    else
+      write(Ucoor,'(a,a,a,i0)') 'Properties=species:S:1:pos:R:3 pbc="', pbc_xyz, '" step=', istepsv
+    end if
     do imode=1,nbead
       do iatom=1,natom
         write(Ucoor,9999) alabel(iatom),r(:,iatom,imode)*AU2Ang
@@ -106,6 +109,8 @@ end if
 8007 format(100F10.6)  ! Charge
 8008 format(4F10.5)    ! Dipole
 8009 format(I7,4E15.7)
+8010 format(I7,9E17.9)
+8011 format('Lattice="',9(ES23.15,1X),'" Properties=species:S:1:pos:R:3 pbc="',a,'" step=',i0)
 9995 format(4E23.15)
 
 return

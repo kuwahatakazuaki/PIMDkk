@@ -18,8 +18,8 @@ subroutine Classical
     call Init_Bath
     call Temp_ctr
     call Force_Classical
-    if ( mod(istepsv,out_step) == 0 ) call print_result
     call Ham_Temp_Classical
+    if ( mod(istepsv,out_step) == 0 ) call print_result
     call print_ham(Irestep)
   end if
 
@@ -35,7 +35,6 @@ subroutine Classical
     call update_vel_nor
     call update_pos_nor
     call Force_Classical
-    if ( mod(istepsv,out_step) == 0 ) call print_result
     call update_vel_nor
     select case(Ncent)
       case(0)
@@ -46,6 +45,7 @@ subroutine Classical
         call Nhc_Integrate_Cent3
     end select
     call Ham_Temp_Classical
+    if ( mod(istepsv,out_step) == 0 ) call print_result
     call print_ham(istepsv)
     if ( mod(istepsv,out_step)==0 ) call restart_write(istepsv)
 
