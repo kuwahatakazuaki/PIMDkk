@@ -37,7 +37,7 @@ Subroutine Ham_Temp_Classical
       enddo
   end select
   hamiltonian = hamiltonian + ebath_cent
-  if ( Lperiodic .and. Iforce == 32 ) call calc_internal_pressure
+  if ( Lperiodic ) call calc_internal_pressure
 
   return
 end subroutine Ham_Temp_Classical

@@ -119,7 +119,7 @@ subroutine Force_MACE
   use Parameters, &
     only: Natom, Nbead, Ista, Iend, r, fr, pot_bead, alabel, &
           AU2Ang, eV2AU, eVAng2AU, dp_inv, Lperiodic, lattice, &
-          device
+          device, W_pot_bead, vol
   use mace_force_config, only: get_mace_model_path, &
                                initialize_mace_interface, symbol_to_atomic_number
   use python_mace_interface, only: mace_calculate_energy_and_forces
@@ -131,6 +131,7 @@ subroutine Force_MACE
   real(c_double) :: cell(3, 3)
   real(c_double) :: energy
   real(c_double) :: forces(Natom, 3)
+  real(c_double) :: stress(3, 3)
   character(len=256) :: model_path
 
   call initialize_mace_interface()
@@ -154,9 +155,12 @@ subroutine Force_MACE
 
     call mace_calculate_energy_and_forces( &
          trim(model_path), Natom, atomic_numbers, positions, cell, &
-         energy, forces, pbc=Lperiodic, device=trim(device))
+         energy, forces, stress, pbc=Lperiodic, device=trim(device))
 
     pot_bead(imode) = energy * eV2AU
+    if ( Lperiodic ) then
+      W_pot_bead(imode) = -vol * (stress(1,1) + stress(2,2) + stress(3,3)) * eV2AU * AU2Ang**3
+    end if
     do iatom = 1, Natom
       do idir = 1, 3
         fr(idir, iatom, imode) = forces(iatom, idir) * eVAng2AU * dp_inv

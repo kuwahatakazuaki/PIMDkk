@@ -42,6 +42,7 @@ subroutine Force_VASP
         if(iline > 0) exit
       enddo
       read(line,*) Cdummy(1:3), pressure(Imode)
+      W_pot_bead(Imode) = 3.0d0 * vol * pressure(Imode) * kB2AU
 ! +++ End  "external pressure" +++
 
 ! +++ Reading "TOTAL-FORCE" +++
@@ -84,6 +85,5 @@ return
 402 print *, 'ERROR!!: We can not find "TOTAL-FORCE" in VASP output'; stop
 403 print *, 'ERROR!!: We can not find "external pressure" in VASP output'; stop
 end subroutine Force_VASP
-
 
 

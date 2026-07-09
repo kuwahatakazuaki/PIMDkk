@@ -73,7 +73,7 @@ if (MyRank == 0) then
     close(Ucon)
   end if
 
-  if ( Lperiodic .and. Iforce == 32 ) then
+  if ( Lperiodic ) then
     open(newunit=Upre,file=trim(dir_result)//'/pressure.dat',status='replace',form='formatted',position='append')
       write(Upre,'(a)') '# 1step 2time_fs 3P_cv_bar 4P_prim_bar 5P_inst_bar 6volume_A3 7a_A 8b_A 9c_A 10W_pot_au'
     close(Upre)

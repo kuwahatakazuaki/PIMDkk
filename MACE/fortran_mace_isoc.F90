@@ -213,7 +213,7 @@ contains
 
   subroutine mace_calculate_energy_and_forces( &
        model_path, n_atoms, atomic_numbers, positions, cell, energy, &
-       forces, extra_sys_path, pbc, device)
+       forces, stress, extra_sys_path, pbc, device)
     implicit none
     character(len=*), intent(in) :: model_path
     integer, intent(in) :: n_atoms
@@ -222,6 +222,7 @@ contains
     real(c_double), intent(in) :: cell(3, 3)
     real(c_double), intent(out) :: energy
     real(c_double), intent(out) :: forces(n_atoms, 3)
+    real(c_double), intent(out) :: stress(3, 3)
     character(len=*), intent(in), optional :: extra_sys_path
     logical, intent(in), optional :: pbc
     character(len=*), intent(in), optional :: device
@@ -230,7 +231,7 @@ contains
     type(c_ptr) :: cell_list_ptr
     type(c_ptr) :: row_ptr, value_ptr
     type(c_ptr) :: args_ptr, result_ptr
-    type(c_ptr) :: energy_obj_ptr, forces_obj_ptr
+    type(c_ptr) :: energy_obj_ptr, forces_obj_ptr, stress_obj_ptr
     type(c_ptr) :: tolist_method_ptr, tolist_result_ptr
     type(c_ptr) :: empty_tuple_ptr
     type(c_ptr) :: py_model_path
@@ -351,6 +352,7 @@ contains
 
     energy_obj_ptr = PyTuple_GetItem(result_ptr, 0_c_ptrdiff_t)
     forces_obj_ptr = PyTuple_GetItem(result_ptr, 1_c_ptrdiff_t)
+    stress_obj_ptr = PyTuple_GetItem(result_ptr, 2_c_ptrdiff_t)
 
     energy = PyFloat_AsDouble(energy_obj_ptr)
 
@@ -373,6 +375,28 @@ contains
       do j = 1, 3
         value_ptr = PyList_GetItem(row_ptr, int(j-1, kind=c_ptrdiff_t))
         forces(i, j) = PyFloat_AsDouble(value_ptr)
+      end do
+    end do
+
+    tolist_method_ptr = PyObject_GetAttrString(stress_obj_ptr, to_c_chars(tolist_name))
+    call ensure_ptr(tolist_method_ptr, 'get stress tolist method')
+
+    empty_tuple_ptr = PyTuple_New(int(0, kind=c_size_t))
+    call ensure_ptr(empty_tuple_ptr, 'create stress empty tuple')
+
+    tolist_result_ptr = PyObject_CallObject(tolist_method_ptr, empty_tuple_ptr)
+    call ensure_ptr(tolist_result_ptr, 'call stress tolist')
+
+    list_size = PyList_Size(tolist_result_ptr)
+    if (list_size /= 3) then
+      stop 'Unexpected stress list size'
+    end if
+
+    do i = 1, 3
+      row_ptr = PyList_GetItem(tolist_result_ptr, int(i-1, kind=c_ptrdiff_t))
+      do j = 1, 3
+        value_ptr = PyList_GetItem(row_ptr, int(j-1, kind=c_ptrdiff_t))
+        stress(i, j) = PyFloat_AsDouble(value_ptr)
       end do
     end do
   end subroutine mace_calculate_energy_and_forces

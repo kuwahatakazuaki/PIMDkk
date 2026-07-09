@@ -79,6 +79,8 @@ def calculate_energy_and_forces(atomic_numbers, positions, model_path, cell=None
         Potential energy of the molecule in eV
     forces : numpy array
         Forces acting on each atom in eV/Å, shape (n_atoms, 3)
+    stress : numpy array
+        Stress tensor in eV/Å^3, shape (3, 3), or zeros for non-periodic inputs
     """
     # Convert inputs to appropriate formats if needed
     atomic_numbers = np.array(atomic_numbers)
@@ -98,8 +100,12 @@ def calculate_energy_and_forces(atomic_numbers, positions, model_path, cell=None
     # Calculate energy and forces
     energy = atoms.get_potential_energy()
     forces = atoms.get_forces()
+    if pbc:
+        stress = atoms.get_stress(voigt=False)
+    else:
+        stress = np.zeros((3, 3), dtype=float)
     
-    return energy, forces
+    return energy, forces, stress
 
 
 def _get_calculator(model_path, positions, device):

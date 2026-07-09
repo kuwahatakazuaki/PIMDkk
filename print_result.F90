@@ -36,7 +36,7 @@ if (MyRank==0) then
     close(Uhfc)
   end if
 
-  if ( Lperiodic .and. Iforce == 32 ) then
+  if ( Lperiodic ) then
     do i = 1, 3
       cell_len(i) = sqrt(sum(lattice(i,:)**2))
     end do
