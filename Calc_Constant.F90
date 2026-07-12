@@ -6,6 +6,7 @@ subroutine Calc_Constant
   real(8) :: omega_p, dp
 
   dt = dt*fs2AU   ! fs -> AU
+  opt_maxstep = opt_maxstep*Ang2AU   ! Angstrom -> AU
   physmass(1:natom) = physmass(1:natom)*amu2AU  ! amu -> AU
 
   beta   = 1.d0/(temperature*K2AU)

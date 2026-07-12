@@ -32,6 +32,9 @@ subroutine read_parameter
       elseif (index(line,"$Isimulation")    == 1) then; read(Uin,*) Isimulation
       elseif (index(line,"$Nref")           == 1) then; read(Uin,*) Nref
       elseif (index(line,"$out_step")       == 1) then; read(Uin,*) out_step
+      elseif (index(line,"$opt_fmax")       == 1) then; read(Uin,*) opt_fmax
+      elseif (index(line,"$opt_maxstep")    == 1) then; read(Uin,*) opt_maxstep
+      elseif (index(line,"$opt_history")     == 1) then; read(Uin,*) opt_history
       elseif (index(line,"$Nys")            == 1) then; read(Uin,*) Nys
       elseif (index(line,"$Nnhc")           == 1) then; read(Uin,*) Nnhc
       elseif (index(line,"$Ncent")          == 1) then; read(Uin,*) Ncent
@@ -107,6 +110,9 @@ subroutine read_parameter
         Ncent = 0
       case(10)
         name_simulation = "CLMD"
+      case(11)
+        name_simulation = "OPT"
+        Ncent = 0
     end select
 
     if ( Isimulation == 1 .and. Ncent > 0 ) then
@@ -123,6 +129,18 @@ subroutine read_parameter
 
     if ( Ldual .and. dual_Iforce <= 0 ) then
       call program_abort("dual_Iforce must be set when Ldual is true")
+    end if
+
+    if ( Isimulation == 11 .and. Nbead /= 1 ) then
+      call program_abort("Set Nbead=1 for Isimulation=11")
+    end if
+
+    if ( Isimulation == 11 .and. Lrestart ) then
+      call program_abort("Geometry optimization restart is unsupported")
+    end if
+
+    if ( Isimulation == 11 .and. Nproc > 1 ) then
+      call program_abort("Geometry optimization is serial-only")
     end if
 
     if ( access(trim(dir_result), ' ') /= 0 ) then
