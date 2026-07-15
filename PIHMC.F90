@@ -19,6 +19,7 @@ subroutine PIHMC_normal
     call nmtrans_ur2r
     call Force_New_MPI(Iforce)
     call nmtrans_fr2fur
+    if ( Ldual ) call eval_potential_hmc
     call getenergy_hmc
   else
     call print_ini
@@ -34,6 +35,8 @@ subroutine PIHMC_normal
 
     call Ham_Temp
     call print_ham(Irestep)
+    if ( Ldual ) call eval_potential_hmc
+    call getenergy_hmc
   end if
 
   call getforce_ref_nor
@@ -64,6 +67,7 @@ subroutine PIHMC_normal
 
       end do loop_dyn
 
+      if ( Ldual ) call eval_potential_hmc
       call getenergy_hmc
       call judge_hmc
 
@@ -164,6 +168,7 @@ contains
     fur_ref(:,:,:)   = fur_ref_old(:,:,:)
     pot_bead(:)      = pot_old(:)
     potential        = potential_old
+    potential_hmc    = potential_hmc_old
     dkinetic         = dkinetic_old
     qkinetic         = qkinetic_old
     hamiltonian      = hamiltonian_old
@@ -178,6 +183,7 @@ contains
     fur_ref_old(:,:,:) = fur_ref(:,:,:)
     pot_old(:)         = pot_bead(:)
     potential_old      = potential
+    potential_hmc_old  = potential_hmc
     dkinetic_old       = dkinetic
     qkinetic_old       = qkinetic
     hamiltonian_old    = hamiltonian
@@ -199,12 +205,8 @@ contains
     end do
     end do
 
-    ! === Change HERE
-    if ( Ldual ) then
-    end if
-    ! === Change HERE
-
-    hamiltonian = dkinetic + qkinetic + potential
+    if ( .not. Ldual ) potential_hmc = potential
+    hamiltonian = dkinetic + qkinetic + potential_hmc
   end subroutine getenergy_hmc
 
 
