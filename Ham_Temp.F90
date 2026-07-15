@@ -39,9 +39,17 @@ subroutine Ham_Temp
 !
     ! Add the harmonic constraint energy only when constraints are enabled.
     if ( Icons > 0 ) then
-      hamiltonian = dkinetic + potential + potential_cons + qkinetic
+      if ( Ldual ) then
+        hamiltonian = dkinetic + potential_hmc + potential_cons + qkinetic
+      else
+        hamiltonian = dkinetic + potential + potential_cons + qkinetic
+      end if
     else
-      hamiltonian = dkinetic + potential + qkinetic
+      if ( Ldual ) then
+        hamiltonian = dkinetic + potential_hmc + qkinetic
+      else
+        hamiltonian = dkinetic + potential + qkinetic
+      end if
     end if
 !
 !   /*  sum bath variables  */
@@ -84,7 +92,7 @@ subroutine Ham_Temp
 !YK include new centroid thermostat energies
     hamiltonian = hamiltonian + ebath + ebath_cent
 
-  call Virial_Estimator
+  if ( .not. Ldual ) call Virial_Estimator
   if ( Lperiodic ) call calc_internal_pressure
 
   return

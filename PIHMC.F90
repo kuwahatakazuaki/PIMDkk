@@ -23,6 +23,7 @@ subroutine PIHMC_normal
     call getenergy_hmc
   else
     call print_ini
+    if ( MyRank == 0 ) call init_pihmc_output
     call NM_Position
     if (MyRank == 0) then
       call Init_Velocity
@@ -33,9 +34,9 @@ subroutine PIHMC_normal
     if ( mod(istepsv,out_step) == 0 ) call print_result
     call nmtrans_fr2fur     !call Getfnm  ! fu(i) = fu(i) + sum_j fx(j)*tnm(j,i)
 
+    if ( Ldual ) call eval_potential_hmc
     call Ham_Temp
     call print_ham(Irestep)
-    if ( Ldual ) call eval_potential_hmc
     call getenergy_hmc
   end if
 
@@ -101,6 +102,15 @@ subroutine PIHMC_normal
 
 contains
 
+  subroutine init_pihmc_output
+    implicit none
+    integer :: Uout
+
+    open(newunit=Uout,file=trim(dir_result)//'/pihmc.out',status='replace',form='formatted')
+      write(Uout,'(a)') '# 1 Step  2 AcceptanceRatio  3 ProposalPotential  4 TargetPotential'
+    close(Uout)
+  end subroutine init_pihmc_output
+
   subroutine eval_potential_hmc
     implicit none
     real(8) :: fr_sv(Ndim,Natom,Nbead), pot_bead_sv(Nbead), potential_sv
@@ -111,6 +121,7 @@ contains
 
     call Force_New_MPI(dual_Iforce)
     potential_hmc = potential
+    call Virial_Estimator
 
     fr = fr_sv
     pot_bead = pot_bead_sv
@@ -124,7 +135,7 @@ contains
   if ( MyRank == 0 ) then
   if ( mod(Istep,out_step) == 0 ) then
     open(newunit=Uout,file=trim(dir_result)//'/pihmc.out',position='append')
-      write(Uout,*) Istep, ratio
+      write(Uout,'(i10,3es24.16)') Istep, ratio, potential, potential_hmc
     close(Uout)
   end if
   end if
@@ -169,6 +180,7 @@ contains
     pot_bead(:)      = pot_old(:)
     potential        = potential_old
     potential_hmc    = potential_hmc_old
+    E_Virial         = E_Virial_old
     dkinetic         = dkinetic_old
     qkinetic         = qkinetic_old
     hamiltonian      = hamiltonian_old
@@ -184,6 +196,7 @@ contains
     pot_old(:)         = pot_bead(:)
     potential_old      = potential
     potential_hmc_old  = potential_hmc
+    E_Virial_old       = E_Virial
     dkinetic_old       = dkinetic
     qkinetic_old       = qkinetic
     hamiltonian_old    = hamiltonian

@@ -18,13 +18,13 @@ contains
   subroutine print_ham_qm
     if ( mod(Istep,out_step) == 0 ) then
       open(newunit=Uout,file=trim(dir_result)//'/ham.dat',status='unknown',form='formatted',position='append')
-        write(Uout,1001) Istep, hamiltonian, temp_inst, potential,dkinetic,qkinetic,ebath,ebath_cent, E_Virial
+        write(Uout,1001) Istep, hamiltonian, temp_inst, merge(potential_hmc, potential, Ldual),dkinetic,qkinetic,ebath,ebath_cent, E_Virial
       close(Uout)
     end if
 
     if (mod(Istep,100)==0) Then
       open(newunit=Uout,file=Fout,status='old',position='append')
-      write(Uout,1002) Istep, hamiltonian, temp_inst, potential,dkinetic,qkinetic,ebath,ebath_cent, get_time()
+      write(Uout,1002) Istep, hamiltonian, temp_inst, merge(potential_hmc, potential, Ldual),dkinetic,qkinetic,ebath,ebath_cent, get_time()
       close(Uout)
     end if
 
