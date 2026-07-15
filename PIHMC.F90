@@ -97,6 +97,22 @@ subroutine PIHMC_normal
 
 contains
 
+  subroutine eval_potential_hmc
+    implicit none
+    real(8) :: fr_sv(Ndim,Natom,Nbead), pot_bead_sv(Nbead), potential_sv
+
+    fr_sv = fr
+    pot_bead_sv = pot_bead
+    potential_sv = potential
+
+    call Force_New_MPI(dual_Iforce)
+    potential_hmc = potential
+
+    fr = fr_sv
+    pot_bead = pot_bead_sv
+    potential = potential_sv
+  end subroutine eval_potential_hmc
+
   subroutine print_pihmc(Istep)
     implicit none
     integer, intent(in) :: Istep

@@ -88,6 +88,7 @@ module Parameters
   real(8), allocatable :: r_old(:,:,:), fr_old(:,:,:), ur_old(:,:,:), vur_old(:,:,:)
   real(8), allocatable :: fur_old(:,:,:), fur_ref_old(:,:,:), pot_old(:)
   real(8)              :: dkinetic_old, qkinetic_old
+  real(8)              :: potential_hmc, potential_hmc_old
   real(8)              :: potential_old, hamiltonian_old
   logical :: Ldual = .False.
 ! Parameters for PIHMC
