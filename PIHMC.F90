@@ -89,6 +89,7 @@ subroutine PIHMC_normal
       do Idyn = 1, Ndyn
         call Force_New_MPI(Iforce)
       end do
+      if ( Ldual ) call eval_potential_hmc
     end do
   end if
 

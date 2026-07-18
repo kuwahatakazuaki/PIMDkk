@@ -127,6 +127,10 @@ subroutine read_parameter
       call program_abort("Ndyn must be positive for PIHMC")
     end if
 
+    if ( Ldual .and. Isimulation /= 3 ) then
+      call program_abort("Ldual is supported only for Isimulation=3 (PIHMC)")
+    end if
+
     if ( Ldual .and. dual_Iforce <= 0 ) then
       call program_abort("dual_Iforce must be set when Ldual is true")
     end if

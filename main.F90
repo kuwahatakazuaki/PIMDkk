@@ -44,7 +44,7 @@ program Path_Integral
   end select
 
 #ifdef _MACE_
-  if (Iforce == 25) call Finalize_MACE
+  if ( Iforce == 25 .or. (Ldual .and. dual_Iforce == 25) ) call Finalize_MACE
 #endif
   call Set_Deallocate
   call print_end
