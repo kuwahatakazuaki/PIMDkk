@@ -32,6 +32,9 @@ subroutine Set_Allocate
     allocate( rbath(Ndim,Natom,Nnhc,Nbead))
     allocate( vrbath(Ndim,Natom,Nnhc,Nbead))
     allocate( frbath(Ndim,Natom,Nnhc,Nbead))
+    rbath(:,:,:,:)  = 0.0d0
+    vrbath(:,:,:,:) = 0.0d0
+    frbath(:,:,:,:) = 0.0d0
   end if
 
   allocate( alabel(Natom))
@@ -50,11 +53,17 @@ subroutine Set_Allocate
       allocate( vbc11(Nnhc))
       allocate( fbc11(Nnhc))
       allocate( qmcent11(Nnhc))
+      rbc11(:) = 0.0d0
+      vbc11(:) = 0.0d0
+      fbc11(:) = 0.0d0
     case(3)
       allocate( rbc31(Ndim,Natom,Nnhc) )
       allocate( vrbc31(Ndim,Natom,Nnhc) )
       allocate( frbc31(Ndim,Natom,Nnhc) )
       allocate( qmcent31(Nnhc))
+      rbc31(:,:,:)  = 0.0d0
+      vrbc31(:,:,:) = 0.0d0
+      frbc31(:,:,:) = 0.0d0
   end select
 
   allocate( ysweight(nys))
