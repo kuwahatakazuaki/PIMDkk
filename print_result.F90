@@ -110,7 +110,7 @@ end if
 8008 format(4F10.5)    ! Dipole
 8009 format(I7,4E15.7)
 8010 format(I7,9E17.9)
-8011 format('Lattice="',9(ES23.15,1X),'" Properties=species:S:1:pos:R:3 pbc="',a,'" step=',i0)
+8011 format('Lattice="',9(ES16.8,1X),'" Properties=species:S:1:pos:R:3 pbc="',a,'" step=',i0)
 9995 format(4E23.15)
 
 return

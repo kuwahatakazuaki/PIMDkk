@@ -108,7 +108,8 @@ contains
     integer :: Uout
 
     open(newunit=Uout,file=trim(dir_result)//'/pihmc.out',status='replace',form='formatted')
-      write(Uout,'(a)') '# 1 Step  2 AcceptanceRatio  3 ProposalPotential  4 TargetPotential'
+      write(Uout,'(a8,a10,2a18)') ' # Step ', ' AccRatio ', &
+                                    '   ProposalPot    ', '    TargetPot     '
     close(Uout)
   end subroutine init_pihmc_output
 
@@ -136,7 +137,7 @@ contains
   if ( MyRank == 0 ) then
   if ( mod(Istep,out_step) == 0 ) then
     open(newunit=Uout,file=trim(dir_result)//'/pihmc.out',position='append')
-      write(Uout,'(i10,3es24.16)') Istep, ratio, potential, potential_hmc
+      write(Uout,'(i8,f10.6,2es18.8)') Istep, ratio, potential, potential_hmc
     close(Uout)
   end if
   end if

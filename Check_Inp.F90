@@ -34,7 +34,6 @@ subroutine Check_Inp
         write(Uout,9995) ' +++++ Flag for Dual HMC   ', Ldual
         if ( Ldual ) then
           write(Uout,9999) ' +++++ Target force calc   ', dual_Iforce
-          write(Uout,'(a)') ' +++++ ham.dat Potential/Hamiltonian/E_Virial use the target potential'
         end if
       end if
       write(Uout,9999) ' +++++ Seed for Random    ', Iseed
