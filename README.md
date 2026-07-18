@@ -2,6 +2,9 @@
 
 経路積分分子動力学プログラム
 
+日本語の利用手順、入力リファレンス、出力仕様、開発者向け処理フローは
+[PIMD8 日本語マニュアル](docs/README.md)を参照してください。
+
 ## Simulation modes
 
 Specify the simulation engine through the `$Isimulation` keyword in `input.inp`.
@@ -11,6 +14,3 @@ Specify the simulation engine through the `$Isimulation` keyword in `input.inp`.
 - `2`: Centroid molecular dynamics (CMD)
 - `3`: Path-integral hybrid Monte Carlo (PIHMC)
 - `10`: Classical MD (if you want the classical limit just set `Nbead=1`)
-
-
-
